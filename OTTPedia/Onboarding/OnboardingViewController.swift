@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingViewController: UIViewController {
+final class OnboardingViewController: UIViewController {
 
     
     private var onboard = OnboardingView()
@@ -18,11 +18,14 @@ class OnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //view.backgroundColor = .red
+        onboard.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
     }
     
 
+    @objc private func startButtonTapped(_ sender: UIButton) {
+        let vc = ProfileInitViewViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
  
 
 }
