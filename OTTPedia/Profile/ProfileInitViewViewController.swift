@@ -10,8 +10,9 @@ import UIKit
 final class ProfileInitViewViewController: UIViewController {
     
     private var profileInit = ProfileInitView()
-    private var tempList: [String] = []
-    
+ //   private var tempList: [String] = []
+    var infoMsg = ""
+    var isOk = true
     
     override func loadView() {
         view = profileInit
@@ -24,15 +25,9 @@ final class ProfileInitViewViewController: UIViewController {
         
         profileInit.nameTextField.delegate = self
         
-        profileInit.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(startButtonTapped)))
+        profileInit.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
+        profileInit.okButton.addTarget(self, action: #selector(okButtonTapped), for: .touchUpInside)
         
-    }
-    
-    
-    @objc private func startButtonTapped(_ sender: UIButton) {
-        print(#function)
-        let vc = ProfileInitViewViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func configurationNavigationController() {
@@ -48,55 +43,75 @@ final class ProfileInitViewViewController: UIViewController {
     }
     
     
+    @objc private func profileButtonTapped(_ sender: UIButton) {
+        print(#function)
+        let vc = ProfileImageSettingViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func okButtonTapped(_ sender: UIButton) {
+        print(#function)
+    }
+    
     
     
     
 }
 
 extension ProfileInitViewViewController: UITextFieldDelegate {
- 
-    // 입력은 되었지만 반영 X
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    
+    
+    // 텍스트필드.text에 값이 있음
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        
         let maxLength = 10
         let minLength = 2
-        let specialCharacter = ["@","#","$","%"]
-        let numbers = ["0","1","2","3","4","5","6","7","8","9"]
-        var msg = ""
-        var status = true
         
-        
-        if !specialCharacter.contains(string) && !numbers.contains(string) {
-            if string.isEmpty, tempList.count != 0 {
-                tempList.removeLast()
-                print(tempList)
-            } else {
-                tempList.append(string)
-                print(tempList)
+        if isOk {
+            if let text = textField.text, text.count != 0 {
+                if text.count >= minLength && text.count <= maxLength {
+                    infoMsg = "사용할 수 있는 닉네님이에요"
+                    isOk = true
+                } else {
+                    infoMsg = "2글자 이상 10글자 미만으로 설정해주세요"
+                    isOk = false
+                }
+                profileInit.infoLable.text = infoMsg
+                profileInit.okButton.isEnabled = isOk
             }
-            if tempList.count >= minLength && tempList.count <= maxLength {
-                msg = "사용할 수 있는 닉네님이에요"
-            } else {
-                msg = "2글자 이상 10글자 미만으로 설정해주세요"
-            }
-        } else if specialCharacter.contains(string) {
-            msg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
-            status = false
+            
         } else {
-            msg = "닉네임에 숫자는 포함할 수 없어요"
-            status = false
-        }
-                
-        if status {
-            profileInit.infoLable.text = msg
-            status = tempList.count >= minLength && tempList.count <= maxLength //문자 카운트 비교해서 1글자 또는 10글자 초과일경우 버튼 disable
-            profileInit.okButton.isEnabled = status
-            return true
-        } else {
-            profileInit.infoLable.text = msg
-            profileInit.okButton.isEnabled = status
-            return false
+         
         }
         
     }
+ 
+    // 입력은 되었지만 텍스트필드.text에는 아직 값이 없음
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print(#function)
+        let specialCharacter = ["@","#","$","%"]
+        let numbers = ["0","1","2","3","4","5","6","7","8","9"]
+        
+        
+        if specialCharacter.contains(string) {
+            infoMsg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
+            isOk = false
+        } else if numbers.contains(string) {
+            infoMsg = "닉네임에 숫자는 포함할 수 없어요"
+            isOk = false
+        } else {
+            isOk = true
+        }
+        
+        if !isOk {
+            profileInit.infoLable.text = infoMsg
+            profileInit.okButton.isEnabled = isOk
+            return isOk
+        } else {
+            return isOk
+        }
+            
+    }
+
 
 }
