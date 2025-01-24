@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D0616FA72D4376B600641114 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D0616FA62D4376B600641114 /* Kingfisher */; };
+		D0616FAA2D4376C200641114 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D0616FA92D4376C200641114 /* Alamofire */; };
+		D0616FB72D438D0700641114 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D0616FB62D438D0700641114 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		D0616F372D4364EB00641114 /* OTTPedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OTTPedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0616FB72D438D0700641114 /* SnapKit in Frameworks */,
+				D0616FA72D4376B600641114 /* Kingfisher in Frameworks */,
+				D0616FAA2D4376C200641114 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +87,9 @@
 			);
 			name = OTTPedia;
 			packageProductDependencies = (
+				D0616FA62D4376B600641114 /* Kingfisher */,
+				D0616FA92D4376C200641114 /* Alamofire */,
+				D0616FB62D438D0700641114 /* SnapKit */,
 			);
 			productName = OTTPedia;
 			productReference = D0616F372D4364EB00641114 /* OTTPedia.app */;
@@ -107,6 +119,11 @@
 			);
 			mainGroup = D0616F2E2D4364EB00641114;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D0616FA52D4376B600641114 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				D0616FA82D4376C200641114 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				D0616FB52D438D0700641114 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D0616F382D4364EB00641114 /* Products */;
 			projectDirPath = "";
@@ -145,6 +162,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZR9M5J9M6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OTTPedia/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -178,6 +196,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZR9M5J9M6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OTTPedia/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -345,6 +364,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0616FA52D4376B600641114 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.3;
+			};
+		};
+		D0616FA82D4376C200641114 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		D0616FB52D438D0700641114 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0616FA62D4376B600641114 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0616FA52D4376B600641114 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		D0616FA92D4376C200641114 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0616FA82D4376C200641114 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		D0616FB62D438D0700641114 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0616FB52D438D0700641114 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D0616F2F2D4364EB00641114 /* Project object */;
 }

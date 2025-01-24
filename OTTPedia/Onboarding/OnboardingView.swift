@@ -15,9 +15,10 @@ final class OnboardingView: BaseCollectionViewCell {
     private let imageView = CustomImageView()
     private let titleLable = CustomLabel(boldStyle: false, fontSize: 16, italic: true)
     private let subTitleLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false)
-    private let startButton = CustomButton(color: #colorLiteral(red: 0, green: 0.6, blue: 0.8392156863, alpha: 1))
+    let startButton = CustomButton(color: ColorList.main.color)
     
     override func configureHierarchy() {
+        
         addSubview(imageView)
         addSubview(titleLable)
         addSubview(subTitleLable)
@@ -26,7 +27,6 @@ final class OnboardingView: BaseCollectionViewCell {
     }
     
     override func configureLayout() {
-        
         
         imageView.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide)
@@ -55,7 +55,6 @@ final class OnboardingView: BaseCollectionViewCell {
             make.height.equalTo(self.snp.width).multipliedBy(1.0 / 8.0) // 뷰의 너비기준으로 높이 비율 계산 즉, 너비 * 비율
             
         }
-
         
     }
     

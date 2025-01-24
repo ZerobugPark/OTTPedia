@@ -26,10 +26,12 @@ final class CustomButton: UIButton {
         backgroundColor = .clear
     }
     
-    init(){
+    init(color: UIColor){
         super.init(frame: .zero)
-        configuration = .filterButtonStyle()
-        backgroundColor = .clear
+        configuration = .BasicButtonStyle()
+        titleLabel?.font = .systemFont(ofSize: 15)
+        clipsToBounds = true
+
      }
     
     required init?(coder: NSCoder) {
@@ -43,21 +45,20 @@ final class CustomButton: UIButton {
 //@available (iOS 15.0, *)
 extension CustomButton.Configuration {
     
-    static func filterButtonStyle() -> UIButton.Configuration {
+    static func BasicButtonStyle() -> UIButton.Configuration {
        
         var configuration = UIButton.Configuration.filled()
         
-        configuration.titleAlignment = .leading
+       
         
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 8, weight: .bold)
-        configuration.image = UIImage(systemName: "list.bullet", withConfiguration: imageConfig)
-    
-        configuration.baseForegroundColor = .black
-        configuration.baseBackgroundColor = .white
+
+        configuration.baseForegroundColor = ColorList.main.color         // #colorLiteral(red: 0, green: 0.6, blue: 0.8392156863, alpha: 1) // 텍스트 컬러
+        configuration.baseBackgroundColor = .clear // 배경 컬러
         
+        configuration.background.strokeColor = ColorList.main.color // 테두리 색상
+        configuration.background.strokeWidth =  3 // 테두리 굵기
         configuration.cornerStyle = .capsule
-        configuration.buttonSize = .mini
-        configuration.imagePadding = 5
+        configuration.buttonSize = .small
       
         return configuration
     }

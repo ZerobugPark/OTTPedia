@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
   
+        //sleep은 초단위 지원, Thread.sleep는 초/밀리세컨드 단위 지원
         Thread.sleep(forTimeInterval: 2.0)  // 런치스크린 지연
+        
         return true
     }
 

@@ -7,23 +7,37 @@
 
 import UIKit
 
-class ProfileInitViewViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+final class ProfileInitViewViewController: UIViewController {
+    
+    private var profileInit = ProfileInitView()
+    
+    override func loadView() {
+        view = profileInit
     }
     
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        configurationNavigationController()
+        view.backgroundColor = .black
     }
-    */
+    
+    private func configurationNavigationController() {
+        
+        let title = "프로필 설정"
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationItem.title = title
+        navigationController?.navigationBar.tintColor = ColorList.main.color
+        UINavigationBar.appearance().standardAppearance = appearance
+        
+    }
+    
+    
 
+
+    
 }

@@ -9,6 +9,9 @@ import UIKit
 
 final class CustomImageView: UIImageView {
     
+    init() {
+        super.init(frame: .zero)
+    }
     
     init(cornerRadius: Bool) {
         super.init(frame: .zero)
@@ -21,9 +24,17 @@ final class CustomImageView: UIImageView {
         
     }
     
-    init() {
+    init(selected: Bool) {
         super.init(frame: .zero)
         clipsToBounds = true
+        
+        if selected {
+            layer.borderWidth = 3
+            layer.borderColor = ColorList.main.color.cgColor
+        } else {
+            layer.borderWidth = 1
+            layer.borderColor = ColorList.DarkGray.color.cgColor
+        }
         
     }
         

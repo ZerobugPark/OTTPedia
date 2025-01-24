@@ -12,18 +12,23 @@ final class CustomLabel: UILabel {
     
     init(boldStyle: Bool, fontSize: CGFloat) {
         super.init(frame: .zero)
-        
         font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
-        
-        
     }
     
-    init(boldStyle: Bool, fontSize: CGFloat, color: UIColor) {
+    init(boldStyle: Bool, fontSize: CGFloat, italic: Bool) {
         super.init(frame: .zero)
         
-        font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
+        if italic {
+            font = .italicSystemFont(ofSize: fontSize)
+        } else {
+            font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
+        }
+        textColor = ColorList.white.color
+        textAlignment = .center
         
-        textColor = color
+        UIFont.italicSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)
+        
+        
     
     }
     
