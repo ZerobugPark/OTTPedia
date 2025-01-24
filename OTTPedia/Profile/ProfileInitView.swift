@@ -10,17 +10,17 @@ import UIKit
 final class ProfileInitView: BaseView {
 
     let imageView = CustomImageView(selected: true)
-    let subImageView = CustomImageView()
-    let infoLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false)
-    let startButton = CustomButton(color: ColorList.main.color)
+    private let circleView = UIView()
+    private let subImageView = CustomImageView()
     let nameTextField = UITextField()
-    let profileImageList = ["profile_0", "profile_1", "profile_2", "profile_3",
-                            "profile_4", "profile_5", "profile_6", "profile_7",
-                            "profile_8", "profile_9", "profile_10", "profile_11"]
+    let startButton = CustomButton(color: ColorList.main.color)
+    let infoLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false)
     
     override func configureHierarchy() {
         addSubview(imageView)
+        addSubview(circleView)
         addSubview(subImageView)
+        addSubview(nameTextField)
         addSubview(infoLable)
         addSubview(startButton)
         
@@ -34,9 +34,17 @@ final class ProfileInitView: BaseView {
             make.size.equalTo(self.snp.width).multipliedBy(1.0 / 3.0)
         }
         
+        circleView.snp.makeConstraints { make in
+            let positionX = imageView.frame.size.width / 1.5
+            let positionY = imageView.frame.size.height / 1.5
+            make.trailing.equalTo(imageView).inset(positionX)
+            make.bottom.equalTo(imageView).inset(positionY)
+            make.size.equalTo(imageView.snp.width).multipliedBy(1.0 / 3.5)
+        }
+        
         subImageView.snp.makeConstraints { make in
-            make.center.equalTo(self)
-            make.size.equalTo(100)
+            make.center.equalTo(circleView)
+            make.size.equalTo(circleView.snp.width).multipliedBy(1.0 / 1.5)
         }
         
    
@@ -49,12 +57,15 @@ final class ProfileInitView: BaseView {
         let randomImage = ImageList.shared.profileImageList.randomElement()!
         imageView.image = UIImage(named: randomImage)
         
+        circleView.backgroundColor = ColorList.main.color
+        
         subImageView.image = UIImage(systemName: "camera.fill")
-        subImageView.contentMode = .scaleAspectFill
         subImageView.tintColor = .white
-        subImageView.backgroundColor =  ColorList.main.color
+        subImageView.contentMode = .scaleAspectFit
+    
         
         DispatchQueue.main.async {
+            self.circleView.layer.cornerRadius = self.circleView.frame.width / 2
             self.imageView.layer.cornerRadius = self.imageView.frame.width / 2
             self.subImageView.layer.cornerRadius = self.subImageView.frame.width / 2
         }
