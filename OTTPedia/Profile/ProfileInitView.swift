@@ -15,7 +15,7 @@ final class ProfileInitView: BaseView {
     let nameTextField = CustomTextField()
     private let lineView = UIView()
     let infoLable = CustomLabel(boldStyle: false, fontSize: 12, italic: false)
-    let startButton = CustomButton(color: ColorList.main.color)
+    let okButton = CustomButton(color: ColorList.main.color)
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -24,7 +24,7 @@ final class ProfileInitView: BaseView {
         addSubview(nameTextField)
         addSubview(lineView)
         addSubview(infoLable)
-        addSubview(startButton)
+        addSubview(okButton)
         
     }
     
@@ -67,7 +67,7 @@ final class ProfileInitView: BaseView {
             make.height.equalTo(15)
         }
         
-        startButton.snp.makeConstraints { make in
+        okButton.snp.makeConstraints { make in
             make.top.equalTo(infoLable.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(self).inset(16)
             make.height.equalTo(self.snp.width).multipliedBy(1.0 / 8.0)
@@ -95,9 +95,10 @@ final class ProfileInitView: BaseView {
         
         infoLable.textAlignment = .left
         infoLable.textColor = ColorList.main.color
-        infoLable.text = "dsasdadadadsadadsad"
+        infoLable.text = "2글자 이상 10글자 미만으로 설정해주세요"
         
-        startButton.setTitle("완료", for: .normal)
+        okButton.setTitle("완료", for: .normal)
+        okButton.isEnabled = false
         
         DispatchQueue.main.async {
             self.circleView.layer.cornerRadius = self.circleView.frame.width / 2
