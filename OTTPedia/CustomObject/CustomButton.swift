@@ -29,7 +29,8 @@ final class CustomButton: UIButton {
     init(color: UIColor){
         super.init(frame: .zero)
         configuration = .BasicButtonStyle()
-        titleLabel?.font = .systemFont(ofSize: 15)
+
+        titleLabel?.font = .systemFont(ofSize: 16)
         clipsToBounds = true
 
      }
@@ -48,9 +49,6 @@ extension CustomButton.Configuration {
     static func BasicButtonStyle() -> UIButton.Configuration {
        
         var configuration = UIButton.Configuration.filled()
-        
-       
-        
 
         configuration.baseForegroundColor = ColorList.main.color         // #colorLiteral(red: 0, green: 0.6, blue: 0.8392156863, alpha: 1) // 텍스트 컬러
         configuration.baseBackgroundColor = .clear // 배경 컬러

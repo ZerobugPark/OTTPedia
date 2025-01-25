@@ -7,6 +7,51 @@
 
 import UIKit
 
-class ProfileImageSettingCollectionViewCell: UICollectionViewCell {
+final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
+    
+    static let id = "ProfileImageSettingCollectionViewCell"
+    
+    let imageView = CustomImageView(selected: false)
+    
+    
+    override func configureHierarchy() {
+        contentView.addSubview(imageView)
+
+        
+    }
+    
+    override func configureLayout() {
+        
+        imageView.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+        
+    }
+    
+    override func configureView() {
+    
+        DispatchQueue.main.async {
+            self.imageView.layer.cornerRadius = self.imageView.frame.width / 2
+        }
+    
+    }
+    func imageSetup(index: Int, selected: Bool) {
+        
+        imageView.image = UIImage(named: ImageList.shared.profileImageList[index])
+        if !selected {
+            imageView.layer.borderWidth = 1
+            imageView.layer.borderColor = ColorList.DarkGray.color.cgColor
+            imageView.alpha = 0.5
+            
+        } else {
+            imageView.layer.borderWidth = 3
+            imageView.layer.borderColor = ColorList.main.color.cgColor
+            imageView.alpha = 1
+        }
+        
+        
+        
+        
+    }
     
 }

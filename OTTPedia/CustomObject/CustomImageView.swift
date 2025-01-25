@@ -34,6 +34,7 @@ final class CustomImageView: UIImageView {
         } else {
             layer.borderWidth = 1
             layer.borderColor = ColorList.DarkGray.color.cgColor
+            alpha = 0.5
         }
         
     }

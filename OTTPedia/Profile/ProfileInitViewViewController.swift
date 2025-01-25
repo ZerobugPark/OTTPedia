@@ -14,8 +14,10 @@ final class ProfileInitViewViewController: UIViewController {
     var infoMsg = ""
     var isOk = true
     
+    
     override func loadView() {
         view = profileInit
+      
     }
     
     override func viewDidLoad() {
@@ -44,13 +46,19 @@ final class ProfileInitViewViewController: UIViewController {
     
     
     @objc private func profileButtonTapped(_ sender: UIButton) {
-        print(#function)
+        
         let vc = ProfileImageSettingViewController()
+        vc.imageIndex = profileInit.randomImageIndex
+        vc.changedImage = { value in
+            self.profileInit.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
+        }
         navigationController?.pushViewController(vc, animated: true)
+        
     }
     
     @objc private func okButtonTapped(_ sender: UIButton) {
-        print(#function)
+        //let vc = ProfileImageSettingViewController()
+    //    navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -61,14 +69,14 @@ final class ProfileInitViewViewController: UIViewController {
 extension ProfileInitViewViewController: UITextFieldDelegate {
     
     
-    // 텍스트필드.text에 값이 있음
+    // textField.text에 값이 있음
     func textFieldDidChangeSelection(_ textField: UITextField) {
         
         let maxLength = 10
         let minLength = 2
         
         if isOk {
-            if let text = textField.text, text.count != 0 {
+            if let text = textField.text {
                 if text.count >= minLength && text.count <= maxLength {
                     infoMsg = "사용할 수 있는 닉네님이에요"
                     isOk = true
@@ -86,9 +94,9 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
         
     }
  
-    // 입력은 되었지만 텍스트필드.text에는 아직 값이 없음
+    // 입력은 되었지만 textField.text에는 아직 값이 없음
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print(#function)
+//        print(#function)
         let specialCharacter = ["@","#","$","%"]
         let numbers = ["0","1","2","3","4","5","6","7","8","9"]
         

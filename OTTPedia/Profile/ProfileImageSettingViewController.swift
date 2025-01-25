@@ -7,23 +7,66 @@
 
 import UIKit
 
-class ProfileImageSettingViewController: UIViewController {
+final class ProfileImageSettingViewController: UIViewController {
 
+    
+    private var imageSet = ProfileImageSettingView()
+    var imageIndex = 0
+    var previousImageIndex = 0
+    var changedImage: ((Int) -> Void)?
+    
+    override func loadView() {
+        view = imageSet
+
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
+        
+        imageSet.collectionView.delegate = self
+        imageSet.collectionView.dataSource = self
+        imageSet.collectionView.register(ProfileImageSettingCollectionViewCell.self, forCellWithReuseIdentifier: ProfileImageSettingCollectionViewCell.id)
+        
     }
     
 
-    /*
-    // MARK: - Navigation
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+
+extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return ImageList.shared.profileImageList.count
     }
-    */
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = imageSet.collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageSettingCollectionViewCell.id, for: indexPath) as? ProfileImageSettingCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        let isSelected = imageIndex == indexPath.item ? true : false
+        cell.imageSetup(index: indexPath.item, selected: isSelected)
 
+        
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(#function)
+        
+        if imageIndex != indexPath.item {
+            previousImageIndex = imageIndex
+            imageIndex = indexPath.item
+            imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)])
+            changedImage?(imageIndex)
+            
+        }
+    }
+    
+    
 }

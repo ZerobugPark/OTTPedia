@@ -16,6 +16,7 @@ final class ProfileInitView: BaseView {
     private let lineView = UIView()
     let infoLable = CustomLabel(boldStyle: false, fontSize: 12, italic: false)
     let okButton = CustomButton(color: ColorList.main.color)
+    let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -81,8 +82,8 @@ final class ProfileInitView: BaseView {
     
     override func configureView() {
         
-        let randomImage = ImageList.shared.profileImageList.randomElement()!
-        imageView.image = UIImage(named: randomImage)
+        
+        imageView.image = UIImage(named: ImageList.shared.profileImageList[randomImageIndex])
         imageView.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
         
         circleView.backgroundColor = ColorList.main.color
@@ -100,9 +101,10 @@ final class ProfileInitView: BaseView {
         okButton.setTitle("완료", for: .normal)
         okButton.isEnabled = false
         
+        
         DispatchQueue.main.async {
-            self.circleView.layer.cornerRadius = self.circleView.frame.width / 2
             self.imageView.layer.cornerRadius = self.imageView.frame.width / 2
+            self.circleView.layer.cornerRadius = self.circleView.frame.width / 2
             self.subImageView.layer.cornerRadius = self.subImageView.frame.width / 2
         }
     

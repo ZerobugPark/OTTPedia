@@ -27,9 +27,6 @@ final class CustomLabel: UILabel {
         textAlignment = .center
         
         UIFont.italicSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)
-        
-        
-    
     }
     
     @available(*, unavailable)

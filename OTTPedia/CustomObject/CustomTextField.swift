@@ -10,9 +10,14 @@ import UIKit
 final class CustomTextField: UITextField {
     
     
-    init(boldStyle: Bool, fontSize: CGFloat) {
+    init() {
         super.init(frame: .zero)
-        font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
+        
+        textAlignment = .left
+        textColor = ColorList.white.color
+        backgroundColor = .clear
+        placeholder = "이름을 입력해주세요."
+        borderStyle = .none
     }
     
 
