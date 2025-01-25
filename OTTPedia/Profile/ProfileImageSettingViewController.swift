@@ -9,11 +9,11 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
 
+    var imageIndex = 0
+    var changedImage: ((Int) -> Void)?
     
     private var imageSet = ProfileImageSettingView()
-    var imageIndex = 0
-    var previousImageIndex = 0
-    var changedImage: ((Int) -> Void)?
+    private var previousImageIndex = 0
     
     override func loadView() {
         view = imageSet

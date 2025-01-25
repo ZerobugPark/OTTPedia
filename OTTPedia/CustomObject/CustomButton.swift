@@ -9,24 +9,14 @@ import UIKit
 
 final class CustomButton: UIButton {
     
-    
-    init(imgName: String){
+    init() {
         super.init(frame: .zero)
-        //configuration = .likeButtonStyle(image: imgName)
-        setTitleColor(.lightGray, for: .normal)
-        backgroundColor = .clear
-
+        backgroundColor = ColorList.main.color
+        titleLabel?.textColor = ColorList.white.color
+        titleLabel?.font = .systemFont(ofSize: 14)
     }
     
-    init(color: UIColor, tagNum: Int){
-        super.init(frame: .zero)
-        //configuration = .colorButtonStyle(color: color)
-        
-        tag = tagNum
-        backgroundColor = .clear
-    }
-    
-    init(color: UIColor){
+    init(applyConfig: Bool){
         super.init(frame: .zero)
         configuration = .BasicButtonStyle()
 

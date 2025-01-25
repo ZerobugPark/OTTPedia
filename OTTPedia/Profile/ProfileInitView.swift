@@ -7,16 +7,19 @@
 
 import UIKit
 
+import SnapKit
+
 final class ProfileInitView: BaseView {
 
     let imageView = CustomImageView(selected: true)
+    let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
+    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, italic: false)
+    let okButton = CustomButton(applyConfig: true)
+    let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
+    
     private let circleView = UIView()
     private let subImageView = CustomImageView()
-    let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
     private let lineView = UIView()
-    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, italic: false)
-    let okButton = CustomButton(color: ColorList.main.color)
-    let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
     
     override func configureHierarchy() {
         addSubview(imageView)

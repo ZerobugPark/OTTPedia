@@ -10,10 +10,10 @@ import UIKit
 final class ProfileInitViewViewController: UIViewController {
     
     private var profileInit = ProfileInitView()
-    var infoMsg = ""
-    var isOk = true
-    var currentIndex = 0
-    var imageStatus = true
+    private var infoMsg = ""
+    private var isOk = true
+    private var currentIndex = 0
+    private var imageStatus = true
     
     override func loadView() {
         view = profileInit

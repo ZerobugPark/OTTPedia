@@ -12,10 +12,12 @@ import SnapKit
 
 final class OnboardingView: BaseCollectionViewCell {
 
+    let startButton = CustomButton(applyConfig: true)
+    
     private let imageView = CustomImageView()
     private let titleLable = CustomLabel(boldStyle: false, fontSize: 16, italic: true)
     private let subTitleLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false)
-    let startButton = CustomButton(color: ColorList.main.color)
+    
     
     override func configureHierarchy() {
         
