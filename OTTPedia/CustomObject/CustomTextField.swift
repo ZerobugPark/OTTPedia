@@ -10,14 +10,18 @@ import UIKit
 final class CustomTextField: UITextField {
     
     
-    init() {
+    init(placeholder: String) {
         super.init(frame: .zero)
         
         textAlignment = .left
         textColor = ColorList.white.color
+        
+        //Placeholder 색상 변경
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : ColorList.DarkGray.color])
+        
         backgroundColor = .clear
-        placeholder = "이름을 입력해주세요."
         borderStyle = .none
+        
     }
     
 

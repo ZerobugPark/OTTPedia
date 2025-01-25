@@ -12,7 +12,7 @@ final class ProfileInitView: BaseView {
     let imageView = CustomImageView(selected: true)
     private let circleView = UIView()
     private let subImageView = CustomImageView()
-    let nameTextField = CustomTextField()
+    let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
     private let lineView = UIView()
     let infoLable = CustomLabel(boldStyle: false, fontSize: 12, italic: false)
     let okButton = CustomButton(color: ColorList.main.color)
