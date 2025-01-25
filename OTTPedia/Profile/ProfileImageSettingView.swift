@@ -47,11 +47,9 @@ final class ProfileImageSettingView: BaseView {
             make.top.equalTo(imageView.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(self)
             make.bottom.equalTo(self)
-            //make.height.equalTo(imageView.snp.width).multipliedBy(2.0)
+
         }
-    
-        
-        
+ 
     }
     
     override func configureView() {
@@ -69,8 +67,7 @@ final class ProfileImageSettingView: BaseView {
             self.subImageView.layer.cornerRadius = self.subImageView.frame.width / 2
         }
         
-        self.backgroundColor = .black
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = ColorList.black.color
         
     }
     

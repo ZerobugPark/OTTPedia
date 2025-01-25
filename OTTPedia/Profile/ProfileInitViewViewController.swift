@@ -10,10 +10,10 @@ import UIKit
 final class ProfileInitViewViewController: UIViewController {
     
     private var profileInit = ProfileInitView()
- //   private var tempList: [String] = []
     var infoMsg = ""
     var isOk = true
-    
+    var currentIndex = 0
+    var imageStatus = true
     
     override func loadView() {
         view = profileInit
@@ -29,6 +29,7 @@ final class ProfileInitViewViewController: UIViewController {
         
         profileInit.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
         profileInit.okButton.addTarget(self, action: #selector(okButtonTapped), for: .touchUpInside)
+
         
     }
     
@@ -48,20 +49,41 @@ final class ProfileInitViewViewController: UIViewController {
     @objc private func profileButtonTapped(_ sender: UIButton) {
         
         let vc = ProfileImageSettingViewController()
-        vc.imageIndex = profileInit.randomImageIndex
+       
+        // 프로필 사진을 새로 선택하고, 만약 확인을 안누르고 프로필 사진을 다시 누르게되면, 변경된 이미지가 선택되어야 함
+        vc.imageIndex = imageStatus ? profileInit.randomImageIndex : currentIndex
+        
         vc.changedImage = { value in
             self.profileInit.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
+            self.currentIndex = value
+            self.imageStatus = false
         }
         navigationController?.pushViewController(vc, animated: true)
         
     }
     
     @objc private func okButtonTapped(_ sender: UIButton) {
-        //let vc = ProfileImageSettingViewController()
-    //    navigationController?.pushViewController(vc, animated: true)
+        
+        guard let windwScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windwScene.windows.first else { return }
+        
+        ProfileUserDefaults.imageIndex = currentIndex
+        
+        window.rootViewController = UINavigationController(rootViewController: TabBarController())
+        window.makeKeyAndVisible()
+        
     }
-    
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        if let text = profileInit.nameTextField.text {
+            if text.isEmpty {
+                profileInit.nameTextField.becomeFirstResponder()
+            } else {
+                view.endEditing(true)
+            }
+        }
+    }
     
     
 }
@@ -120,6 +142,9 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
         }
             
     }
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
 
 }

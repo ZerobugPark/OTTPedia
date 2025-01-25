@@ -73,7 +73,6 @@ final class OnboardingView: BaseCollectionViewCell {
         
         startButton.setTitle("시작하기", for: .normal)
         
-        self.backgroundColor = .black
         
     }
 }

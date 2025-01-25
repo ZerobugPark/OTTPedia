@@ -53,7 +53,6 @@ final class ProfileInitView: BaseView {
         nameTextField.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(32)
             make.horizontalEdges.equalTo(self).inset(40)
-            //make.height.equalTo(30)
         }
         
         lineView.snp.makeConstraints { make in
@@ -108,7 +107,6 @@ final class ProfileInitView: BaseView {
             self.subImageView.layer.cornerRadius = self.subImageView.frame.width / 2
         }
     
-        self.backgroundColor = .black
         
     }
 

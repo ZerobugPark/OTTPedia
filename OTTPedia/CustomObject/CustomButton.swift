@@ -12,7 +12,7 @@ final class CustomButton: UIButton {
     
     init(imgName: String){
         super.init(frame: .zero)
-        configuration = .likeButtonStyle(image: imgName)
+        //configuration = .likeButtonStyle(image: imgName)
         setTitleColor(.lightGray, for: .normal)
         backgroundColor = .clear
 
@@ -20,7 +20,7 @@ final class CustomButton: UIButton {
     
     init(color: UIColor, tagNum: Int){
         super.init(frame: .zero)
-        configuration = .colorButtonStyle(color: color)
+        //configuration = .colorButtonStyle(color: color)
         
         tag = tagNum
         backgroundColor = .clear

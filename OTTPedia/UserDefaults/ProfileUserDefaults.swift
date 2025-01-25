@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+class ProfileUserDefaults {
+    
+    static var imageIndex: Int {
+        get {
+            UserDefaults.standard.integer(forKey: "imageIndex")
+        } set {
+            UserDefaults.standard.set(newValue, forKey: "imageIndex")
+        }
+    }
+    
+}
