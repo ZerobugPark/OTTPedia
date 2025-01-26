@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
         //sleep은 초단위 지원, Thread.sleep는 초/밀리세컨드 단위 지원
         Thread.sleep(forTimeInterval: 2.0)  // 런치스크린 지연
+            
+        configurationNavigationController()
         
         return true
     }
@@ -31,6 +33,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
     }
 
+    private func configurationNavigationController() {
+        
+//        let title = "OTTPedia"
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+       // navigationController?.navigationBar.standardAppearance = appearance
+       //navigationItem.title = title
+        //navigationController?.navigationBar.tintColor = ColorList.main.color
+        UINavigationBar.appearance().tintColor = ColorList.main.color
+        UINavigationBar.appearance().standardAppearance = appearance
+
+    }
 
 }
 
