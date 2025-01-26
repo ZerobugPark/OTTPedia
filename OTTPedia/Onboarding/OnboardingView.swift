@@ -33,11 +33,11 @@ final class OnboardingView: BaseCollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(self)
-            make.bottom.equalTo(titleLable.snp.top).inset(-4)
+            make.bottom.equalTo(titleLable.snp.top).offset(-4)
         }
         
         titleLable.snp.makeConstraints { make in
-            make.bottom.equalTo(subTitleLable.snp.top).inset(-20)
+            make.bottom.equalTo(subTitleLable.snp.top).offset(-20)
             make.horizontalEdges.equalTo(self).inset(16)
             make.height.equalTo(30)
         }

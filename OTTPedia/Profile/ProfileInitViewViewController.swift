@@ -36,13 +36,7 @@ final class ProfileInitViewViewController: UIViewController {
     private func configurationNavigationController() {
         
         let title = "프로필 설정"
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.standardAppearance = appearance
         navigationItem.title = title
-        navigationController?.navigationBar.tintColor = ColorList.main.color
-        UINavigationBar.appearance().standardAppearance = appearance
-        
     }
     
     
@@ -56,7 +50,7 @@ final class ProfileInitViewViewController: UIViewController {
         vc.changedImage = { value in
             self.profileInit.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
             self.currentIndex = value
-            self.imageStatus = false
+            self.imageStatus = false // 이거 currentIndex가 바뀔 때마다 didset으로 변경해도 되지 않나?
         }
         navigationController?.pushViewController(vc, animated: true)
         
@@ -133,7 +127,7 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
             isOk = true
         }
         
-        if !isOk {
+        if !isOk { // 이것도 didset 가능할 듯 해보이긴 하네
             profileInit.infoLable.text = infoMsg
             profileInit.okButton.isEnabled = isOk
             return isOk

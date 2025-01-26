@@ -10,7 +10,7 @@ import UIKit
 final class MainViewController: UIViewController {
 
     
-    var list = ["test1", "test2"]
+    var list = ["최근검색어", "오늘의 영화"]
     
     private var mainView = MainView()
     
@@ -21,9 +21,12 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mainView.tableView.rowHeight = 200
-        mainView.tableView.delegate = self
-        mainView.tableView.dataSource = self
+
+        mainView.collectionView.delegate = self
+        mainView.collectionView.dataSource = self
+        
+        mainView.collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.id)
+
 
         configurationNavigationController()
         mainView.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
@@ -34,13 +37,7 @@ final class MainViewController: UIViewController {
     private func configurationNavigationController() {
         
         let title = "OTTPedia"
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationItem.title = title
-        navigationController?.navigationBar.tintColor = ColorList.main.color
-        UINavigationBar.appearance().standardAppearance = appearance
-        
+        navigationItem.title = title    
     }
 
     @objc private func profileButtonTapped(_ sender: UIButton) {
@@ -58,19 +55,44 @@ final class MainViewController: UIViewController {
 }
 
 
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        list.count
+
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return 10
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as! MovieListCollectionViewCell
         
-        let cell = UITableViewCell()
+     //   let data = detailList[collectionView.tag][indexPath.item]
         
-        cell.titleLabel.text = list[indexPath.row]
-        
-        return UITableViewCell()
+       // let url = URL(string: data.urls.thumb)
+        //cell.posterImageView.kf.setImage(with: url)
+  
+        return cell
     }
+}
+
+
+extension MainViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let deviceWidth = UIScreen.main.bounds.size.width
+        let spacing: CGFloat = 8
+        let inset: CGFloat = 16
+        let imageCount: CGFloat = 2
+        
+        let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
+        let objectHeight = mainView.movieListView.frame.size.height - mainView.secondSection.frame.size.height
+        print(objectWidth)
+        print(objectHeight)
     
+        //print(mainView.movieListView.frame.size.height)
+        
+        
+        return CGSize(width: objectWidth, height: objectHeight)
+    }
 }
