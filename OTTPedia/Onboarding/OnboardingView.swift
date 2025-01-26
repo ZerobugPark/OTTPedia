@@ -15,7 +15,7 @@ final class OnboardingView: BaseCollectionViewCell {
     let startButton = CustomButton(applyConfig: true)
     
     private let imageView = CustomImageView()
-    private let titleLable = CustomLabel(boldStyle: false, fontSize: 16, italic: true)
+    private let titleLable = CustomLabel(boldStyle: false, fontSize: 25, italic: true)
     private let subTitleLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false)
     
     
@@ -37,15 +37,15 @@ final class OnboardingView: BaseCollectionViewCell {
         }
         
         titleLable.snp.makeConstraints { make in
-            make.bottom.equalTo(subTitleLable.snp.top).inset(-30)
+            make.bottom.equalTo(subTitleLable.snp.top).inset(-20)
             make.horizontalEdges.equalTo(self).inset(16)
-            make.height.equalTo(20)
+            make.height.equalTo(30)
         }
         
         subTitleLable.snp.makeConstraints { make in
             make.bottom.equalTo(startButton.snp.top).offset(-30)
             make.horizontalEdges.equalTo(self).inset(16)
-            make.height.equalTo(35)
+            make.height.equalTo(34)  
             
         }
         
