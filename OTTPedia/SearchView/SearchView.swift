@@ -7,13 +7,16 @@
 
 import UIKit
 
-class SearchView: BaseView {
+import SnapKit
 
-    let searchController = UISearchController()
+final class SearchView: BaseView {
+
+    let searchBar = UISearchBar()
     let tableView = UITableView()
 
   
     override func configureHierarchy() {
+        addSubview(searchBar)
         addSubview(tableView)
 
         
@@ -21,8 +24,13 @@ class SearchView: BaseView {
     
     override func configureLayout() {
         
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(self).inset(16)
+        }
+        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(60)
+            make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(self).inset(16)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
@@ -30,14 +38,16 @@ class SearchView: BaseView {
     }
     
     override func configureView() {
+        
         tableView.bounces = false
         
-        //네비게이션 컨트롤러 영역 미침범
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.backgroundColor = ColorList.darkGray.color
+        let placeholder = "어떤 영화가 궁금하신가요?"
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor : ColorList.lightGray.color])
+        searchBar.searchTextField.backgroundColor =  ColorList.darkGray.color
+        searchBar.searchTextField.leftView?.tintColor = ColorList.white.color // 돋보기 색상 변경
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchBarStyle = .minimal
         
-        // Cancel 버튼 삭제
-        searchController.searchBar.setShowsCancelButton(false, animated: false)
    
     }
 
