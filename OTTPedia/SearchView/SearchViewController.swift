@@ -19,7 +19,11 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurationNavigationController()
-        searchView.searchController.searchBar.delegate = self
+//        DispatchQueue.main.async {
+//            self.navigationItem.searchController = self.searchView.searchController
+//
+//        }
+        self.searchView.searchController.searchBar.delegate = self
         view.backgroundColor = .blue
     }
     
@@ -32,11 +36,11 @@ class SearchViewController: UIViewController {
         searchView.searchController.searchBar.placeholder = "검색어 입력"
     }
 
-  
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         navigationItem.searchController = searchView.searchController
     }
+
 
 }
 
