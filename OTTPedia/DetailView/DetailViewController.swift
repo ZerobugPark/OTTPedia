@@ -9,6 +9,12 @@ import UIKit
 
 import Kingfisher
 
+protocol PassDataDelegate {
+    func hidebuttonTapped()
+    
+}
+
+
 final class DetailViewController: UIViewController {
     
     
@@ -17,10 +23,11 @@ final class DetailViewController: UIViewController {
     private var posters: [Imageinfo] = []
     private var likeButtonStatus = false
     private let maxBackdropImageCount = 5
+    private let sections = ["Synopsis", "Cast", "Poster"]
     
-    var movieInfo: (id: Int, date: String, avg: Double, genreIds: [Int], title: String,likeStatus: Bool)?
+    var movieInfo: (info: Results, likeStatus: Bool)?
     
-    var idAndLikeStatus:(Int, Bool)?
+ 
     
     let color:[UIColor] = [.red,.blue,.green,.yellow,.purple]
     override func loadView() {
@@ -29,11 +36,21 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         detailView.scrollView.delegate = self
         
+        detailView.tableView.delegate = self
+        detailView.tableView.dataSource = self
+        detailView.tableView.register(SynopsisTableViewCell.self, forCellReuseIdentifier: SynopsisTableViewCell.id)
         
-        if let (id, _, _, _, _, _) = movieInfo {
-            NetworkManger.shared.callRequest(api: .getImage(id: id), type: GetImage.self) { value in
+        
+        detailView.tableView.rowHeight = UITableView.automaticDimension
+        detailView.tableView.estimatedRowHeight = 100 // 오토디멘션 사용시 추정값을 잡아줘야 함
+       
+        
+        
+        if let (info, _) = movieInfo {
+            NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { value in
                 self.backdrops = value.backdrops
                 self.posters = value.posters
             } failHandler: {
@@ -48,16 +65,16 @@ final class DetailViewController: UIViewController {
         addContentScrollView()
         setPageControl()
         
-        if let (_, date, avg, genres, title, likeStatus) = movieInfo {
-            detailView.dateLabel.text = date + "  |"
-            detailView.avgLabel.text = avg.formatted() + "  |"
-            detailView.genreLabel.text = findGenre(genres: genres)
+        if let (info, likeStatus) = movieInfo {
+            detailView.dateLabel.text = info.releaseDate + "  |"
+            detailView.avgLabel.text = info.average.formatted() + "  |"
+            detailView.genreLabel.text = findGenre(genres: info.genreIds)
             
             for i in 0..<detailView.imageViews.count {
                 detailView.imageViews[i].isHidden = false
             }
             likeButtonStatus = likeStatus
-            configurationNavigationController(title: title)
+            configurationNavigationController(title: info.title)
         }
 
     }
@@ -100,8 +117,9 @@ final class DetailViewController: UIViewController {
         let rightButton = UIImage(systemName: image)
             
         navigationItem.rightBarButtonItem?.image = rightButton
+        
+        
     }
-    
     
     
 }
@@ -143,5 +161,51 @@ extension DetailViewController: UIScrollViewDelegate {
 }
 
 
+//MARK: - UITableViewDelegate Delegate
+extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1//sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: SynopsisTableViewCell.id, for: indexPath) as? SynopsisTableViewCell else { return UITableViewCell() }
+        
+        if let (info, _) = movieInfo {
+            cell.setupLabel(title: sections[indexPath.row], overView: info.overview)
+        } else {
+            cell.setupLabel(title: "", overView: "")
+        }
+        cell.delegate = self
+        
+        
+        
+        
+        return cell
+    }
+    
+    
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        
+//        return UITableView.automaticDimension
+//    }
+}
+
+
+extension DetailViewController: PassDataDelegate {
+    func hidebuttonTapped() {
+        
+        detailView.tableView.reloadData()
+        
+        
+        // 특정 Row만 변경시, UI가 즉각적으로 변경이 안됨.
+//        detailView.tableView.beginUpdates()
+//        detailView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+//        detailView.tableView.endUpdates()
+       
+    }
+    
+}
 
 

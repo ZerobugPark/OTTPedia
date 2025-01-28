@@ -15,11 +15,12 @@ final class DetailView: BaseView {
     let scrollView = UIScrollView()
     let pageControl = UIPageControl()
     
-    
     let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let avgLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let genreLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let imageViews: [CustomImageView] = [CustomImageView(), CustomImageView(), CustomImageView()]
+    
+    let tableView = UITableView()
     
     private let stackView = UIStackView()
     
@@ -34,7 +35,7 @@ final class DetailView: BaseView {
         stackView.addArrangedSubview(avgLabel)
         stackView.addArrangedSubview(imageViews[2])
         stackView.addArrangedSubview(genreLabel)
-        
+        addSubview(tableView)
     }
     
     override func configureLayout() {
@@ -53,13 +54,17 @@ final class DetailView: BaseView {
         stackView.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.bottom).offset(16)
             make.centerX.equalTo(self)
-
+            for i in 0..<imageViews.count{
+                imageViews[i].snp.makeConstraints { make in
+                    make.size.equalTo(14)
+                }
+            }
         }
         
-        for i in 0..<imageViews.count{
-            imageViews[i].snp.makeConstraints { make in
-                make.size.equalTo(14)
-            }
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(stackView.snp.bottom).offset(16)
+            make.horizontalEdges.equalTo(self).inset(16)
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
         
     }
@@ -81,7 +86,8 @@ final class DetailView: BaseView {
         stackView.distribution = .equalSpacing
         stackView.axis = .horizontal
         
-     
+        //tableView.backgroundColor = .red
+        
         
         pageControl.pageIndicatorTintColor = ColorList.lightGray.color
         pageControl.currentPageIndicatorTintColor = ColorList.white.color
