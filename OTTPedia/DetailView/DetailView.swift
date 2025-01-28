@@ -14,13 +14,26 @@ final class DetailView: BaseView {
     
     let scrollView = UIScrollView()
     let pageControl = UIPageControl()
-    let infoLabel = CustomLabel(boldStyle: false, fontSize: 12, italic: false, color: ColorList.lightGray.color)
+    
+    
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let avgLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let genreLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let imageViews: [CustomImageView] = [CustomImageView(), CustomImageView(), CustomImageView()]
+    
+    private let stackView = UIStackView()
     
     override func configureHierarchy() {
         
         addSubview(scrollView)
         addSubview(pageControl)
-        addSubview(infoLabel)
+        addSubview(stackView)
+        stackView.addArrangedSubview(imageViews[0])
+        stackView.addArrangedSubview(dateLabel)
+        stackView.addArrangedSubview(imageViews[1])
+        stackView.addArrangedSubview(avgLabel)
+        stackView.addArrangedSubview(imageViews[2])
+        stackView.addArrangedSubview(genreLabel)
         
     }
     
@@ -37,22 +50,38 @@ final class DetailView: BaseView {
             make.centerX.equalTo(scrollView)
         }
         
-        
-        infoLabel.snp.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.bottom).offset(16)
-            make.horizontalEdges.equalTo(self).inset(16)
-            make.height.equalTo(15)
+            make.centerX.equalTo(self)
+
         }
-  
+        
+        for i in 0..<imageViews.count{
+            imageViews[i].snp.makeConstraints { make in
+                make.size.equalTo(14)
+            }
+        }
         
     }
     
     override func configureView() {
    
-       // scrollView.backgroundColor = .white
+        let images = ["calendar", "star.fill", "film.fill"]
+        
+        for i in 0..<imageViews.count {
+            imageViews[i].image = UIImage(systemName: images[i])
+            imageViews[i].tintColor = ColorList.lightGray.color
+            imageViews[i].isHidden = true // 자연스러운 전환을 위해서 히든 처리
+        }
+        
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
-        infoLabel.backgroundColor = .white
+        
+        stackView.spacing = 4
+        stackView.distribution = .equalSpacing
+        stackView.axis = .horizontal
+        
+     
         
         pageControl.pageIndicatorTintColor = ColorList.lightGray.color
         pageControl.currentPageIndicatorTintColor = ColorList.white.color
