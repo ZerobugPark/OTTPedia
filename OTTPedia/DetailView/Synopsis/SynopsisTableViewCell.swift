@@ -50,7 +50,7 @@ final class SynopsisTableViewCell: BaseTableViewCell {
         }
         
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(sectionLabel.snp.bottom).offset(16)
+            make.top.equalTo(sectionLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalTo(contentView).inset(16)
             // heigth로 잡을 경우 오토디멘션이 동작 X
             // heigth로 기준을 잡을 경우, bottom까지 다른게 더 있다고 생각해서 높이를 계산하지 못하는 것으로 보임

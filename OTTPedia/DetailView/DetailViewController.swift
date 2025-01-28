@@ -19,8 +19,9 @@ final class DetailViewController: UIViewController {
     
     
     private var detailView = DetailView()
-    private var backdrops: [Imageinfo] = []
-    private var posters: [Imageinfo] = []
+    private var backdrops: [ImageInfo] = []
+    private var posters: [ImageInfo] = []
+    private var castInfo: [CastInfo] = []
     private var likeButtonStatus = false
     private let maxBackdropImageCount = 5
     private let sections = ["Synopsis", "Cast", "Poster"]
@@ -43,20 +44,38 @@ final class DetailViewController: UIViewController {
         detailView.tableView.dataSource = self
         detailView.tableView.register(SynopsisTableViewCell.self, forCellReuseIdentifier: SynopsisTableViewCell.id)
         detailView.tableView.register(CastTableViewCell.self, forCellReuseIdentifier: CastTableViewCell.id)
-        
+        detailView.tableView.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.id)
         
        // detailView.tableView.rowHeight = UITableView.automaticDimension
         detailView.tableView.estimatedRowHeight = 100 // 오토디멘션 사용시 추정값을 잡아줘야 함
        
         
-        
+        let group = DispatchGroup()
         if let (info, _) = movieInfo {
+            group.enter()
             NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { value in
                 self.backdrops = value.backdrops
                 self.posters = value.posters
+                group.leave()
             } failHandler: {
                 print()
+                group.leave()
             }
+            group.enter()
+            NetworkManger.shared.callRequest(api: .getCredit(id: info.id), type: GetCredit.self) { value in
+                self.castInfo = value.cast
+               // dump(self.castInfo)
+                group.leave()
+            } failHandler: {
+                print()
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            print("DispatchGroup Notifiy")
+            self.detailView.tableView.reloadData()
+       
         }
         
     }
@@ -166,7 +185,7 @@ extension DetailViewController: UIScrollViewDelegate {
 //MARK: - UITableViewDelegate Delegate
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1//sections.count
+        return 1 //섹션별 테이블 뷰 개수
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -185,23 +204,28 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if indexPath.section == 1 {
             guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as? CastTableViewCell else { return UITableViewCell() }
-            
-            if let (info, _) = movieInfo {
-                cell.setupLabel(title: sections[indexPath.section])
-                
-                
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.register(CastCollectionViewCell.self, forCellWithReuseIdentifier: CastCollectionViewCell.id)
-                
-            }
-         
+
+            cell.setupLabel(title: sections[indexPath.section])
+            cell.collectionView.delegate = self
+            cell.collectionView.dataSource = self
+            cell.collectionView.tag = indexPath.section - 1
+            cell.collectionView.register(CastCollectionViewCell.self, forCellWithReuseIdentifier: CastCollectionViewCell.id)
+            cell.collectionView.reloadData()
             
             return cell
-                    
             
         } else if indexPath.section == 2 {
-            return UITableViewCell()
+            
+            guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.id, for: indexPath) as? PosterTableViewCell else { return UITableViewCell() }
+            cell.setupLabel(title: sections[indexPath.section])
+            cell.collectionView.delegate = self
+            cell.collectionView.dataSource = self
+            cell.collectionView.tag = indexPath.section - 1
+            cell.collectionView.register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: PosterCollectionViewCell.id)
+            cell.collectionView.reloadData()
+            
+            return cell
+            
         } else {
             return UITableViewCell()
         }
@@ -209,64 +233,65 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return sections.count
     }
     
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
      
-        if indexPath.section == 0 {
-            return UITableView.automaticDimension
-        } else {
+        if indexPath.section == 1 {
             // 하나의 테이블셀에서 아이템을 기준으로 변경하려고 각각 화면을 구성하려고 했으나, 컬렉션뷰와 오토디멘션 문제로 구조 변경
             // 테이블 뷰 안에서 컬렉션 뷰를 만드는데, 오토디멘션으로 설정시, 컬렉션뷰에서 높이를 테이블뷰에 높이를 찾을 수가 없음
             // 기기별 동적 대응을 위해, 각 섹션으로 구분하고. 기기별 대응을 위해 섹션별 높이를 새롭게 설정함.
-            print(UIScreen.main.bounds.size.width / 2.5)
             return (UIScreen.main.bounds.size.width / 2.5)
+        } else if indexPath.section == 2 {
+            return (UIScreen.main.bounds.size.width / 1.8)
+        } else {
+            return UITableView.automaticDimension
         }
-        
     }
 }
 
 // MARK: - CollectionViewDelegate
 extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        
+        if collectionView.tag == 0 {
+            return castInfo.count
+        } else if collectionView.tag == 1 {
+            return posters.count
+        } else {
+            return 0
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
-        
-        return cell
+       
+        if collectionView.tag == 0 {
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.setupCast(info: castInfo[indexPath.item])
+            
+            return cell
+            
+        } else if collectionView.tag == 1 {
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as? PosterCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.setupPoster(info: posters[indexPath.item])
+            
+            return cell
+            
+        } else {
+            return UICollectionViewCell()
+        }
+       
     }
     
-    
-    
-    
 }
-
-//// MARK: - CollectionViewDelegateFlowLayout Delegate
-//extension DetailViewController: UICollectionViewDelegateFlowLayout {
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        print(#function)
-//        let deviceWidth = UIScreen.main.bounds.size.width
-//        let spacing: CGFloat = 8
-//        let inset: CGFloat = 16
-//        let imageCount: CGFloat = 2
-//                
-//        let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
-//        let objectHeight = objectWidth / 2
-////        print(objectWidth)
-////        print(objectHeight)
-//        
-//        
-//        return CGSize(width: objectWidth, height: deviceWidth)
-//    }
-//}
-
-
 
 extension DetailViewController: PassDataDelegate {
     func hidebuttonTapped() {
