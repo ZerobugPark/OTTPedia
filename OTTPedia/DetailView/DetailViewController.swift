@@ -42,9 +42,10 @@ final class DetailViewController: UIViewController {
         detailView.tableView.delegate = self
         detailView.tableView.dataSource = self
         detailView.tableView.register(SynopsisTableViewCell.self, forCellReuseIdentifier: SynopsisTableViewCell.id)
+        detailView.tableView.register(CastTableViewCell.self, forCellReuseIdentifier: CastTableViewCell.id)
         
         
-        detailView.tableView.rowHeight = UITableView.automaticDimension
+       // detailView.tableView.rowHeight = UITableView.automaticDimension
         detailView.tableView.estimatedRowHeight = 100 // 오토디멘션 사용시 추정값을 잡아줘야 함
        
         
@@ -60,14 +61,15 @@ final class DetailViewController: UIViewController {
         
     }
     
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         addContentScrollView()
         setPageControl()
         
         if let (info, likeStatus) = movieInfo {
-            detailView.dateLabel.text = info.releaseDate + "  |"
-            detailView.avgLabel.text = info.average.formatted() + "  |"
+            detailView.dateLabel.text = info.releaseDate + "  | "
+            detailView.avgLabel.text = info.average.formatted() + "  | "
             detailView.genreLabel.text = findGenre(genres: info.genreIds)
             
             for i in 0..<detailView.imageViews.count {
@@ -169,28 +171,101 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: SynopsisTableViewCell.id, for: indexPath) as? SynopsisTableViewCell else { return UITableViewCell() }
         
-        if let (info, _) = movieInfo {
-            cell.setupLabel(title: sections[indexPath.row], overView: info.overview)
+        if indexPath.section == 0 {
+            guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: SynopsisTableViewCell.id, for: indexPath) as? SynopsisTableViewCell else { return UITableViewCell() }
+            
+            if let (info, _) = movieInfo {
+                cell.setupLabel(title: sections[indexPath.row], overView: info.overview)
+            } else {
+                cell.setupLabel(title: "", overView: "")
+            }
+            cell.delegate = self
+            
+            return cell
+        } else if indexPath.section == 1 {
+            guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as? CastTableViewCell else { return UITableViewCell() }
+            
+            if let (info, _) = movieInfo {
+                cell.setupLabel(title: sections[indexPath.section])
+                
+                
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.register(CastCollectionViewCell.self, forCellWithReuseIdentifier: CastCollectionViewCell.id)
+                
+            }
+         
+            
+            return cell
+                    
+            
+        } else if indexPath.section == 2 {
+            return UITableViewCell()
         } else {
-            cell.setupLabel(title: "", overView: "")
+            return UITableViewCell()
         }
-        cell.delegate = self
+
+            
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+     
+        if indexPath.section == 0 {
+            return UITableView.automaticDimension
+        } else {
+            // 하나의 테이블셀에서 아이템을 기준으로 변경하려고 각각 화면을 구성하려고 했으나, 컬렉션뷰와 오토디멘션 문제로 구조 변경
+            // 테이블 뷰 안에서 컬렉션 뷰를 만드는데, 오토디멘션으로 설정시, 컬렉션뷰에서 높이를 테이블뷰에 높이를 찾을 수가 없음
+            // 기기별 동적 대응을 위해, 각 섹션으로 구분하고. 기기별 대응을 위해 섹션별 높이를 새롭게 설정함.
+            print(UIScreen.main.bounds.size.width / 2.5)
+            return (UIScreen.main.bounds.size.width / 2.5)
+        }
         
-        
-        
+    }
+}
+
+// MARK: - CollectionViewDelegate
+extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
         
         return cell
     }
     
     
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        
-//        return UITableView.automaticDimension
-//    }
+    
 }
+
+//// MARK: - CollectionViewDelegateFlowLayout Delegate
+//extension DetailViewController: UICollectionViewDelegateFlowLayout {
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        print(#function)
+//        let deviceWidth = UIScreen.main.bounds.size.width
+//        let spacing: CGFloat = 8
+//        let inset: CGFloat = 16
+//        let imageCount: CGFloat = 2
+//                
+//        let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
+//        let objectHeight = objectWidth / 2
+////        print(objectWidth)
+////        print(objectHeight)
+//        
+//        
+//        return CGSize(width: objectWidth, height: deviceWidth)
+//    }
+//}
+
 
 
 extension DetailViewController: PassDataDelegate {
@@ -207,5 +282,6 @@ extension DetailViewController: PassDataDelegate {
     }
     
 }
+
 
 

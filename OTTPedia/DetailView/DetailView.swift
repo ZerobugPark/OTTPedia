@@ -79,6 +79,8 @@ final class DetailView: BaseView {
             imageViews[i].isHidden = true // 자연스러운 전환을 위해서 히든 처리
         }
         
+        tableView.bounces = false
+        
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         
