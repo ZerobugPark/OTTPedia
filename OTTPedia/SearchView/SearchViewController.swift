@@ -18,13 +18,15 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchView.tableView.delegate = self
+        searchView.tableView.dataSource = self
+        searchView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
+        
+
         configurationNavigationController()
-//        DispatchQueue.main.async {
-//            self.navigationItem.searchController = self.searchView.searchController
-//
-//        }
-        self.searchView.searchController.searchBar.delegate = self
-        view.backgroundColor = .blue
+
+       // self.searchView.searchController.searchBar.delegate = self
     }
     
     private func configurationNavigationController() {
@@ -33,13 +35,9 @@ class SearchViewController: UIViewController {
         navigationItem.title = title
 
 
-        searchView.searchController.searchBar.placeholder = "검색어 입력"
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        navigationItem.searchController = searchView.searchController
-    }
+
 
 
 }
@@ -101,4 +99,25 @@ extension SearchViewController: UISearchBarDelegate {
 //        return true
 //    }
 
+}
+
+
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
+        
+        
+        return cell
+        
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return (UIScreen.main.bounds.width / 3.0)
+    }
+    
+    
 }

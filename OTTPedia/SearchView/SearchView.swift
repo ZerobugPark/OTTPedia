@@ -25,12 +25,12 @@ final class SearchView: BaseView {
     override func configureLayout() {
         
         searchBar.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(16)
             make.horizontalEdges.equalTo(self).inset(16)
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(16)
+            make.top.equalTo(searchBar.snp.bottom)
             make.horizontalEdges.equalTo(self).inset(16)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
@@ -40,6 +40,12 @@ final class SearchView: BaseView {
     override func configureView() {
         
         tableView.bounces = false
+        tableView.backgroundColor = ColorList.black.color
+        
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        tableView.separatorColor = ColorList.lightGray.color
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
         
         let placeholder = "어떤 영화가 궁금하신가요?"
         searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor : ColorList.lightGray.color])
