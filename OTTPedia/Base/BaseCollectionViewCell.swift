@@ -15,7 +15,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
         configureHierarchy()
         configureLayout()
         configureView()
-        
+        self.backgroundColor = ColorList.black.color
     }
     
     func configureHierarchy() { }
