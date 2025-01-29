@@ -15,7 +15,8 @@ struct Configuration {
     let secureURL = "https://image.tmdb.org/t/p/"
     
     private init() { }
-    
+
+    // enum은 인스턴스나, 메서스가 아니기 때문에, 구조체에서 바로 접근 가능 (구조체명.enum)
     enum BackdropSizes: String {
         case w300 = "w300"
         case w780 = "w780"
@@ -106,5 +107,11 @@ struct Configuration {
             
         }
     }
+    
+    enum Language: String {
+        case korean = "ko-KR"
+        case english = "en-US"
+    }
+
 }
 
