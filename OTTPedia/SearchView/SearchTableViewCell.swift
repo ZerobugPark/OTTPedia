@@ -24,8 +24,6 @@ final class SearchTableViewCell: BaseTableViewCell {
     private let likeButton = UIButton()
     private var likeButtonStatus = false
     
-    private let genreCount = 2
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
@@ -38,20 +36,7 @@ final class SearchTableViewCell: BaseTableViewCell {
         addSubview(releaseDate)
         addSubview(stackView)
         
-        for i in 0..<genreCount {
-            
-            let view = CustomView()
-            view.layer.cornerRadius = 5
-            genreView.append(view)
-            stackView.addArrangedSubview(genreView[i])
-            
-            let label = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white.color)
-            label.textAlignment = .center
-            
-            genreLabel.append(label)
-            genreView[i].addSubview(genreLabel[i])
-        }
-        
+
         addSubview(likeButton)
         
     }
@@ -86,13 +71,7 @@ final class SearchTableViewCell: BaseTableViewCell {
             
         }
         
-        for i in 0..<genreCount {
-            genreLabel[i].snp.makeConstraints { make in
-                make.edges.equalTo(genreView[i]).inset(4)
-                
-            }
-        }
-        
+ 
         
         likeButton.snp.makeConstraints { make in
             make.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(16)
@@ -106,17 +85,10 @@ final class SearchTableViewCell: BaseTableViewCell {
     
     override func configureView() {
         
-        
-        movieImage.backgroundColor = .red
-        
-      
-        
-        movieTitle.text = "123213dfsfsfdsfsfdsfsfsfsfsfsfsfsfsfsfsdfsfsfsfsfdsfsfsf"
         movieTitle.numberOfLines = 2
-        releaseDate.text = "123213123213"
         
-        genreLabel[0].text = "액션"
-        genreLabel[1].text = "애니메이션"
+       // genreLabel[0].text = "액션"
+       // genreLabel[1].text = "애니메이션"
         
         likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         
@@ -128,7 +100,61 @@ final class SearchTableViewCell: BaseTableViewCell {
     }
     
     
-    func setupLabel(title: String) {
+    func searchInfo(info: Results) {
+        
+        if let path = info.posterPath {
+            let url = URL(string: Configuration.shared.secureURL + Configuration.PosterSizes.w500.rawValue + path)
+            movieImage.kf.setImage(with: url)
+        } else {
+            movieImage.image = UIImage(systemName: "star.fill")
+        }
+
+        
+        movieTitle.text = info.title
+        releaseDate.text = info.releaseDate
+        movieTitle.text = info.title
+        findGenre(genres: info.genreIds)
+        
+    }
+    
+    private func findGenre(genres: [Int]) {
+        
+        let maxCount = genres.count > 2 ? 2 : genres.count
+        
+        if maxCount == 0 {
+            return
+        }
+        
+        genreLayout(count: maxCount)
+        
+        for i in 0..<maxCount {
+            genreLabel[i].text = (Configuration.Genres(rawValue: genres[i])?.genre ?? "unknown")
+        }
+    }
+    
+    private func genreLayout(count: Int) {
+       
+        for i in 0..<count {
+            
+            let view = CustomView()
+            view.layer.cornerRadius = 5
+            genreView.append(view)
+            stackView.addArrangedSubview(genreView[i])
+            
+            let label = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white.color)
+            label.textAlignment = .center
+            
+            genreLabel.append(label)
+            genreView[i].addSubview(genreLabel[i])
+        }
+        
+        for i in 0..<count {
+            genreLabel[i].snp.makeConstraints { make in
+                make.edges.equalTo(genreView[i]).inset(4)
+                
+            }
+        }
+        
         
     }
     
