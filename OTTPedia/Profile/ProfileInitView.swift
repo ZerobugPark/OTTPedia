@@ -100,7 +100,6 @@ final class ProfileInitView: BaseView {
         okButton.setTitle("완료", for: .normal)
         okButton.isEnabled = false
         
-        
         DispatchQueue.main.async {
             self.imageView.layer.cornerRadius = self.imageView.frame.width / 2
             self.circleView.layer.cornerRadius = self.circleView.frame.width / 2

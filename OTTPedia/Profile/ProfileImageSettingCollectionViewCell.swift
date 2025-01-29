@@ -16,7 +16,6 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
     
     override func configureHierarchy() {
         contentView.addSubview(imageView)
-
         
     }
     
@@ -40,7 +39,7 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
         imageView.image = UIImage(named: ImageList.shared.profileImageList[index])
         if !selected {
             imageView.layer.borderWidth = 1
-            imageView.layer.borderColor = ColorList.DarkGray.color.cgColor
+            imageView.layer.borderColor = ColorList.darkGray.color.cgColor
             imageView.alpha = 0.5
             
         } else {

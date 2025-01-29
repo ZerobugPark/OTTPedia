@@ -84,7 +84,7 @@ final class ProfileImageSettingView: BaseView {
         print(objectWidth)
         print(deviceWidth)
     
-        //이건 정리좀 후딱해야겠다.
+
         layout.minimumInteritemSpacing = spacing
         
         layout.itemSize = CGSize(width: objectWidth, height: objectWidth)

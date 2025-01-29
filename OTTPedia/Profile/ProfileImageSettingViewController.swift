@@ -34,7 +34,7 @@ final class ProfileImageSettingViewController: UIViewController {
 
 }
 
-
+// MARK: - CollectionViewDelegate
 extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return ImageList.shared.profileImageList.count

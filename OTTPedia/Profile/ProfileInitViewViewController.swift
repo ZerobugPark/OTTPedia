@@ -82,8 +82,8 @@ final class ProfileInitViewViewController: UIViewController {
     
 }
 
+// MARK: - TextFieldDelegate
 extension ProfileInitViewViewController: UITextFieldDelegate {
-    
     
     // textField.text에 값이 있음
     func textFieldDidChangeSelection(_ textField: UITextField) {
@@ -104,15 +104,12 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
                 profileInit.okButton.isEnabled = isOk
             }
             
-        } else {
-         
         }
-        
     }
  
     // 입력은 되었지만 textField.text에는 아직 값이 없음
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        print(#function)
+       
         let specialCharacter = ["@","#","$","%"]
         let numbers = ["0","1","2","3","4","5","6","7","8","9"]
         
