@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class SettingTableViewCell: BaseTableViewCell {
+final class SettingTableViewCell: BaseTableViewCell {
 
     static let id = "SettingTableViewCell"
     
@@ -26,18 +26,12 @@ class SettingTableViewCell: BaseTableViewCell {
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView)
         }
-
-        
     }
   
-    
-    
     func setupContent(title: String) {
         content.text = title
 
     }
-
-    
 
 
 }
