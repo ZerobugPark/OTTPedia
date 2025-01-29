@@ -37,8 +37,10 @@ final class ModifiyProfileViewController: UIViewController {
         
         let buttonTitle = "저장"
         let rightButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(saveButtonTapped))
-        
+    
         navigationItem.rightBarButtonItem = rightButton
+        
+        navigationItem.backButtonTitle = ""
 
     }
     
