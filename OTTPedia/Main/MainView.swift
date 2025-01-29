@@ -7,6 +7,8 @@
 
 import UIKit
 
+import SnapKit
+
 final class MainView: BaseView {
     
     let view = CustomView()
@@ -26,9 +28,9 @@ final class MainView: BaseView {
     private let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     private let chevronImage = CustomImageView()
     
+    private let titleSection = ["최근검색어", "오늘의 영화"]
     
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-    
     
     
     override func configureHierarchy() {
@@ -48,13 +50,13 @@ final class MainView: BaseView {
         
         movieListView.addSubview(secondSection)
         movieListView.addSubview(collectionView)
-        //addSubview(tableView)
         
         
     }
     
     override func configureLayout() {
         
+        // MARK: - 프로필 레이아웃
         view.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide).offset(16)
             make.horizontalEdges.equalTo(self).inset(16)
@@ -93,12 +95,13 @@ final class MainView: BaseView {
             make.bottom.equalTo(view).inset(8)
         }
         
+        
         stackView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(self)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
-        
+        // MARK: - 최근 검색어 레이아웃
         recentSearchView.snp.makeConstraints { make in
             make.top.equalTo(stackView.safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(stackView)
@@ -121,7 +124,7 @@ final class MainView: BaseView {
             make.center.equalTo(recentSearchView).offset(2)
             make.height.equalTo(14)
         }
-        
+        // MARK: - 오늘의 영화 레이아웃
         movieListView.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(stackView)
@@ -145,8 +148,9 @@ final class MainView: BaseView {
     override func configureView() {
         
         recentSearchView.backgroundColor = ColorList.black.color
-        movieListView.backgroundColor = .red
+        movieListView.backgroundColor = ColorList.black.color
         collectionView.backgroundColor = .black
+        collectionView.showsHorizontalScrollIndicator = false
         
         imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
         
@@ -164,8 +168,8 @@ final class MainView: BaseView {
         stackView.axis = .vertical
         stackView.spacing = 4
         
-        firstSection.text = "최근검색어"
-        secondSection.text = "오늘의 영화"
+        firstSection.text = titleSection[0]
+        secondSection.text = titleSection[1]
         recentInfoLabel.text = "최근 검색어 내역이 없습니다."
         
         let buttonTitle = "전체 삭제"
@@ -173,34 +177,23 @@ final class MainView: BaseView {
         removeAllButton.setTitleColor(ColorList.main.color, for: .normal)
         removeAllButton.titleLabel?.font = .systemFont(ofSize: 12)
         
-        
-        
-        
-        
+        //print("메인뷰")
         DispatchQueue.main.async {
+            //print("메인뷰 디스패치")
             self.imageView.layer.cornerRadius = self.imageView.frame.width / 2
         }
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        
-        let deviceWidth = UIScreen.main.bounds.size.width
-        let spacing: CGFloat = 8
-        let inset: CGFloat = 16
-        let imageCount: CGFloat = 2
-        
-        let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
-      
-        print(objectWidth)
-        print(deviceWidth)
-    
        
-        layout.minimumInteritemSpacing = spacing
-        layout.minimumLineSpacing = 10
+        let inset: CGFloat = 16
+        let spacing: CGFloat = 8
+
+        layout.minimumLineSpacing = spacing
         
-        layout.itemSize = CGSize(width: 100, height: 100)
-        layout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        layout.itemSize = CGSize(width: 0, height: 0)
+        layout.sectionInset = UIEdgeInsets(top: inset / 2, left: inset, bottom: inset / 2, right: inset)
         
         layout.scrollDirection = .horizontal
         
