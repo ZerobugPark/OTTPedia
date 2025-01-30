@@ -27,7 +27,7 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         
         view.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide)
+            make.top.equalTo(contentView).offset(4)
             make.horizontalEdges.equalTo(contentView)
             make.bottom.equalTo(contentView).inset(16)
         }
@@ -35,7 +35,6 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
         label.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.leading.equalTo(view).offset(8)
-            
         }
         
         button.snp.makeConstraints { make in
@@ -51,9 +50,10 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
         
         
         view.backgroundColor = ColorList.white.color
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 13
         view.clipsToBounds = true
         
+    
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = ColorList.black.color
         button.backgroundColor = .clear

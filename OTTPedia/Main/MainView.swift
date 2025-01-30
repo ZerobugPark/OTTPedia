@@ -47,8 +47,8 @@ final class MainView: BaseView {
         
         recentSearchView.addSubview(firstSection)
         recentSearchView.addSubview(removeAllButton)
-        recentSearchView.addSubview(recentInfoLabel)
         recentSearchView.addSubview(recentSearchCollectionView)
+        recentSearchView.addSubview(recentInfoLabel)
         
         movieListView.addSubview(secondSection)
         movieListView.addSubview(collectionView)
@@ -130,7 +130,7 @@ final class MainView: BaseView {
         recentSearchCollectionView.snp.makeConstraints { make in
             make.top.equalTo(firstSection.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(self)
-            make.bottom.equalTo(recentSearchView)
+            make.bottom.equalTo(recentSearchView).inset(4)
         }
         
         // MARK: - 오늘의 영화 레이아웃
@@ -166,8 +166,6 @@ final class MainView: BaseView {
         collectionView.backgroundColor = ColorList.black.color
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.tag = 1
-        
-        
 
         
         imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
@@ -212,8 +210,8 @@ final class MainView: BaseView {
         layout.minimumLineSpacing = spacing
         
         layout.itemSize = CGSize(width: 0, height: 0)
-        layout.sectionInset = UIEdgeInsets(top: inset / 2, left: inset, bottom: inset / 2, right: inset)
-        
+        //layout.sectionInset = UIEdgeInsets(top: inset / 2, left: inset, bottom: inset / 2, right: inset)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         layout.scrollDirection = .horizontal
         
         return layout

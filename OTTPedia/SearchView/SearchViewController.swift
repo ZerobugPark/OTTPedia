@@ -15,7 +15,9 @@ final class SearchViewController: UIViewController {
     private var searchView = SearchView()
     private var totalPage = 0
     
-    private var searchText = ""
+    var searchText = ""
+    
+    var textInfo: ((String) -> Void)?
     
     override func loadView() {
         view = searchView
@@ -33,6 +35,17 @@ final class SearchViewController: UIViewController {
         
         configurationNavigationController()
         
+        
+        if !searchText.isEmpty {
+            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
+                self.searchResult = value.results
+                self.totalPage = value.totalPage
+                self.searchView.tableView.reloadData()
+                self.noData()
+            } failHandler: {
+                print("123")
+            }
+        }
         
     }
     
@@ -56,15 +69,16 @@ extension SearchViewController: UISearchBarDelegate {
   
         if let text = searchBar.text {
             searchText = text
+            currentPage = 1
             NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
                 self.searchResult = value.results
                 self.totalPage = value.totalPage
                 self.searchView.tableView.reloadData()
                 self.noData()
-                self.currentPage = 1
             } failHandler: {
                 print("123")
             }
+            textInfo?(searchText)
         }
         
         view.endEditing(true)

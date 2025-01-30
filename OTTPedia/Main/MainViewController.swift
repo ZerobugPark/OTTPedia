@@ -14,8 +14,15 @@ final class MainViewController: UIViewController {
     private var mainView = MainView()
     private var trendingResult: [Results] = []
     
-    private var textList: [String] = ["안녕하세요", "반", "정말?"]
-
+    private var textList: [String] = [] {
+        didSet {
+            if textList.isEmpty {
+                mainView.recentInfoLabel.isHidden = false
+            } else {
+                mainView.recentInfoLabel.isHidden = true
+            }
+        }
+    }
     
     override func loadView() {
         view = mainView
@@ -92,11 +99,21 @@ final class MainViewController: UIViewController {
     }
     
     @objc private func removeAllButtonTapped(_ sender: UIButton) {
-        print(#function)
+        textList.removeAll()
+        self.mainView.recentSearchCollectionView.reloadData()
     }
     
     @objc private func searchButtonTapped(_ sender: UIButton) {
         let vc = SearchViewController()
+        
+        vc.textInfo = { text in
+            
+            if let sameTextIndex = self.textList.lastIndex(of: text) {
+                self.textList.remove(at: sameTextIndex)
+            }
+            self.textList.insert(text, at: 0)
+            self.mainView.recentSearchCollectionView.reloadData()
+        }
         
         navigationController?.pushViewController(vc, animated: true)
         
@@ -130,13 +147,16 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.id, for: indexPath) as? RecentSearchCollectionViewCell else { return UICollectionViewCell() }
             
             cell.addRecnetSearchLable(text: textList[indexPath.item])
-            
+            cell.button.tag = indexPath.item
+            cell.button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
             return cell
             
         } else if collectionView.tag == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as? MovieListCollectionViewCell else { return UICollectionViewCell() }
          
             cell.setupTrending(trend: trendingResult[indexPath.item])
+      
+            
             
             return cell
             
@@ -150,7 +170,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if collectionView.tag == 0 {
-            
+            let vc = SearchViewController()
+            vc.searchText = textList[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
             
         } else if collectionView.tag == 1 {
             let vc = DetailViewController()
@@ -162,6 +184,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         }
 
+    }
+    
+    
+    @objc private func deleteButtonTapped(_ sender: UIButton) {
+        
+        textList.remove(at: sender.tag)
+        mainView.recentSearchCollectionView.reloadData()
     }
 }
 
@@ -175,12 +204,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         
         if collectionView.tag == 0 {
              
-            print(UIScreen.main.bounds.size.height)
-            let size = textList[indexPath.item].size()
-            print(size)
-          
             
-            // label offset 8, buttion inset 8, lable size, buttonsize = 20, spacing = 8
+            let font = UIFont.systemFont(ofSize: 13)
+            let size = textList[indexPath.item].size(withAttributes: [.font: font])
+            //print(size)
+            
+            
+            
+            // label offset 8, buttion inset 8, lable size, buttonsize = 12, spacing = 8
             let buttonSize: CGFloat = 12
             let spacing: CGFloat = 8
             let inset: CGFloat = 16 // 8 + 8
@@ -188,7 +219,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             let objectWidth =  size.width + buttonSize + spacing + inset
             let objectHeight = mainView.recentSearchCollectionView.bounds.height
             
-            print(objectWidth)
+            //print(objectWidth)
             print(objectHeight)
             return CGSize(width: objectWidth, height: objectHeight)
         
