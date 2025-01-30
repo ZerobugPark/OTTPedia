@@ -14,7 +14,7 @@ class CustomView: UIView {
         
         
         layer.cornerRadius = 10
-        backgroundColor = ColorList.DarkGray.color
+        backgroundColor = ColorList.darkGray.color
         clipsToBounds = true
    
     }

@@ -10,12 +10,17 @@ import UIKit
 final class CustomLabel: UILabel {
     
     
-    init(boldStyle: Bool, fontSize: CGFloat) {
+    // 컬러를 매개변수로 받고 정렬리 왼쪽일 때,
+    init(boldStyle: Bool, fontSize: CGFloat, color: UIColor) {
         super.init(frame: .zero)
         font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
+        textColor = color
+        textAlignment = .left
     }
     
-    init(boldStyle: Bool, fontSize: CGFloat, italic: Bool) {
+    
+    // 컬러 변경 및 정렬이 센터이면서, 이탤릭체랑 비교
+    init(boldStyle: Bool, fontSize: CGFloat, italic: Bool, color: UIColor) {
         super.init(frame: .zero)
         
         if italic {
@@ -23,7 +28,7 @@ final class CustomLabel: UILabel {
         } else {
             font = boldStyle ? .boldSystemFont(ofSize: fontSize) : .systemFont(ofSize: fontSize)
         }
-        textColor = ColorList.white.color
+        textColor = color
         textAlignment = .center
         
         UIFont.italicSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)

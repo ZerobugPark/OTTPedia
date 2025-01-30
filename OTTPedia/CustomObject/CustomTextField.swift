@@ -17,7 +17,7 @@ final class CustomTextField: UITextField {
         textColor = ColorList.white.color
         
         //Placeholder 색상 변경
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : ColorList.DarkGray.color])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : ColorList.darkGray.color])
         
         backgroundColor = .clear
         borderStyle = .none

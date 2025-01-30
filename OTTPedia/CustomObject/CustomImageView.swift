@@ -11,6 +11,7 @@ final class CustomImageView: UIImageView {
     
     init() {
         super.init(frame: .zero)
+        clipsToBounds = true
     }
     
     init(cornerRadius: Bool) {
@@ -20,7 +21,7 @@ final class CustomImageView: UIImageView {
             layer.cornerRadius = 10
             clipsToBounds = true
         }
-        contentMode = .scaleToFill//.scaleAspectFit
+        contentMode = .scaleToFill
         
     }
     
@@ -33,7 +34,7 @@ final class CustomImageView: UIImageView {
             layer.borderColor = ColorList.main.color.cgColor
         } else {
             layer.borderWidth = 1
-            layer.borderColor = ColorList.DarkGray.color.cgColor
+            layer.borderColor = ColorList.darkGray.color.cgColor
             alpha = 0.5
         }
         

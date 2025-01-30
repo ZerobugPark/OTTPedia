@@ -13,7 +13,9 @@ final class CustomButton: UIButton {
         super.init(frame: .zero)
         backgroundColor = ColorList.main.color
         titleLabel?.textColor = ColorList.white.color
-        titleLabel?.font = .systemFont(ofSize: 14)
+        titleLabel?.font = .boldSystemFont(ofSize: 14)
+        layer.cornerRadius = 8
+        clipsToBounds = true
     }
     
     init(applyConfig: Bool){
@@ -40,7 +42,7 @@ extension CustomButton.Configuration {
        
         var configuration = UIButton.Configuration.filled()
 
-        configuration.baseForegroundColor = ColorList.main.color         // #colorLiteral(red: 0, green: 0.6, blue: 0.8392156863, alpha: 1) // 텍스트 컬러
+        configuration.baseForegroundColor = ColorList.main.color  // 텍스트 컬러
         configuration.baseBackgroundColor = .clear // 배경 컬러
         
         configuration.background.strokeColor = ColorList.main.color // 테두리 색상
@@ -50,48 +52,4 @@ extension CustomButton.Configuration {
       
         return configuration
     }
-    
-    
-    static func colorButtonStyle(color: UIColor) -> UIButton.Configuration {
-       
-        var configuration = UIButton.Configuration.filled()
-        
-        configuration.titleAlignment = .leading
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
-        configuration.image = UIImage(systemName: "circle.fill", withConfiguration: imageConfig)
-    
-        configuration.baseForegroundColor = .black
-        configuration.baseBackgroundColor = #colorLiteral(red: 0.9450977445, green: 0.9450982213, blue: 0.9537070394, alpha: 1)
-
-        
-        configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [color])
-        configuration.cornerStyle = .capsule
-        configuration.buttonSize = .mini
-        configuration.imagePadding = 5
-        
-        return configuration
-    }
-    
-    
-    static func likeButtonStyle(image: String) -> UIButton.Configuration {
-       
-        var configuration = UIButton.Configuration.filled()
-        
-        configuration.titleAlignment = .leading
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 8, weight: .thin)
-        configuration.image = UIImage(systemName: image, withConfiguration: imageConfig)
-           
-        configuration.baseForegroundColor = .yellow
-        configuration.baseBackgroundColor = .darkGray
-        
-
-        configuration.cornerStyle = .capsule
-        configuration.buttonSize = .mini
-        configuration.imagePadding = 5
-
-        return configuration
-    }
-    
 }
