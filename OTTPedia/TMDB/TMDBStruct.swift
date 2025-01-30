@@ -13,20 +13,28 @@ import Foundation
 struct Trending: Decodable {
     
     let results: [Results]
+    let totalPage: Int
+    
+    
+    enum CodingKeys: String, CodingKey {
+        case results
+        case totalPage = "total_pages"
+    }
 }
 
 struct Results: Decodable {
     
-    let backdropPath: String
+    let backdropPath: String?
     let id: Int
     let title: String
     let overview: String
-    let posterPath: String
+    let posterPath: String?
    // let adult: Bool
     let genreIds: [Int]
     let releaseDate: String
     let average: Double
-    
+
+
     
     enum CodingKeys: String, CodingKey {
         case backdropPath = "backdrop_path"
