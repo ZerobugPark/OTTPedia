@@ -13,12 +13,13 @@ final class SearchView: BaseView {
 
     let searchBar = UISearchBar()
     let tableView = UITableView()
+    let infoLabel = CustomLabel(boldStyle: true, fontSize: 14, color: ColorList.white.color)
 
   
     override func configureHierarchy() {
         addSubview(searchBar)
         addSubview(tableView)
-
+        addSubview(infoLabel)
         
     }
     
@@ -34,17 +35,14 @@ final class SearchView: BaseView {
             make.horizontalEdges.equalTo(self).inset(16)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
+        
+        infoLabel.snp.makeConstraints { make in
+            make.center.equalTo(self)
+        }
 
     }
     
     override func configureView() {
-        
-        tableView.bounces = false
-        tableView.backgroundColor = ColorList.black.color
-        
-        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        tableView.separatorColor = ColorList.lightGray.color
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         
         let placeholder = "어떤 영화가 궁금하신가요?"
@@ -53,6 +51,19 @@ final class SearchView: BaseView {
         searchBar.searchTextField.leftView?.tintColor = ColorList.white.color // 돋보기 색상 변경
         searchBar.searchTextField.textColor = .white
         searchBar.searchBarStyle = .minimal
+        
+        
+        
+        tableView.bounces = false
+        tableView.backgroundColor = ColorList.black.color
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        tableView.separatorColor = ColorList.lightGray.color
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        let msg = "원하는 검색결과를 찾지 못했습니다."
+        infoLabel.text = msg
+        infoLabel.isHidden = true
+
         
    
     }

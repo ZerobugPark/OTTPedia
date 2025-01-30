@@ -93,7 +93,7 @@ final class SearchTableViewCell: BaseTableViewCell {
         likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         
         stackView.spacing = 4
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .equalSpacing
         stackView.axis = .horizontal
         
         

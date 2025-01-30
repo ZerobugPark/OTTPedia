@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
     
     private var searchResult: [Results] = []
     private var currentPage = 1
@@ -60,7 +60,8 @@ extension SearchViewController: UISearchBarDelegate {
                 self.searchResult = value.results
                 self.totalPage = value.totalPage
                 self.searchView.tableView.reloadData()
-                self.currentPage += 1
+                self.noData()
+                self.currentPage = 1
             } failHandler: {
                 print("123")
             }
@@ -68,19 +69,14 @@ extension SearchViewController: UISearchBarDelegate {
         
         view.endEditing(true)
     }
-    
-    //    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    //        results.removeAll()
-    //        searchView.collectionView.reloadData()
-    //        self.searchView.label.text = "사진을 검색해보세요."
-    //        self.searchView.label.isHidden = false
-    //    }
-    //
-    //
-    //    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-    //        searchView.searchController.searchBar.text = ""
-    //        return true
-    //    }
+
+    private func noData() {
+        if searchResult.isEmpty {
+            searchView.infoLabel.isHidden = false
+        } else {
+            searchView.infoLabel.isHidden = true
+        }
+    }
     
 }
 
@@ -122,14 +118,13 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
             print("맥스입낟.")
             return
         } else {
-            
-            
+           
             for path in indexPaths {
                 if searchResult.count - 2 == path.row {
+                    currentPage += 1
                     NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
                         self.searchResult.append(contentsOf: value.results)
                         self.searchView.tableView.reloadData()
-                        self.currentPage += 1
                     } failHandler: {
                         print("123")
                     
