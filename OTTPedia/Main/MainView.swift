@@ -19,10 +19,11 @@ final class MainView: BaseView {
     let recentInfoLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let movieListView = UIView()
     let secondSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
-    
+   
     private let firstSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
     private let stackView = UIStackView()
     private let recentSearchView = UIView()
+ 
     
     
     private let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
@@ -31,7 +32,7 @@ final class MainView: BaseView {
     private let titleSection = ["최근검색어", "오늘의 영화"]
     
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-    
+    lazy var recentSearchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
     
     override func configureHierarchy() {
         addSubview(view)
@@ -47,6 +48,7 @@ final class MainView: BaseView {
         recentSearchView.addSubview(firstSection)
         recentSearchView.addSubview(removeAllButton)
         recentSearchView.addSubview(recentInfoLabel)
+        recentSearchView.addSubview(recentSearchCollectionView)
         
         movieListView.addSubview(secondSection)
         movieListView.addSubview(collectionView)
@@ -124,6 +126,13 @@ final class MainView: BaseView {
             make.center.equalTo(recentSearchView).offset(2)
             make.height.equalTo(14)
         }
+        
+        recentSearchCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(firstSection.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(self)
+            make.bottom.equalTo(recentSearchView)
+        }
+        
         // MARK: - 오늘의 영화 레이아웃
         movieListView.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(4)
@@ -149,8 +158,17 @@ final class MainView: BaseView {
         
         recentSearchView.backgroundColor = ColorList.black.color
         movieListView.backgroundColor = ColorList.black.color
-        collectionView.backgroundColor = .black
+        
+        recentSearchCollectionView.backgroundColor = ColorList.black.color
+        recentSearchCollectionView.showsHorizontalScrollIndicator = false
+        recentSearchCollectionView.tag = 0
+        
+        collectionView.backgroundColor = ColorList.black.color
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.tag = 1
+        
+        
+
         
         imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
         
@@ -168,6 +186,7 @@ final class MainView: BaseView {
         stackView.axis = .vertical
         stackView.spacing = 4
         
+
         firstSection.text = titleSection[0]
         secondSection.text = titleSection[1]
         recentInfoLabel.text = "최근 검색어 내역이 없습니다."

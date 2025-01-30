@@ -7,10 +7,15 @@
 
 import UIKit
 
+import SnapKit
+
 final class MainViewController: UIViewController {
 
     private var mainView = MainView()
     private var trendingResult: [Results] = []
+    
+    private var textList: [String] = ["안녕하세요", "반", "정말?"]
+
     
     override func loadView() {
         view = mainView
@@ -21,8 +26,13 @@ final class MainViewController: UIViewController {
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
         
+        mainView.recentSearchCollectionView.delegate = self
+        mainView.recentSearchCollectionView.dataSource = self
+        
         mainView.collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.id)
-
+        mainView.recentSearchCollectionView.register(RecentSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecentSearchCollectionViewCell.id)
+        
+        
 
         configurationNavigationController()
         mainView.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
@@ -103,21 +113,55 @@ final class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return trendingResult.count
+        if collectionView.tag == 0 {
+            return textList.count
+        } else if collectionView.tag == 1{
+            return trendingResult.count
+        } else {
+            return 0
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as! MovieListCollectionViewCell
-        cell.setupTrending(trend: trendingResult[indexPath.item])
-  
-        return cell
+        
+        
+        if collectionView.tag == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.id, for: indexPath) as? RecentSearchCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.addRecnetSearchLable(text: textList[indexPath.item])
+            
+            return cell
+            
+        } else if collectionView.tag == 1 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as? MovieListCollectionViewCell else { return UICollectionViewCell() }
+         
+            cell.setupTrending(trend: trendingResult[indexPath.item])
+            
+            return cell
+            
+        } else {
+            return UICollectionViewCell()
+        }
+        
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = DetailViewController()
         
-        vc.movieInfo = (info: trendingResult[indexPath.item], likeStatus: true)
-        navigationController?.pushViewController(vc, animated: true)
+        if collectionView.tag == 0 {
+            
+            
+        } else if collectionView.tag == 1 {
+            let vc = DetailViewController()
+            
+            vc.movieInfo = (info: trendingResult[indexPath.item], likeStatus: true)
+            navigationController?.pushViewController(vc, animated: true)
+            
+        } else {
+            
+        }
+
     }
 }
 
@@ -128,17 +172,46 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let deviceWidth = UIScreen.main.bounds.size.width
-        let spacing: CGFloat = 8
-        let inset: CGFloat = 16
-        let imageCount: CGFloat = 2
-                
-        let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
-        let objectHeight = mainView.movieListView.frame.size.height - mainView.secondSection.frame.size.height
-//        print(objectWidth)
-//        print(objectHeight)
-
         
-        return CGSize(width: objectWidth, height: objectHeight)
+        if collectionView.tag == 0 {
+             
+            print(UIScreen.main.bounds.size.height)
+            let size = textList[indexPath.item].size()
+            print(size)
+          
+            
+            // label offset 8, buttion inset 8, lable size, buttonsize = 20, spacing = 8
+            let buttonSize: CGFloat = 12
+            let spacing: CGFloat = 8
+            let inset: CGFloat = 16 // 8 + 8
+            
+            let objectWidth =  size.width + buttonSize + spacing + inset
+            let objectHeight = mainView.recentSearchCollectionView.bounds.height
+            
+            print(objectWidth)
+            print(objectHeight)
+            return CGSize(width: objectWidth, height: objectHeight)
+        
+            
+        } else if collectionView.tag == 1 {
+            let deviceWidth = UIScreen.main.bounds.size.width
+            let spacing: CGFloat = 8
+            let inset: CGFloat = 16
+            let imageCount: CGFloat = 2
+                    
+            let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
+            let objectHeight = mainView.movieListView.frame.size.height - mainView.secondSection.frame.size.height
+    //        print(objectWidth)
+    //        print(objectHeight)
+
+            
+            return CGSize(width: objectWidth, height: objectHeight)
+        } else {
+            
+            return CGSize(width: 0, height: 0)
+        }
+        
+
     }
 }
+
