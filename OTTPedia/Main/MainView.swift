@@ -179,7 +179,9 @@ final class MainView: BaseView {
 
         firstSection.text = titleSection[0]
         secondSection.text = titleSection[1]
-        recentInfoLabel.text = "최근 검색어 내역이 없습니다."
+        
+        let text = "최근 검색어 내역이 없습니다."
+        recentInfoLabel.text = text
         
         let buttonTitle = "전체 삭제"
         removeAllButton.setTitle(buttonTitle, for: .normal)
@@ -202,7 +204,6 @@ final class MainView: BaseView {
         layout.minimumLineSpacing = spacing
         
         layout.itemSize = CGSize(width: 0, height: 0)
-        //layout.sectionInset = UIEdgeInsets(top: inset / 2, left: inset, bottom: inset / 2, right: inset)
         layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         layout.scrollDirection = .horizontal
         

@@ -69,43 +69,30 @@ struct ApiError {
             try apiError(status: apiStatus)
         } catch TMDBError.verificationFailed {
             return "검증실패"
-            //print(TMDBError.verificationFailed.rawValue)
         } catch TMDBError.authenticationFailed {
            return "인증실패"
-            //print(TMDBError.authenticationFailed.rawValue)
         } catch TMDBError.accountSuspension {
             return "계정정지"
-           // print(TMDBError.accountSuspension.rawValue)
         } catch TMDBError.invalidRequest {
             return "잘못된 요청"
-            //print(TMDBError.invalidRequest.rawValue)
         } catch TMDBError.wrongForm {
             return "잘못된 형식"
-            //print(TMDBError.wrongForm.rawValue)
         } catch TMDBError.invalidHeader  {
             return "잘못된 수락 헤더"
-            //print(TMDBError.invalidHeader.rawValue)
         } catch TMDBError.invalidParameter {
             return "잘못된 파라미터"
-           // print(TMDBError.invalidParameter.rawValue)
         } catch TMDBError.limitExceeded {
             return "요청한도 초과"
-           // print(TMDBError.limitExceeded.rawValue)
         } catch  TMDBError.tmdbError {
             return "TMDB 오류"
-           // print(TMDBError.tmdbError.rawValue)
         } catch TMDBError.noService {
             return "잘못된 서비스"
-           // print(TMDBError.noService.rawValue)
         } catch TMDBError.backendConnectionError {
             return "백엔드 연결 실패"
-           // print(TMDBError.backendConnectionError.rawValue)
         } catch  TMDBError.offline {
             return "서비스 오프라인"
-           // print(TMDBError.offline.rawValue)
         } catch TMDBError.timeout {
             return "시간초과"
-           // print(TMDBError.timeout.rawValue)
         } catch  {
             return "Unknown"
         }
