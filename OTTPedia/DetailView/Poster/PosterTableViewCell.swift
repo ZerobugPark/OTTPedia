@@ -16,11 +16,7 @@ final class PosterTableViewCell: BaseTableViewCell {
     private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
   
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-    
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
+
 
     override func configureHierarchy() {
         contentView.addSubview(sectionLabel)
@@ -63,10 +59,8 @@ final class PosterTableViewCell: BaseTableViewCell {
         let imageCount: CGFloat = 4
         
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 3.5
-        // 60 = Label Height(20) + offset(8) + inset(16) + inset(8)
+        // 52 = Label Height(20) + offset(8) + inset(16) + inset(8)
         let objectHeight = ((UIScreen.main.bounds.size.width / 1.8) - 52)
-//        print(objectHeight)
-//        print((UIScreen.main.bounds.size.width / 2.5))
     
         layout.minimumLineSpacing = spacing
         

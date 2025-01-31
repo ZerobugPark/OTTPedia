@@ -15,17 +15,7 @@ final class PosterCollectionViewCell: BaseCollectionViewCell {
     
     private let posterImage = CustomImageView()
     
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
+
     override func configureHierarchy() {
         contentView.addSubview(posterImage)
     }
