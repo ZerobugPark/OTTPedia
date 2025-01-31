@@ -22,7 +22,7 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
+            make.edges.equalTo(contentView)
         }
         
     }

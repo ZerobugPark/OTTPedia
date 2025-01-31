@@ -125,7 +125,7 @@ final class SearchTableViewCell: BaseTableViewCell {
         }
      
         genreLayout(count: maxCount)
-        print(maxCount)
+
         for i in 0..<maxCount {
             genreLabel[i].text = (Configuration.Genres(rawValue: genres[i])?.genre ?? "unknown")
             

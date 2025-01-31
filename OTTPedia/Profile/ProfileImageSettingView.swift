@@ -57,7 +57,7 @@ final class ProfileImageSettingView: BaseView {
         circleView.backgroundColor = ColorList.main.color
         
         subImageView.image = UIImage(systemName: "camera.fill")
-        subImageView.tintColor = .white
+        subImageView.tintColor = ColorList.white.color
         subImageView.contentMode = .scaleAspectFit
         
         
@@ -80,10 +80,7 @@ final class ProfileImageSettingView: BaseView {
         let imageCount: CGFloat = 4
         
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 4
-      
-        print(objectWidth)
-        print(deviceWidth)
-    
+
 
         layout.minimumInteritemSpacing = spacing
         

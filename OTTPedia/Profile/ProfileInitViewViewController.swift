@@ -13,7 +13,6 @@ final class ProfileInitViewViewController: UIViewController {
     private var infoMsg = ""
     private var isOk = true
     private var currentIndex = 0
-    private var imageStatus = true
     
     override func loadView() {
         view = profileInit
@@ -30,13 +29,16 @@ final class ProfileInitViewViewController: UIViewController {
         profileInit.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
         profileInit.okButton.addTarget(self, action: #selector(okButtonTapped), for: .touchUpInside)
 
-        
+        currentIndex = profileInit.randomImageIndex
+    
     }
     
     private func configurationNavigationController() {
         
         let title = "프로필 설정"
         navigationItem.title = title
+        
+        navigationItem.backButtonTitle = ""
     }
     
     
@@ -45,14 +47,15 @@ final class ProfileInitViewViewController: UIViewController {
         let vc = ProfileImageSettingViewController()
        
         // 프로필 사진을 새로 선택하고, 만약 확인을 안누르고 프로필 사진을 다시 누르게되면, 변경된 이미지가 선택되어야 함
-        vc.imageIndex = imageStatus ? profileInit.randomImageIndex : currentIndex
+        vc.imageIndex = currentIndex
         
         vc.changedImage = { value in
             self.profileInit.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
             self.currentIndex = value
-            self.imageStatus = false // 이거 currentIndex가 바뀔 때마다 didset으로 변경해도 되지 않나?
+
         }
         navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     
@@ -60,18 +63,23 @@ final class ProfileInitViewViewController: UIViewController {
         
         guard let windwScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windwScene.windows.first else { return }
         
+        ProfileUserDefaults.isEnroll = true
         ProfileUserDefaults.imageIndex = currentIndex
+        ProfileUserDefaults.resgisterDate = Date().formatted(.dateTime.day(.twoDigits).month(.twoDigits).year(.defaultDigits).locale(Locale(identifier: "ko_KR")))
+        
+        ProfileUserDefaults.id = profileInit.nameTextField.text!
         
         window.rootViewController = UINavigationController(rootViewController: TabBarController())
         window.makeKeyAndVisible()
         
     }
+    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
         if let text = profileInit.nameTextField.text {
-            if text.isEmpty {
+            if text.count < 2 {
                 profileInit.nameTextField.becomeFirstResponder()
             } else {
                 view.endEditing(true)
@@ -124,7 +132,7 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
             isOk = true
         }
         
-        if !isOk { // 이것도 didset 가능할 듯 해보이긴 하네
+        if !isOk { // 이것도 didset 가능할 듯 해보이긴 하네, didset보다는 직관적이어서 함수에 안에쓰는게 나아 보임
             profileInit.infoLable.text = infoMsg
             profileInit.okButton.isEnabled = isOk
             return isOk

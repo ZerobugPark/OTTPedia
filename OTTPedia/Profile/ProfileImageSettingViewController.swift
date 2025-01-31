@@ -17,6 +17,7 @@ final class ProfileImageSettingViewController: UIViewController {
     
     override func loadView() {
         view = imageSet
+        configurationNavigationController()
 
     }
     
@@ -30,6 +31,14 @@ final class ProfileImageSettingViewController: UIViewController {
         imageSet.collectionView.register(ProfileImageSettingCollectionViewCell.self, forCellWithReuseIdentifier: ProfileImageSettingCollectionViewCell.id)
         
     }
+    
+    private func configurationNavigationController() {
+        
+        let title = "프로필 이미지 편집"
+        navigationItem.title = title
+        
+    }
+    
     
 
 }
@@ -55,14 +64,13 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(#function)
         
         if imageIndex != indexPath.item {
             previousImageIndex = imageIndex
             imageIndex = indexPath.item
-            imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
             collectionView.reloadItems(at: [indexPath])
-            collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)])
+            collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)]) // 이전 이미지 흑백으로 변경
+            imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
             changedImage?(imageIndex)
             
         }

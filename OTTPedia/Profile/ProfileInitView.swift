@@ -14,7 +14,7 @@ final class ProfileInitView: BaseView {
     let imageView = CustomImageView(selected: true)
     let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
     let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.main.color)
-    let okButton = CustomButton(applyConfig: true)
+    let okButton = CustomButton(title: "완료")
     let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
     
     private let circleView = UIView()
@@ -91,13 +91,13 @@ final class ProfileInitView: BaseView {
         circleView.backgroundColor = ColorList.main.color
         
         subImageView.image = UIImage(systemName: "camera.fill")
-        subImageView.tintColor = .white
+        subImageView.tintColor = ColorList.white.color
         subImageView.contentMode = .scaleAspectFit
     
         lineView.backgroundColor = ColorList.white.color
         infoLable.text = "2글자 이상 10글자 미만으로 설정해주세요"
         
-        okButton.setTitle("완료", for: .normal)
+    
         okButton.isEnabled = false
         
         DispatchQueue.main.async {

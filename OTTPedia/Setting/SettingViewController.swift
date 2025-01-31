@@ -132,7 +132,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == Setting.withdraw.rawValue {
-            var title = "탈퇴하기"
+            let title = "탈퇴하기"
             let msg = "탈퇴를 하면 데이터가 모두 초기화됩니다. 탈퇴 하시겠습니까?"
             let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
             

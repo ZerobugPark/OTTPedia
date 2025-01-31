@@ -60,7 +60,7 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     func addRecnetSearchLable(text: String) {
-        label.text = text//"1232132131221"
+        label.text = text
     }
     
 }
