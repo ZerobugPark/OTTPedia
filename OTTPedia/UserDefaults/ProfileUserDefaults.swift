@@ -50,4 +50,12 @@ class ProfileUserDefaults {
         }
     }
     
+    static var recentSearh: [String] {
+        get {
+            UserDefaults.standard.stringArray(forKey: "search") ?? []
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "search")
+        }
+    }
 }
