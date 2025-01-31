@@ -44,6 +44,7 @@ final class SearchViewController: UIViewController {
                 self.totalPage = value.totalPage
                 self.searchView.tableView.reloadData()
                 self.noData()
+                self.searchView.searchBar.text = self.searchText
             } failHandler: { stauts in
                 let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
                 self.showAPIAlet(msg: msg)
@@ -68,7 +69,6 @@ final class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-
         likeMovie = ProfileUserDefaults.likeMoive
 
     }
@@ -140,11 +140,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
         
-        
     }
-    
-    
-    
 }
 
 
