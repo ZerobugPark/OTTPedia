@@ -9,10 +9,9 @@ import UIKit
 
 import SnapKit
 
-
 final class OnboardingView: BaseCollectionViewCell {
 
-    let startButton = CustomButton(applyConfig: true)
+    let startButton = CustomButton(title: "시작하기")
     
     private let imageView = CustomImageView()
     private let titleLable = CustomLabel(boldStyle: false, fontSize: 25, italic: true, color: ColorList.white.color)
@@ -73,7 +72,7 @@ final class OnboardingView: BaseCollectionViewCell {
         subTitleLable.text = subtitle
         subTitleLable.numberOfLines = 2
         
-        startButton.setTitle("시작하기", for: .normal)
+       
         
         
     }
