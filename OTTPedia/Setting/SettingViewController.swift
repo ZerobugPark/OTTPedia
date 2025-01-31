@@ -129,5 +129,33 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if indexPath.row == Setting.withdraw.rawValue {
+            var title = "탈퇴하기"
+            let msg = "탈퇴를 하면 데이터가 모두 초기화됩니다. 탈퇴 하시겠습니까?"
+            let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "확인", style: .destructive) { _ in
+                
+                guard let windwScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windwScene.windows.first else { return }
+                
+                for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                    UserDefaults.standard.removeObject(forKey: key.description)
+                }
+                window.rootViewController = UINavigationController(rootViewController: OnboardingViewController())
+                window.makeKeyAndVisible()
+            }
+            
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            
+            present(alert,animated: true)
+            
+        }
+    }
+    
     
 }
