@@ -9,16 +9,15 @@ import UIKit
 
 final class SearchViewController: UIViewController {
     
+
+    
     private var searchResult: [Results] = []
     private var currentPage = 1
-    
     private var searchView = SearchView()
     private var totalPage = 0
-    
     private var likeMovie: [String: Bool] = [:]
     
     var searchText = ""
-    
     var textInfo: ((String) -> Void)?
     
     override func loadView() {

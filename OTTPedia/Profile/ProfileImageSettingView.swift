@@ -9,11 +9,14 @@ import UIKit
 
 final class ProfileImageSettingView: BaseView {
     
-    let imageView = CustomImageView(selected: true)
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-    
     private let circleView = UIView()
     private let subImageView = CustomImageView()
+    
+    let imageView = CustomImageView(selected: true)
+   
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
+    
+
     
     override func configureHierarchy() {
         addSubview(imageView)

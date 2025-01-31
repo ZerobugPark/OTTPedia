@@ -11,15 +11,15 @@ import SnapKit
 
 final class ProfileInitView: BaseView {
 
+    private let circleView = UIView()
+    private let subImageView = CustomImageView()
+    private let lineView = UIView()
+    
     let imageView = CustomImageView(selected: true)
     let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
     let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.main.color)
     let okButton = CustomButton(title: "완료")
     let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
-    
-    private let circleView = UIView()
-    private let subImageView = CustomImageView()
-    private let lineView = UIView()
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -95,9 +95,10 @@ final class ProfileInitView: BaseView {
         subImageView.contentMode = .scaleAspectFit
     
         lineView.backgroundColor = ColorList.white.color
-        infoLable.text = "2글자 이상 10글자 미만으로 설정해주세요"
+       
+        let text = "2글자 이상 10글자 미만으로 설정해주세요"
+        infoLable.text = text
         
-    
         okButton.isEnabled = false
         
         DispatchQueue.main.async {

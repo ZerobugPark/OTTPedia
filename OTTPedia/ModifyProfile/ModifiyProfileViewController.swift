@@ -92,7 +92,7 @@ final class ModifiyProfileViewController: UIViewController {
         let vc = ProfileImageSettingViewController()
        
         vc.imageIndex = currentIndex
-        
+        vc.isEdit = true
         vc.changedImage = { value in
             self.profileModify.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
             self.currentIndex = value

@@ -8,12 +8,13 @@
 import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
-
-    var imageIndex = 0
-    var changedImage: ((Int) -> Void)?
     
     private var imageSet = ProfileImageSettingView()
     private var previousImageIndex = 0
+    
+    var imageIndex = 0
+    var changedImage: ((Int) -> Void)?
+    var isEdit = false
     
     override func loadView() {
         view = imageSet
@@ -34,7 +35,7 @@ final class ProfileImageSettingViewController: UIViewController {
     
     private func configurationNavigationController() {
         
-        let title = "프로필 이미지 편집"
+        let title = isEdit ? "프로필 이미지 편집" : "프로필 이미지 설정"
         navigationItem.title = title
         
     }
