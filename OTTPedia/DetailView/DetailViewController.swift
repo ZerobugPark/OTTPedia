@@ -47,7 +47,6 @@ final class DetailViewController: UIViewController {
         detailView.tableView.register(CastTableViewCell.self, forCellReuseIdentifier: CastTableViewCell.id)
         detailView.tableView.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.id)
         
-       // detailView.tableView.rowHeight = UITableView.automaticDimension
         detailView.tableView.estimatedRowHeight = 100 // 오토디멘션 사용시 추정값을 잡아줘야 함
        
         
@@ -67,7 +66,6 @@ final class DetailViewController: UIViewController {
             group.enter()
             NetworkManger.shared.callRequest(api: .getCredit(id: info.id), type: GetCredit.self) { value in
                 self.castInfo = value.cast
-               // dump(self.castInfo)
                 group.leave()
             } failHandler: { stauts in
                 let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
@@ -261,8 +259,8 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
      
         if indexPath.section == 1 {
             // 하나의 테이블셀에서 아이템을 기준으로 변경하려고 각각 화면을 구성하려고 했으나, 컬렉션뷰와 오토디멘션 문제로 구조 변경
-            // 테이블 뷰 안에서 컬렉션 뷰를 만드는데, 오토디멘션으로 설정시, 컬렉션뷰에서 높이를 테이블뷰에 높이를 찾을 수가 없음
-            // 기기별 동적 대응을 위해, 각 섹션으로 구분하고. 기기별 대응을 위해 섹션별 높이를 새롭게 설정함.
+            // 테이블 뷰 안에서 컬렉션 뷰를 만드는데, 오토디멘션으로 설정시, 컬렉션뷰에서 높이를 테이블뷰가 찾을 수가 없음
+            // 기기별 동적 대응을 위해, 각 섹션으로 구분하고. 기기별 대응을 위해 섹션별 높이를 비율로 새롭게 설정함.
             return (UIScreen.main.bounds.size.width / 2.5)
         } else if indexPath.section == 2 {
             return (UIScreen.main.bounds.size.width / 1.8)
@@ -314,17 +312,8 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 extension DetailViewController: PassHiddenButtonDelegate {
     func hidebuttonTapped() {
-        
         detailView.tableView.reloadData()
-        
-        
-        // 특정 Row만 변경시, UI가 즉각적으로 변경이 안됨.
-//        detailView.tableView.beginUpdates()
-//        detailView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-//        detailView.tableView.endUpdates()
-       
     }
-    
 }
 
 

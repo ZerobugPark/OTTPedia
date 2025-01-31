@@ -60,8 +60,9 @@ final class PosterTableViewCell: BaseTableViewCell {
         
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 3.5
         // 52 = Label Height(20) + offset(8) + inset(16) + inset(8)
+        // 포스터 셀의 높이는 UIScreen.main.bounds.size.width / 1.8
         let objectHeight = ((UIScreen.main.bounds.size.width / 1.8) - 52)
-    
+        
         layout.minimumLineSpacing = spacing
         
         layout.itemSize = CGSize(width: objectWidth, height: objectHeight)

@@ -49,10 +49,7 @@ final class CastTableViewCell: BaseTableViewCell {
     
     
     func setupLabel(title: String) {
-        
         sectionLabel.text = title
-        
-
     }
 
     
@@ -66,7 +63,7 @@ final class CastTableViewCell: BaseTableViewCell {
         let imageCount: CGFloat = 3
         
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 2.3
-        // 60 = Label Height(20) + offset(8) + inset(16) + spacing(8)
+        // 52 = Label Height(20) + offset(8) + inset(16) + spacing(8)
         let objectHeight = ((UIScreen.main.bounds.size.width / 2.5) - 52) / 2
 
         layout.minimumInteritemSpacing = spacing
