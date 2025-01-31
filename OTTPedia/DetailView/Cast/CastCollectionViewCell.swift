@@ -18,15 +18,6 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
     private let characterName = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
     override func configureHierarchy() {
         contentView.addSubview(profileImage)
         contentView.addSubview(koreanName)

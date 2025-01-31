@@ -17,10 +17,6 @@ final class CastTableViewCell: BaseTableViewCell {
   
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
     
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
 
     override func configureHierarchy() {
         contentView.addSubview(sectionLabel)
@@ -72,9 +68,6 @@ final class CastTableViewCell: BaseTableViewCell {
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 2.3
         // 60 = Label Height(20) + offset(8) + inset(16) + spacing(8)
         let objectHeight = ((UIScreen.main.bounds.size.width / 2.5) - 52) / 2
-//        print(objectHeight)
-//        print((UIScreen.main.bounds.size.width / 2.5))
-    
 
         layout.minimumInteritemSpacing = spacing
         layout.minimumLineSpacing = spacing
