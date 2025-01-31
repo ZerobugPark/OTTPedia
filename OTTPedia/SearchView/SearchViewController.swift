@@ -15,6 +15,8 @@ final class SearchViewController: UIViewController {
     private var searchView = SearchView()
     private var totalPage = 0
     
+    private var likeMovie: [String: Bool] = [:]
+    
     var searchText = ""
     
     var textInfo: ((String) -> Void)?
@@ -46,7 +48,7 @@ final class SearchViewController: UIViewController {
                 print("123")
             }
         }
-        
+        likeMovie = ProfileUserDefaults.likeMoive
     }
     
     private func configurationNavigationController() {
@@ -57,7 +59,18 @@ final class SearchViewController: UIViewController {
         
     }
     
+    private func checkLikeStatus(index: Int) -> Bool {
+        let likeStatus = likeMovie[String(searchResult[index].id)] ?? false
+        
+        return likeStatus
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+
+        likeMovie = ProfileUserDefaults.likeMoive
+
+    }
     
     
 }
@@ -66,7 +79,7 @@ final class SearchViewController: UIViewController {
 // MARK: - SearchBar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-  
+        
         if let text = searchBar.text {
             searchText = text
             currentPage = 1
@@ -83,7 +96,7 @@ extension SearchViewController: UISearchBarDelegate {
         
         view.endEditing(true)
     }
-
+    
     private func noData() {
         if searchResult.isEmpty {
             searchView.infoLabel.isHidden = false
@@ -91,7 +104,6 @@ extension SearchViewController: UISearchBarDelegate {
             searchView.infoLabel.isHidden = true
         }
     }
-    
 }
 
 // MARK: - TableView Delegate
@@ -105,6 +117,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
         
         cell.searchInfo(info: searchResult[indexPath.row])
+        cell.selectionStyle = .none
+        
+        cell.likeButton.tag = indexPath.row
+        cell.delegate = self
+        
+        let image = checkLikeStatus(index: indexPath.row) ? "heart.fill" : "heart"
+        cell.likeButton.setImage(UIImage(systemName: image), for: .normal)
         
         return cell
         
@@ -115,24 +134,29 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
-        
-        vc.movieInfo = (info: searchResult[indexPath.item], likeStatus: true)
+        vc.movieInfo = (info: searchResult[indexPath.row], likeStatus: checkLikeStatus(index: indexPath.row))
+        vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
         
         
     }
     
+    
+    
 }
+
+
+
 
 // MARK: - TableView Prefetching
 extension SearchViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-    
+        
         if currentPage > totalPage {
-            print("맥스입낟.")
+            print("맥스입니다")
             return
         } else {
-           
+            
             for path in indexPaths {
                 if searchResult.count - 2 == path.row {
                     currentPage += 1
@@ -141,16 +165,30 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
                         self.searchView.tableView.reloadData()
                     } failHandler: {
                         print("123")
-                    
+                        
                     }
                 }
             }
         }
     }
     
-    
-    
-    
-    
 }
 
+
+// MARK: - PassMovieLikeDelegate Delegate
+extension SearchViewController: PassMovieLikeDelegate {
+    
+    func likeButtonTapped(index: Int, status: Bool) {
+        likeMovie.updateValue(status, forKey: String(searchResult[index].id))
+        ProfileUserDefaults.likeMoive = likeMovie
+        
+    }
+    
+    func detailViewLikeButtonTapped(id: Int, status: Bool) {
+        likeMovie.updateValue(status, forKey: String(id))
+        ProfileUserDefaults.likeMoive = likeMovie
+        searchView.tableView.reloadData()
+        
+    }
+    
+}

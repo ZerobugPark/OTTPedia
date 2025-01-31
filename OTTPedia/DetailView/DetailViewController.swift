@@ -9,7 +9,7 @@ import UIKit
 
 import Kingfisher
 
-protocol PassDataDelegate {
+protocol PassHiddenButtonDelegate {
     func hidebuttonTapped()
     
 }
@@ -23,11 +23,12 @@ final class DetailViewController: UIViewController {
     private var posters: [ImageInfo] = []
     private var castInfo: [CastInfo] = []
     private var likeButtonStatus = false
-    private let maxBackdropImageCount = 5
+    private var maxBackdropImageCount = 0
     private let sections = ["Synopsis", "Cast", "Poster"]
     
     var movieInfo: (info: Results, likeStatus: Bool)?
     
+    var delegate: PassMovieLikeDelegate?
  
     
     let color:[UIColor] = [.red,.blue,.green,.yellow,.purple]
@@ -55,6 +56,7 @@ final class DetailViewController: UIViewController {
             group.enter()
             NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { value in
                 self.backdrops = value.backdrops
+                self.maxBackdropImageCount = self.backdrops.count
                 self.posters = value.posters
                 group.leave()
             } failHandler: {
@@ -73,7 +75,7 @@ final class DetailViewController: UIViewController {
         }
         
         group.notify(queue: .main) {
-            print("DispatchGroup Notifiy")
+            //print("DispatchGroup Notifiy")
             self.detailView.tableView.reloadData()
        
         }
@@ -136,9 +138,12 @@ final class DetailViewController: UIViewController {
         likeButtonStatus.toggle()
         let image = likeButtonStatus ? "heart.fill" : "heart"
         let rightButton = UIImage(systemName: image)
+        
+        if let (info, _) = movieInfo  {
+            delegate?.detailViewLikeButtonTapped(id: info.id, status: likeButtonStatus)
+        }
             
         navigationItem.rightBarButtonItem?.image = rightButton
-        
         
     }
     
@@ -162,13 +167,20 @@ extension DetailViewController: UIScrollViewDelegate {
     }
     
     private func addContentScrollView() {
+        
+        if maxBackdropImageCount == 0 {
+            return
+        }
+        
         for i in 0..<maxBackdropImageCount {
             let imageView = UIImageView()
             // 이미지를 스크롤뷰와 동일한 사이즈를 맞추기 위해, x좌표를 알아야함, h는 고정 사이즈이기 때문에, 상관 X
             let xPos = detailView.scrollView.frame.width * CGFloat(i)
             imageView.frame = CGRect(x: xPos, y: 0, width: detailView.scrollView.bounds.width, height: detailView.scrollView.bounds.height)
             
-            let url = URL(string: Configuration.shared.secureURL + Configuration.PosterSizes.w780.rawValue + backdrops[i].filePath)
+            
+           
+            let url = URL(string: Configuration.shared.secureURL + Configuration.BackdropSizes.w780.rawValue + backdrops[i].filePath)
             imageView.kf.setImage(with: url)
             detailView.scrollView.addSubview(imageView)
             // 스크롤뷰 위치 변경
@@ -200,6 +212,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.setupLabel(title: "", overView: "")
             }
             cell.delegate = self
+            cell.selectionStyle = .none
             
             return cell
         } else if indexPath.section == 1 {
@@ -211,6 +224,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.collectionView.tag = indexPath.section - 1
             cell.collectionView.register(CastCollectionViewCell.self, forCellWithReuseIdentifier: CastCollectionViewCell.id)
             cell.collectionView.reloadData()
+            cell.selectionStyle = .none
             
             return cell
             
@@ -223,6 +237,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.collectionView.tag = indexPath.section - 1
             cell.collectionView.register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: PosterCollectionViewCell.id)
             cell.collectionView.reloadData()
+            cell.selectionStyle = .none
             
             return cell
             
@@ -293,7 +308,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
 }
 
-extension DetailViewController: PassDataDelegate {
+extension DetailViewController: PassHiddenButtonDelegate {
     func hidebuttonTapped() {
         
         detailView.tableView.reloadData()

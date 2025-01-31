@@ -10,7 +10,7 @@ import UIKit
 final class SettingViewController: UIViewController {
 
     private var settingView = SettingView()
-    
+    private var likeMovie: [String: Bool] = [:]
     private let contents = ["자주 묻는 질문", "1:1 문의", "알림 설정", "탈퇴하기"]
     private var userInfo = UserInfo()
     
@@ -50,6 +50,11 @@ final class SettingViewController: UIViewController {
         userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
         userInfo.id =  ProfileUserDefaults.id
         userInfo.date =  ProfileUserDefaults.resgisterDate
+        userInfo.likeCount = likeCount()
+        
+        let msg = "\(userInfo.likeCount) 개의 무비박스 보관중"
+        settingView.likeStorageButton.setTitle(msg, for: .normal)
+        
         
         settingView.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
         settingView.nameLabel.text = userInfo.id
@@ -87,6 +92,17 @@ final class SettingViewController: UIViewController {
 
     }
     
+    private func likeCount() -> Int {
+        
+        likeMovie = ProfileUserDefaults.likeMoive
+        var count = 0
+        for (_, value) in likeMovie {
+            if value {
+                count += 1
+            }
+        }
+        return count
+    }
 
     
 }

@@ -41,4 +41,13 @@ class ProfileUserDefaults {
         }
     }
     
+    static var likeMoive: [String: Bool] {
+        get {
+            UserDefaults.standard.dictionary(forKey: "likeMovie") as? [String: Bool] ?? ["nil" : false]
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "likeMovie")
+        }
+    }
+    
 }

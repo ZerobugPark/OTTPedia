@@ -167,14 +167,11 @@ final class MainView: BaseView {
         collectionView.tag = 1
 
         
-        
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
-
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
         chevronImage.tintColor = ColorList.lightGray.color
-        
-        likeStorageButton.setTitle("18 개의 무비박스 보관중", for: .normal)
+    
         
         stackView.axis = .vertical
         stackView.spacing = 4

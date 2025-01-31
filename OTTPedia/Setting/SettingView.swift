@@ -93,8 +93,7 @@ final class SettingView: BaseView {
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
         chevronImage.tintColor = ColorList.lightGray.color
         
-        likeStorageButton.setTitle("18 개의 무비박스 보관중", for: .normal)
-        
+
         tableView.bounces = false
         
         tableView.backgroundColor = ColorList.black.color

@@ -9,12 +9,24 @@ import UIKit
 
 import SnapKit
 
-final class MainViewController: UIViewController {
+protocol PassMovieLikeDelegate {
+    func likeButtonTapped(index: Int, status: Bool)
+    func detailViewLikeButtonTapped(id: Int, status: Bool)
+}
 
+
+
+final class MainViewController: UIViewController {
+    
     private var mainView = MainView()
     private var trendingResult: [Results] = []
-    private var userInfo = UserInfo()
-    
+    private var userInfo = UserInfo() {
+        didSet {
+            let msg = "\(userInfo.likeCount) 개의 무비박스 보관중"
+            mainView.likeStorageButton.setTitle(msg, for: .normal)
+        }
+    }
+    private var likeMovie: [String: Bool] = [:]
     
     private var textList: [String] = [] {
         didSet {
@@ -31,7 +43,7 @@ final class MainViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-
+        
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
         
@@ -42,10 +54,10 @@ final class MainViewController: UIViewController {
         mainView.recentSearchCollectionView.register(RecentSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecentSearchCollectionViewCell.id)
         
         
-
+        
         configurationNavigationController()
         mainView.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
-        mainView.likeStorageButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        mainView.likeStorageButton.addTarget(self, action: #selector(likeStorageButtonTapped), for: .touchUpInside)
         mainView.removeAllButton.addTarget(self, action: #selector(removeAllButtonTapped), for: .touchUpInside)
         
         
@@ -55,11 +67,10 @@ final class MainViewController: UIViewController {
         } failHandler: {
             print("123")
         }
-
-        print(#function)
+    
     }
     
-
+    
     private func configurationNavigationController() {
         
         let title = "OTTPedia"
@@ -76,83 +87,34 @@ final class MainViewController: UIViewController {
         userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
         userInfo.id =  ProfileUserDefaults.id
         userInfo.date =  ProfileUserDefaults.resgisterDate
+        userInfo.likeCount = likeCount()
         
+     
         mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
         mainView.nameLabel.text = userInfo.id
         mainView.dateLabel.text = userInfo.date
- 
+        
+        
     }
-
     
-    
-    @objc private func profileButtonTapped(_ sender: UIButton) {
-        
-        let vc = ModifiyProfileViewController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.isModalInPresentation = true // 내려가기 방지
-        //nav.modalPresentationStyle = .pageSheet // 아마 default가 pageSheet이기 때문에 적용안해도 상관없을 듯
-        
-        //sheetPresentationController
-        // 1. 뷰컨트롤러 연결시, pageSheet/formSheet 처럼 화면을 덮지 않아야 가능하다.
-        // 2. sheetPresentationController자체가 화면 분활 처럼 뒤에 화면을 보이게 할 수도 있는 기능인데, Full Screen처럼 화면을 다 덮으면 굳이 쓸 이유가 없어 보임
-        // 3.네비게이션 컨트롤러에도 적용이 가능하다, 이때, vc의 modalPresentationStyle은 상관없다.
-        // 4.아마도, vc에서 적용하더라고 화면전환 방식은 nav에서 새롭게 기본값으로 변하기 때문인거 같다.
-        // 5. 반대로 isModalInPresentation은 vc에서도 적용해도 동일하게 nav에서도 적용이 된다.
-        
-        
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.large()] // pageSheet처럼 보이게 하기 위해
-            sheet.prefersGrabberVisible = true // 상단에 회색같은 막대기바 추가
-        }
-        
-        
-        vc.userInfo = userInfo
-        
-        vc.updateUserInfo = { info in
-            self.userInfo.userImageIndex =  info.userImageIndex
-            self.userInfo.id =  info.id
-            
-            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
-            ProfileUserDefaults.id = self.userInfo.id
-    
-            self.mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[self.userInfo.userImageIndex])
-            self.mainView.nameLabel.text = self.userInfo.id
-            self.mainView.dateLabel.text = self.userInfo.date
-            
-        }
-        
-        present(nav,animated: true)
    
-    }
     
-    @objc private func likeButtonTapped(_ sender: UIButton) {
+    private func likeCount() -> Int {
         
-        print(#function)
-    }
-    
-    @objc private func removeAllButtonTapped(_ sender: UIButton) {
-        textList.removeAll()
-        self.mainView.recentSearchCollectionView.reloadData()
-    }
-    
-    @objc private func searchButtonTapped(_ sender: UIButton) {
-        let vc = SearchViewController()
-        
-        vc.textInfo = { text in
-            
-            if let sameTextIndex = self.textList.lastIndex(of: text) {
-                self.textList.remove(at: sameTextIndex)
+        likeMovie = ProfileUserDefaults.likeMoive
+        var count = 0
+        for (_, value) in likeMovie {
+            if value {
+                count += 1
             }
-            self.textList.insert(text, at: 0)
-            self.mainView.recentSearchCollectionView.reloadData()
         }
-        
-        navigationController?.pushViewController(vc, animated: true)
-        
+        return count
     }
     
-
-
+   
+    
+    
+    
 }
 
 
@@ -185,10 +147,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else if collectionView.tag == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as? MovieListCollectionViewCell else { return UICollectionViewCell() }
-         
-            cell.setupTrending(trend: trendingResult[indexPath.item])
-      
             
+            cell.setupTrending(trend: trendingResult[indexPath.item])
+            cell.delegate = self
+            cell.likeButton.tag = indexPath.item
+            
+            let image = checkLikeStatus(index: indexPath.item) ? "heart.fill" : "heart"
+            cell.likeButton.setImage(UIImage(systemName: image), for: .normal)
             
             return cell
             
@@ -208,20 +173,24 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else if collectionView.tag == 1 {
             let vc = DetailViewController()
-            
-            vc.movieInfo = (info: trendingResult[indexPath.item], likeStatus: true)
+            vc.movieInfo = (info: trendingResult[indexPath.item], likeStatus: checkLikeStatus(index: indexPath.item))
+            vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
             
-        } else {
-            
-        }
-
+        } else { }
+        
+    }
+    
+    private func checkLikeStatus(index: Int) -> Bool {
+        let likeStatus = likeMovie[String(trendingResult[index].id)] ?? false
+        
+        return likeStatus
     }
     
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
-        
         textList.remove(at: sender.tag)
+        // 갱신이 아닌 삭제가 되는거기 때문에, reloadData 사용
         mainView.recentSearchCollectionView.reloadData()
     }
 }
@@ -235,13 +204,9 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         
         
         if collectionView.tag == 0 {
-             
             
             let font = UIFont.systemFont(ofSize: 13)
             let size = textList[indexPath.item].size(withAttributes: [.font: font])
-            //print(size)
-            
-            
             
             // label offset 8, buttion inset 8, lable size, buttonsize = 12, spacing = 8
             let buttonSize: CGFloat = 12
@@ -251,30 +216,115 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             let objectWidth =  size.width + buttonSize + spacing + inset
             let objectHeight = mainView.recentSearchCollectionView.bounds.height
             
-            //print(objectWidth)
-            print(objectHeight)
             return CGSize(width: objectWidth, height: objectHeight)
-        
+            
             
         } else if collectionView.tag == 1 {
             let deviceWidth = UIScreen.main.bounds.size.width
             let spacing: CGFloat = 8
             let inset: CGFloat = 16
             let imageCount: CGFloat = 2
-                    
+            
             let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
             let objectHeight = mainView.movieListView.frame.size.height - mainView.secondSection.frame.size.height
-    //        print(objectWidth)
-    //        print(objectHeight)
 
-            
             return CGSize(width: objectWidth, height: objectHeight)
         } else {
             
             return CGSize(width: 0, height: 0)
         }
         
-
+        
     }
 }
 
+// MARK: - PassMovieLikeDelegate Delegate
+extension MainViewController: PassMovieLikeDelegate {
+
+    func likeButtonTapped(index: Int, status: Bool) {
+        likeMovie.updateValue(status, forKey: String(trendingResult[index].id))
+        ProfileUserDefaults.likeMoive = likeMovie
+        userInfo.likeCount = likeCount()
+    }
+    
+    func detailViewLikeButtonTapped(id: Int, status: Bool) {
+        likeMovie.updateValue(status, forKey: String(id))
+        ProfileUserDefaults.likeMoive = likeMovie
+        userInfo.likeCount = likeCount()
+        mainView.collectionView.reloadData()
+        
+    }
+    
+}
+
+
+// MARK: - OBJC Funcfion
+extension MainViewController {
+    
+    @objc private func profileButtonTapped(_ sender: UIButton) {
+        
+        let vc = ModifiyProfileViewController()
+        let nav = UINavigationController(rootViewController: vc)
+        nav.isModalInPresentation = true // 내려가기 방지
+        //nav.modalPresentationStyle = .pageSheet // 아마 default가 pageSheet이기 때문에 적용안해도 상관없을 듯
+        
+        //sheetPresentationController
+        // 1. 뷰컨트롤러 연결시, pageSheet/formSheet 처럼 화면을 덮지 않아야 가능하다.
+        // 2. sheetPresentationController자체가 화면 분활 처럼 뒤에 화면을 보이게 할 수도 있는 기능인데, Full Screen처럼 화면을 다 덮으면 굳이 쓸 이유가 없어 보임
+        // 3.네비게이션 컨트롤러에도 적용이 가능하다, 이때, vc의 modalPresentationStyle은 상관없다.
+        // 4.아마도, vc에서 적용하더라고 화면전환 방식은 nav에서 새롭게 기본값으로 변하기 때문인거 같다.
+        // 5. 반대로 isModalInPresentation은 vc에서도 적용해도 동일하게 nav에서도 적용이 된다.
+        
+        
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()] // pageSheet처럼 보이게 하기 위해
+            sheet.prefersGrabberVisible = true // 상단에 회색같은 막대기바 추가
+        }
+        
+        
+        vc.userInfo = userInfo
+        
+        vc.updateUserInfo = { info in
+            self.userInfo.userImageIndex =  info.userImageIndex
+            self.userInfo.id =  info.id
+            
+            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
+            ProfileUserDefaults.id = self.userInfo.id
+            
+            self.mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[self.userInfo.userImageIndex])
+            self.mainView.nameLabel.text = self.userInfo.id
+            self.mainView.dateLabel.text = self.userInfo.date
+            
+        }
+        
+        present(nav,animated: true)
+        
+    }
+    
+    @objc private func likeStorageButtonTapped(_ sender: UIButton) {
+        
+        print(#function)
+    }
+    
+    @objc private func removeAllButtonTapped(_ sender: UIButton) {
+        textList.removeAll()
+        self.mainView.recentSearchCollectionView.reloadData()
+    }
+    
+    @objc private func searchButtonTapped(_ sender: UIButton) {
+        let vc = SearchViewController()
+        
+        vc.textInfo = { text in
+            
+            if let sameTextIndex = self.textList.lastIndex(of: text) {
+                self.textList.remove(at: sameTextIndex)
+            }
+            self.textList.insert(text, at: 0)
+            self.mainView.recentSearchCollectionView.reloadData()
+        }
+        
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+}

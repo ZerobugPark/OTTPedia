@@ -9,9 +9,9 @@ import Foundation
 
 
 struct UserInfo {
-    let userImageIndex: Int
-    let id: String
-    let date: String
-    let likeCount: Int
+    var userImageIndex: Int = 0
+    var id: String = ""
+    var date: String = ""
+    var likeCount: Int = 0
     
 }

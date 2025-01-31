@@ -63,7 +63,7 @@ final class DetailView: BaseView {
         
         tableView.snp.makeConstraints { make in
             make.top.equalTo(stackView.snp.bottom).offset(16)
-            make.horizontalEdges.equalTo(self).inset(16)
+            make.horizontalEdges.equalTo(self)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
         
@@ -80,6 +80,7 @@ final class DetailView: BaseView {
         }
         
         tableView.bounces = false
+        tableView.backgroundColor = ColorList.black.color
         
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
@@ -88,11 +89,12 @@ final class DetailView: BaseView {
         stackView.distribution = .equalSpacing
         stackView.axis = .horizontal
         
-        //tableView.backgroundColor = .red
         
         
         pageControl.pageIndicatorTintColor = ColorList.lightGray.color
         pageControl.currentPageIndicatorTintColor = ColorList.white.color
+        
+        
         
     }
 
