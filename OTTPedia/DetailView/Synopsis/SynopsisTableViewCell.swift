@@ -20,13 +20,13 @@ final class SynopsisTableViewCell: BaseTableViewCell {
     private var buttonTtile = "More"
     private var hideButtonStatus = false
     
-    var delegate: PassDataDelegate?
+    var delegate: PassHiddenButtonDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        hideButton.addTarget(self, action: #selector(hideButtonTapped), for: .touchUpInside)
         
+        hideButton.addTarget(self, action: #selector(hideButtonTapped), for: .touchUpInside)
     }
     
     
