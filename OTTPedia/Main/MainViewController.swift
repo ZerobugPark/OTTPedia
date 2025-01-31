@@ -13,6 +13,8 @@ final class MainViewController: UIViewController {
 
     private var mainView = MainView()
     private var trendingResult: [Results] = []
+    private var userInfo = UserInfo()
+    
     
     private var textList: [String] = [] {
         didSet {
@@ -54,7 +56,7 @@ final class MainViewController: UIViewController {
             print("123")
         }
 
-        
+        print(#function)
     }
     
 
@@ -68,7 +70,21 @@ final class MainViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = rightButton
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
+        userInfo.id =  ProfileUserDefaults.id
+        userInfo.date =  ProfileUserDefaults.resgisterDate
+        
+        mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
+        mainView.nameLabel.text = userInfo.id
+        mainView.dateLabel.text = userInfo.date
+ 
+    }
 
+    
+    
     @objc private func profileButtonTapped(_ sender: UIButton) {
         
         let vc = ModifiyProfileViewController()
@@ -87,6 +103,22 @@ final class MainViewController: UIViewController {
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()] // pageSheet처럼 보이게 하기 위해
             sheet.prefersGrabberVisible = true // 상단에 회색같은 막대기바 추가
+        }
+        
+        
+        vc.userInfo = userInfo
+        
+        vc.updateUserInfo = { info in
+            self.userInfo.userImageIndex =  info.userImageIndex
+            self.userInfo.id =  info.id
+            
+            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
+            ProfileUserDefaults.id = self.userInfo.id
+    
+            self.mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[self.userInfo.userImageIndex])
+            self.mainView.nameLabel.text = self.userInfo.id
+            self.mainView.dateLabel.text = self.userInfo.date
+            
         }
         
         present(nav,animated: true)

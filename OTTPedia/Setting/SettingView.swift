@@ -14,8 +14,9 @@ final class SettingView: BaseView {
     let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
     let likeStorageButton = CustomButton()
     let tableView = UITableView()
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     
-    private let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    
     private let chevronImage = CustomImageView()
     
     
@@ -88,10 +89,6 @@ final class SettingView: BaseView {
         imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
         
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
-
-        nameLabel.text = "안녕하세요안녕하세요"
-
-        dateLabel.text = "25.01.23 가입"
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
         chevronImage.tintColor = ColorList.lightGray.color

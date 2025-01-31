@@ -14,19 +14,18 @@ final class MainView: BaseView {
     let view = CustomView()
     let imageView = CustomImageView(selected: true)
     let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let likeStorageButton = CustomButton()
     let removeAllButton = UIButton()
     let recentInfoLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let movieListView = UIView()
     let secondSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
-   
+
+        
     private let firstSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
     private let stackView = UIStackView()
     private let recentSearchView = UIView()
  
-    
-    
-    private let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     private let chevronImage = CustomImageView()
     
     private let titleSection = ["최근검색어", "오늘의 영화"]
@@ -168,13 +167,9 @@ final class MainView: BaseView {
         collectionView.tag = 1
 
         
-        imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
         
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
 
-        nameLabel.text = "안녕하세요안녕하세요"
-
-        dateLabel.text = "25.01.23 가입"
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
         chevronImage.tintColor = ColorList.lightGray.color
