@@ -35,13 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func configurationNavigationController() {
         
-//        let title = "OTTPedia"
+
         let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.titleTextAttributes = [.foregroundColor: ColorList.white.color]
         
-       // navigationController?.navigationBar.standardAppearance = appearance
-       //navigationItem.title = title
-        //navigationController?.navigationBar.tintColor = ColorList.main.color
         UINavigationBar.appearance().tintColor = ColorList.main.color
         UINavigationBar.appearance().standardAppearance = appearance
 
