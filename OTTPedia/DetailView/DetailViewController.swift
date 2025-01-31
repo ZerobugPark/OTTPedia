@@ -59,8 +59,9 @@ final class DetailViewController: UIViewController {
                 self.maxBackdropImageCount = self.backdrops.count
                 self.posters = value.posters
                 group.leave()
-            } failHandler: {
-                print()
+            } failHandler: { stauts in
+                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                self.showAPIAlet(msg: msg)
                 group.leave()
             }
             group.enter()
@@ -68,8 +69,9 @@ final class DetailViewController: UIViewController {
                 self.castInfo = value.cast
                // dump(self.castInfo)
                 group.leave()
-            } failHandler: {
-                print()
+            } failHandler: { stauts in
+                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                self.showAPIAlet(msg: msg)
                 group.leave()
             }
         }
@@ -170,6 +172,8 @@ extension DetailViewController: UIScrollViewDelegate {
         
         if maxBackdropImageCount == 0 {
             return
+        } else if maxBackdropImageCount >= 5  {
+            maxBackdropImageCount = 5
         }
         
         for i in 0..<maxBackdropImageCount {

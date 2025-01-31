@@ -44,8 +44,9 @@ final class SearchViewController: UIViewController {
                 self.totalPage = value.totalPage
                 self.searchView.tableView.reloadData()
                 self.noData()
-            } failHandler: {
-                print("123")
+            } failHandler: { stauts in
+                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                self.showAPIAlet(msg: msg)
             }
         }
         likeMovie = ProfileUserDefaults.likeMoive
@@ -53,7 +54,7 @@ final class SearchViewController: UIViewController {
     
     private func configurationNavigationController() {
         
-        let title = "영화검색"
+        let title = "영화 검색"
         navigationItem.title = title
         navigationItem.backButtonTitle = ""
         
@@ -88,8 +89,9 @@ extension SearchViewController: UISearchBarDelegate {
                 self.totalPage = value.totalPage
                 self.searchView.tableView.reloadData()
                 self.noData()
-            } failHandler: {
-                print("123")
+            } failHandler: { stauts in
+                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                self.showAPIAlet(msg: msg)
             }
             textInfo?(searchText)
         }
@@ -163,9 +165,9 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
                     NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
                         self.searchResult.append(contentsOf: value.results)
                         self.searchView.tableView.reloadData()
-                    } failHandler: {
-                        print("123")
-                        
+                    } failHandler: { stauts in
+                        let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                        self.showAPIAlet(msg: msg)
                     }
                 }
             }

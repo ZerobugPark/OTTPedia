@@ -5,4 +5,130 @@
 //  Created by youngkyun park on 1/31/25.
 //
 
-import Foundation
+import UIKit
+
+enum TMDBError: Int, Error {
+    case verificationFailed = 400
+    case authenticationFailed = 401
+    case accountSuspension = 403
+    case invalidRequest = 404
+    case wrongForm = 405
+    case invalidHeader = 406
+    case invalidParameter = 422
+    case limitExceeded = 429
+    case tmdbError = 500
+    case noService = 501
+    case backendConnectionError = 502
+    case offline = 503
+    case timeout = 504
+    
+}
+
+struct ApiError {
+    
+    static let shared = ApiError()
+    private init() { }
+    
+    func apiError(status: Int) throws {
+        switch status {
+        case 400:
+            throw TMDBError.verificationFailed
+        case 401:
+            throw TMDBError.authenticationFailed
+        case 403:
+            throw TMDBError.accountSuspension
+        case 404:
+            throw TMDBError.invalidRequest
+        case 405:
+            throw TMDBError.wrongForm
+        case 406:
+            throw TMDBError.invalidHeader
+        case 422:
+            throw TMDBError.invalidParameter
+        case 429:
+            throw TMDBError.limitExceeded
+        case 500:
+            throw TMDBError.tmdbError
+        case 501:
+            throw TMDBError.noService
+        case 502:
+            throw TMDBError.backendConnectionError
+        case 503:
+            throw TMDBError.offline
+        case 504:
+            throw TMDBError.timeout
+        default:
+            break
+           
+        }
+    }
+    
+    func apiErrorDoCatch(apiStatus: Int) -> String {
+    
+        do {
+            try apiError(status: apiStatus)
+        } catch TMDBError.verificationFailed {
+            return "검증실패"
+            //print(TMDBError.verificationFailed.rawValue)
+        } catch TMDBError.authenticationFailed {
+           return "인증실패"
+            //print(TMDBError.authenticationFailed.rawValue)
+        } catch TMDBError.accountSuspension {
+            return "계정정지"
+           // print(TMDBError.accountSuspension.rawValue)
+        } catch TMDBError.invalidRequest {
+            return "잘못된 요청"
+            //print(TMDBError.invalidRequest.rawValue)
+        } catch TMDBError.wrongForm {
+            return "잘못된 형식"
+            //print(TMDBError.wrongForm.rawValue)
+        } catch TMDBError.invalidHeader  {
+            return "잘못된 수락 헤더"
+            //print(TMDBError.invalidHeader.rawValue)
+        } catch TMDBError.invalidParameter {
+            return "잘못된 파라미터"
+           // print(TMDBError.invalidParameter.rawValue)
+        } catch TMDBError.limitExceeded {
+            return "요청한도 초과"
+           // print(TMDBError.limitExceeded.rawValue)
+        } catch  TMDBError.tmdbError {
+            return "TMDB 오류"
+           // print(TMDBError.tmdbError.rawValue)
+        } catch TMDBError.noService {
+            return "잘못된 서비스"
+           // print(TMDBError.noService.rawValue)
+        } catch TMDBError.backendConnectionError {
+            return "백엔드 연결 실패"
+           // print(TMDBError.backendConnectionError.rawValue)
+        } catch  TMDBError.offline {
+            return "서비스 오프라인"
+           // print(TMDBError.offline.rawValue)
+        } catch TMDBError.timeout {
+            return "시간초과"
+           // print(TMDBError.timeout.rawValue)
+        } catch  {
+            return "Unknown"
+        }
+
+        return "Unknown"
+    }
+    
+    
+}
+
+// MARK: - Extension UIViewController
+extension UIViewController {
+    func showAPIAlet(msg: String) {
+        let title = "API 오류"
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(ok)
+        
+        present(alert, animated: true)
+    }
+}
+
+
+
+
+    

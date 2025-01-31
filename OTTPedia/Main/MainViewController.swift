@@ -64,8 +64,9 @@ final class MainViewController: UIViewController {
         NetworkManger.shared.callRequest(api: .trending(), type: Trending.self) { value in
             self.trendingResult = value.results
             self.mainView.collectionView.reloadData()
-        } failHandler: {
-            print("123")
+        } failHandler: { stauts in
+            let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+            self.showAPIAlet(msg: msg)
         }
     
     }
@@ -88,6 +89,7 @@ final class MainViewController: UIViewController {
         userInfo.id =  ProfileUserDefaults.id
         userInfo.date =  ProfileUserDefaults.resgisterDate
         userInfo.likeCount = likeCount()
+        textList = ProfileUserDefaults.recentSearh
         
      
         mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
@@ -96,8 +98,6 @@ final class MainViewController: UIViewController {
         
         
     }
-    
-   
     
     private func likeCount() -> Int {
         
@@ -110,10 +110,6 @@ final class MainViewController: UIViewController {
         }
         return count
     }
-    
-   
-    
-    
     
 }
 
@@ -190,6 +186,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         textList.remove(at: sender.tag)
+        ProfileUserDefaults.recentSearh = self.textList
         // 갱신이 아닌 삭제가 되는거기 때문에, reloadData 사용
         mainView.recentSearchCollectionView.reloadData()
     }
@@ -321,6 +318,7 @@ extension MainViewController {
             }
             self.textList.insert(text, at: 0)
             self.mainView.recentSearchCollectionView.reloadData()
+            ProfileUserDefaults.recentSearh = self.textList
         }
         
         navigationController?.pushViewController(vc, animated: true)
