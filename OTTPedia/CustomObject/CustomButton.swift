@@ -18,9 +18,9 @@ final class CustomButton: UIButton {
         clipsToBounds = true
     }
     
-    init(applyConfig: Bool){
+    init(title: String){
         super.init(frame: .zero)
-        configuration = .BasicButtonStyle()
+        configuration = .BasicButtonStyle(title: title)
 
         titleLabel?.font = .systemFont(ofSize: 16)
         clipsToBounds = true
@@ -38,10 +38,10 @@ final class CustomButton: UIButton {
 //@available (iOS 15.0, *)
 extension CustomButton.Configuration {
     
-    static func BasicButtonStyle() -> UIButton.Configuration {
+    static func BasicButtonStyle(title: String) -> UIButton.Configuration {
        
         var configuration = UIButton.Configuration.filled()
-
+        configuration.title = title
         configuration.baseForegroundColor = ColorList.main.color  // 텍스트 컬러
         configuration.baseBackgroundColor = .clear // 배경 컬러
         
