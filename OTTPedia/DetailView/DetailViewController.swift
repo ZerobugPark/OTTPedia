@@ -51,7 +51,7 @@ final class DetailViewController: UIViewController {
        
         
         let group = DispatchGroup()
-        if let (info, _) = movieInfo {
+        if let (info, likeStatus) = movieInfo {
             group.enter()
             NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { value in
                 self.backdrops = value.backdrops
@@ -72,6 +72,7 @@ final class DetailViewController: UIViewController {
                 self.showAPIAlet(msg: msg)
                 group.leave()
             }
+            likeButtonStatus = likeStatus
         }
         
         group.notify(queue: .main) {
@@ -79,6 +80,7 @@ final class DetailViewController: UIViewController {
             self.detailView.tableView.reloadData()
        
         }
+        print(#function)
         
     }
     
@@ -88,7 +90,7 @@ final class DetailViewController: UIViewController {
         addContentScrollView()
         setPageControl()
         
-        if let (info, likeStatus) = movieInfo {
+        if let (info, _) = movieInfo {
             detailView.dateLabel.text = info.releaseDate + "  | "
             detailView.avgLabel.text = info.average.formatted() + "  | "
             detailView.genreLabel.text = findGenre(genres: info.genreIds)
@@ -96,9 +98,10 @@ final class DetailViewController: UIViewController {
             for i in 0..<detailView.imageViews.count {
                 detailView.imageViews[i].isHidden = false
             }
-            likeButtonStatus = likeStatus
+  
             configurationNavigationController(title: info.title)
         }
+        print(#function)
 
     }
     
