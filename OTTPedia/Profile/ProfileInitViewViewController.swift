@@ -121,6 +121,8 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
         let specialCharacter = ["@","#","$","%"]
         let numbers = ["0","1","2","3","4","5","6","7","8","9"]
         
+        let maxLength = 10
+        let minLength = 2
         
         if specialCharacter.contains(string) {
             infoMsg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
@@ -132,9 +134,16 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
             isOk = true
         }
         
-        if !isOk { // 이것도 didset 가능할 듯 해보이긴 하네, didset보다는 직관적이어서 함수에 안에쓰는게 나아 보임
+        if !isOk { 
             profileInit.infoLable.text = infoMsg
-            profileInit.okButton.isEnabled = isOk
+            
+            if let text = textField.text {
+                if text.count >= minLength && text.count <= maxLength {
+                    profileInit.okButton.isEnabled = true
+                } else {
+                    profileInit.okButton.isEnabled = isOk
+                }
+            }
             return isOk
         } else {
             return isOk
