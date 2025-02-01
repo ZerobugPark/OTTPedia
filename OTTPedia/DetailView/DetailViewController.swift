@@ -80,8 +80,6 @@ final class DetailViewController: UIViewController {
             self.detailView.tableView.reloadData()
        
         }
-        print(#function)
-        
     }
     
 
@@ -101,8 +99,6 @@ final class DetailViewController: UIViewController {
   
             configurationNavigationController(title: info.title)
         }
-        print(#function)
-
     }
     
 
