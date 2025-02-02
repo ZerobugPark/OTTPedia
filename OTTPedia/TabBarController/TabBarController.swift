@@ -53,7 +53,7 @@ final class TabBarController: UITabBarController {
     
     private func configureApperance() {
         let tabBarApperance = UITabBarAppearance()
-        tabBarApperance.configureWithTransparentBackground() // 투명하고 그림자가 없는 시스템 바 모양 개체를 구성
+        tabBarApperance.configureWithTransparentBackground()
         tabBarApperance.selectionIndicatorTintColor = ColorList.main.color
         UITabBar.appearance().standardAppearance = tabBarApperance
     }

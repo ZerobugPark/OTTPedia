@@ -46,7 +46,7 @@ final class ProfileInitViewViewController: UIViewController {
         
         let vc = ProfileImageSettingViewController()
        
-        // 프로필 사진을 새로 선택하고, 만약 확인을 안누르고 프로필 사진을 다시 누르게되면, 변경된 이미지가 선택되어야 함
+        // 프로필 사진을 새로 선택한 상태에서, 확인(회원가입)을 안누르고 프로필 사진을 다시 설정할 경우, 랜덤 이미지가 아닌, 변경된 이미지가 선택될 수 있도록.
         vc.imageIndex = currentIndex
         
         vc.changedImage = { value in
@@ -134,7 +134,7 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
             isOk = true
         }
         
-        if !isOk { 
+        if !isOk {
             profileInit.infoLable.text = infoMsg
             
             if let text = textField.text {

@@ -207,8 +207,8 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             
             // label offset 8, buttion inset 8, lable size, buttonsize = 12, spacing = 8
             let buttonSize: CGFloat = 12
-            let spacing: CGFloat = 8
-            let inset: CGFloat = 16 // 8 + 8
+            let spacing: CGFloat = 8 //(레이블과 버튼 간격)
+            let inset: CGFloat = 16 // 8 + 8 (레이블과 뷰(leading) / 버튼과 뷰(trailing))
             
             let objectWidth =  size.width + buttonSize + spacing + inset
             let objectHeight = mainView.recentSearchCollectionView.bounds.height
