@@ -217,7 +217,16 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             
             
         } else if collectionView.tag == 1 {
-            let deviceWidth = UIScreen.main.bounds.size.width
+            
+            var deviceWidth: Double = 0.0
+            
+            if let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                deviceWidth = window.screen.bounds.size.width
+            } else {
+                deviceWidth = UIScreen.main.bounds.size.width // iOS 18.2 부터 사용 X
+            }
+            
+
             let spacing: CGFloat = 8
             let inset: CGFloat = 16
             let imageCount: CGFloat = 2

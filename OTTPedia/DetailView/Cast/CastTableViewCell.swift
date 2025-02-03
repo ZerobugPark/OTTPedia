@@ -56,7 +56,14 @@ final class CastTableViewCell: BaseTableViewCell {
     private func createCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         
-        let deviceWidth = UIScreen.main.bounds.size.width
+        var deviceWidth: Double = 0.0
+        
+        if let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            deviceWidth = window.screen.bounds.size.width
+        } else {
+            deviceWidth = UIScreen.main.bounds.size.width // iOS 18.2 부터 사용 X
+        }
+        
     
         let spacing: CGFloat = 8
         let inset: CGFloat = 16
@@ -64,8 +71,9 @@ final class CastTableViewCell: BaseTableViewCell {
         
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 2.3
         // 52 = Label Height(20) + offset(8) + inset(16) + spacing(8)
-        let objectHeight = ((UIScreen.main.bounds.size.width / 2.5) - 52) / 2
-
+        //let objectHeight = ((UIScreen.main.bounds.size.width / 2.5) - 52) / 2
+        let objectHeight = ((deviceWidth / 2.5) - 52) / 2
+        
         layout.minimumInteritemSpacing = spacing
         layout.minimumLineSpacing = spacing
         

@@ -52,8 +52,15 @@ final class PosterTableViewCell: BaseTableViewCell {
     private func createCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         
-        let deviceWidth = UIScreen.main.bounds.size.width
-    
+        var deviceWidth: Double = 0.0
+        
+        // View에서 불러올 수 있지만, View에서 불러오려면, viewcontroller에서 작업 처리해야함
+        if let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            deviceWidth = window.screen.bounds.size.width
+        } else {
+            deviceWidth = UIScreen.main.bounds.size.width // iOS 18.2 부터 사용 X
+        }
+        
         let spacing: CGFloat = 8
         let inset: CGFloat = 16
         let imageCount: CGFloat = 4
@@ -61,7 +68,7 @@ final class PosterTableViewCell: BaseTableViewCell {
         let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 3.5
         // 52 = Label Height(20) + offset(8) + inset(16) + inset(8)
         // 포스터 셀의 높이는 UIScreen.main.bounds.size.width / 1.8
-        let objectHeight = ((UIScreen.main.bounds.size.width / 1.8) - 52)
+        let objectHeight = ((deviceWidth / 1.8) - 52)
         
         layout.minimumLineSpacing = spacing
         
