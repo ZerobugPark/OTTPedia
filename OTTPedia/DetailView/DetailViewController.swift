@@ -89,9 +89,22 @@ final class DetailViewController: UIViewController {
         setPageControl()
         
         if let (info, _) = movieInfo {
-            detailView.dateLabel.text = info.releaseDate + "  | "
-            detailView.avgLabel.text = info.average.formatted() + "  | "
-            detailView.genreLabel.text = findGenre(genres: info.genreIds)
+            if let releaseDate = info.releaseDate {
+                detailView.dateLabel.text = releaseDate + "  | "
+            } else {
+                detailView.dateLabel.text = "  | "
+            }
+            if let average = info.average {
+                detailView.avgLabel.text = average.formatted() + "  | "
+            } else {
+                detailView.avgLabel.text = "  | "
+            }
+            
+           
+            if let genre = info.genreIds {
+                detailView.genreLabel.text = findGenre(genres: genre)
+            }
+            
             
             for i in 0..<detailView.imageViews.count {
                 detailView.imageViews[i].isHidden = false

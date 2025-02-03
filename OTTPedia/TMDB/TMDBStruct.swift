@@ -30,9 +30,9 @@ struct Results: Decodable {
     let overview: String
     let posterPath: String?
    // let adult: Bool
-    let genreIds: [Int]
-    let releaseDate: String
-    let average: Double
+    let genreIds: [Int]?
+    let releaseDate: String?
+    let average: Double?
 
 
     

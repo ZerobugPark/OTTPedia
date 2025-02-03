@@ -112,7 +112,10 @@ final class SearchTableViewCell: BaseTableViewCell {
         movieTitle.text = info.title
         releaseDate.text = info.releaseDate
         movieTitle.text = info.title
-        findGenre(genres: info.genreIds)
+        if let genre = info.genreIds {
+            findGenre(genres: genre)
+        }
+        
         
     }
     
