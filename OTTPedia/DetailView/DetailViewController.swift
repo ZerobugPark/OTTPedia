@@ -53,24 +53,30 @@ final class DetailViewController: UIViewController {
         let group = DispatchGroup()
         if let (info, likeStatus) = movieInfo {
             group.enter()
-            NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { value in
-                self.backdrops = value.backdrops
-                self.maxBackdropImageCount = self.backdrops.count
-                self.posters = value.posters
-                group.leave()
-            } failHandler: { stauts in
-                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                self.showAPIAlet(msg: msg)
-                group.leave()
+            NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { response in
+                switch response {
+                case .success(let value):
+                    self.backdrops = value.backdrops
+                    self.maxBackdropImageCount = self.backdrops.count
+                    self.posters = value.posters
+                    group.leave()
+                case .failure(let failure):
+                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                    self.showAPIAlet(msg: "Error")
+                    group.leave()
+                }
             }
             group.enter()
-            NetworkManger.shared.callRequest(api: .getCredit(id: info.id), type: GetCredit.self) { value in
-                self.castInfo = value.cast
-                group.leave()
-            } failHandler: { stauts in
-                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                self.showAPIAlet(msg: msg)
-                group.leave()
+            NetworkManger.shared.callRequest(api: .getCredit(id: info.id), type: GetCredit.self) { response in
+                switch response {
+                case .success(let value):
+                    self.castInfo = value.cast
+                    group.leave()
+                case .failure(let failure):
+                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                     self.showAPIAlet(msg: "Error")
+                     group.leave()
+                }
             }
             likeButtonStatus = likeStatus
         }

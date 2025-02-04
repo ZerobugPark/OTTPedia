@@ -61,12 +61,16 @@ final class MainViewController: UIViewController {
         mainView.removeAllButton.addTarget(self, action: #selector(removeAllButtonTapped), for: .touchUpInside)
         
         
-        NetworkManger.shared.callRequest(api: .trending(), type: Trending.self) { value in
-            self.trendingResult = value.results
-            self.mainView.collectionView.reloadData()
-        } failHandler: { stauts in
-            let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-            self.showAPIAlet(msg: msg)
+        NetworkManger.shared.callRequest(api: .trending(), type: Trending.self) { response in
+            switch response {
+            case .success(let value):
+                self.trendingResult = value.results
+                self.mainView.collectionView.reloadData()
+            case .failure(let failure):
+                //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                self.showAPIAlet(msg: "Error")
+            }
+
         }
     
     }
@@ -320,7 +324,7 @@ extension MainViewController {
     @objc private func searchButtonTapped(_ sender: UIButton) {
         let vc = SearchViewController()
         
-        vc.textInfo = { text in
+        vc.recentTextInfo = { text in
             
             if let sameTextIndex = self.textList.lastIndex(of: text) {
                 self.textList.remove(at: sameTextIndex)

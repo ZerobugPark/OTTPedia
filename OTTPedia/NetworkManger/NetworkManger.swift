@@ -70,7 +70,29 @@ class NetworkManger {
     
     private init() { }
     
-    func callRequest<T: Decodable>(api: TMDBRequest, type: T.Type, completionHandler: @escaping (T) -> Void, failHandler: @escaping (Int) -> Void) {
+//    func callRequest<T: Decodable>(api: TMDBRequest, type: T.Type, completionHandler: @escaping (T) -> Void, failHandler: @escaping (Int) -> Void) {
+//        
+//  
+//        AF.request(api.endPoint, method: api.method, parameters: api.parameter, encoding: URLEncoding(destination: .queryString),headers: api.header).responseDecodable(of: (T.self)) { response in
+//            
+//            switch response.result {
+//            case .success(let value):
+//                //dump(value)
+//                completionHandler(value)
+//            case .failure(let error):
+//                if let status = response.response?.statusCode {
+//                    failHandler(status)
+//                 // 어떻게 하면 status에 statusCode를 추가해볼 수 있을까?
+//                }
+//                dump(error)
+//                
+//                
+//            }
+//        }
+//    }
+//    
+
+    func callRequest<T: Decodable>(api: TMDBRequest, type: T.Type, completionHandler: @escaping (Result <(T), AFError>) -> Void) {
         
   
         AF.request(api.endPoint, method: api.method, parameters: api.parameter, encoding: URLEncoding(destination: .queryString),headers: api.header).responseDecodable(of: (T.self)) { response in
@@ -78,12 +100,11 @@ class NetworkManger {
             switch response.result {
             case .success(let value):
                 //dump(value)
-                completionHandler(value)
+                completionHandler(.success(value))
             case .failure(let error):
-                if let status = response.response?.statusCode {
-                    failHandler(status)
-                }
-                dump(error)
+                //dump(error)
+                completionHandler(.failure(error))
+                
                 
                 
             }

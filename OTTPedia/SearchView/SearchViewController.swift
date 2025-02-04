@@ -10,7 +10,6 @@ import UIKit
 final class SearchViewController: UIViewController {
     
 
-    
     private var searchResult: [Results] = []
     private var currentPage = 1
     private var searchView = SearchView()
@@ -18,7 +17,7 @@ final class SearchViewController: UIViewController {
     private var likeMovie: [String: Bool] = [:]
     
     var searchText = ""
-    var textInfo: ((String) -> Void)?
+    var recentTextInfo: ((String) -> Void)?
     
     override func loadView() {
         view = searchView
@@ -38,15 +37,20 @@ final class SearchViewController: UIViewController {
         
         
         if !searchText.isEmpty {
-            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
-                self.searchResult = value.results
-                self.totalPage = value.totalPage
-                self.searchView.tableView.reloadData()
-                self.noData()
-                self.searchView.searchBar.text = self.searchText
-            } failHandler: { stauts in
-                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                self.showAPIAlet(msg: msg)
+            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
+                
+                switch response {
+                case .success(let value):
+                    self.searchResult = value.results
+                    self.totalPage = value.totalPage
+                    self.searchView.tableView.reloadData()
+                    self.noData()
+                    self.searchView.searchBar.text = self.searchText
+                case .failure(let failure):
+                    //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                    self.showAPIAlet(msg: "Error")
+                }
+
             }
         }
         likeMovie = ProfileUserDefaults.likeMoive
@@ -83,16 +87,20 @@ extension SearchViewController: UISearchBarDelegate {
         if let text = searchBar.text {
             searchText = text
             currentPage = 1
-            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
-                self.searchResult = value.results
-                self.totalPage = value.totalPage
-                self.searchView.tableView.reloadData()
-                self.noData()
-            } failHandler: { stauts in
-                let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                self.showAPIAlet(msg: msg)
+            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
+                
+                switch response {
+                case .success(let value):
+                    self.searchResult = value.results
+                    self.totalPage = value.totalPage
+                    self.searchView.tableView.reloadData()
+                    self.noData()
+                case .failure(let failure):
+                    //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                    self.showAPIAlet(msg: "Error")
+                }
             }
-            textInfo?(searchText)
+            recentTextInfo?(searchText)
         }
         
         view.endEditing(true)
@@ -157,12 +165,16 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
             for path in indexPaths {
                 if searchResult.count - 2 == path.row {
                     currentPage += 1
-                    NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { value in
-                        self.searchResult.append(contentsOf: value.results)
-                        self.searchView.tableView.reloadData()
-                    } failHandler: { stauts in
-                        let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                        self.showAPIAlet(msg: msg)
+                    NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
+            
+                        switch response {
+                        case .success(let value):
+                            self.searchResult.append(contentsOf: value.results)
+                            self.searchView.tableView.reloadData()
+                        case .failure(let failure):
+                            //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                            self.showAPIAlet(msg: "Error")
+                        }
                     }
                 }
             }
