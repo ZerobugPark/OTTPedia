@@ -14,8 +14,8 @@ final class CustomImageView: UIImageView {
         clipsToBounds = true
     }
     
-    init(cornerRadius: Bool) {
-        super.init(frame: .zero)
+    convenience init(cornerRadius: Bool) {
+        self.init()
         
         if cornerRadius {
             layer.cornerRadius = 10
@@ -25,8 +25,9 @@ final class CustomImageView: UIImageView {
         
     }
     
-    init(selected: Bool) {
-        super.init(frame: .zero)
+    convenience init(selected: Bool) {
+        self.init()
+        
         clipsToBounds = true
         
         if selected {
@@ -39,8 +40,6 @@ final class CustomImageView: UIImageView {
         }
         
     }
-        
-    
     
     
     @available(*, unavailable)

@@ -103,6 +103,7 @@ class NetworkManger {
                 completionHandler(.success(value))
             case .failure(let error):
                 //dump(error)
+                // AFError이 아닌 내가 만든 Error을 넣어서, Error에 대한 결과 처리를 따로 해줘야 함
                 completionHandler(.failure(error))
                 
                 

@@ -9,17 +9,24 @@ import UIKit
 
 final class CustomButton: UIButton {
     
+    
     init() {
         super.init(frame: .zero)
+
+    }
+    
+    convenience init(cornerRadius: CGFloat) {
+        self.init()
+        
         backgroundColor = ColorList.main.color
         titleLabel?.textColor = ColorList.white.color
         titleLabel?.font = .boldSystemFont(ofSize: 14)
-        layer.cornerRadius = 8
+        layer.cornerRadius = cornerRadius
         clipsToBounds = true
     }
     
-    init(title: String){
-        super.init(frame: .zero)
+    convenience init(title: String){
+        self.init()
         configuration = .BasicButtonStyle(title: title)
 
         titleLabel?.font = .systemFont(ofSize: 16)

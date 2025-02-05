@@ -139,8 +139,8 @@ final class SearchTableViewCell: BaseTableViewCell {
        
         for i in 0..<count {
             
-            let view = CustomView()
-            view.layer.cornerRadius = 5
+            let view = CustomView(cornerRadius: 5)
+            //view.layer.cornerRadius = 5
             genreView.append(view)
             stackView.addArrangedSubview(genreView[i])
             

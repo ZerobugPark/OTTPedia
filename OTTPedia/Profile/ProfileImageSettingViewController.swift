@@ -69,8 +69,11 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
         if imageIndex != indexPath.item {
             previousImageIndex = imageIndex
             imageIndex = indexPath.item
+            
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)]) // 이전 이미지 흑백으로 변경
+            
+            //collectionView.reloadData() -> 사실 이게 깔끔하긴 한데
             imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
             changedImage?(imageIndex)
             

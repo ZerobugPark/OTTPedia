@@ -9,9 +9,12 @@ import UIKit
 
 final class CustomTextField: UITextField {
     
-    
-    init(placeholder: String) {
+    init() {
         super.init(frame: .zero)
+    }
+    
+    convenience init(placeholder: String) {
+        self.init()
         
         textAlignment = .left
         textColor = ColorList.white.color

@@ -11,12 +11,16 @@ class CustomView: UIView {
     
     init() {
         super.init(frame: .zero)
+
+   
+    }
+    
+    convenience init(cornerRadius: CGFloat) {
+        self.init()
         
-        
-        layer.cornerRadius = 10
+        layer.cornerRadius = cornerRadius
         backgroundColor = ColorList.darkGray.color
         clipsToBounds = true
-   
     }
     
 

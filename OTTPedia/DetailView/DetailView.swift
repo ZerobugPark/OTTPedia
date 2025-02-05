@@ -51,6 +51,7 @@ final class DetailView: BaseView {
             make.centerX.equalTo(scrollView)
         }
         
+        // MARK: - 개봉일, 평점, 장르
         stackView.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.bottom).offset(16)
             make.centerX.equalTo(self)

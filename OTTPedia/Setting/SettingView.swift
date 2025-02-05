@@ -9,10 +9,10 @@ import UIKit
 
 final class SettingView: BaseView {
 
-    let view = CustomView()
+    let view = CustomView(cornerRadius: 10)
     let imageView = CustomImageView(selected: true)
     let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
-    let likeStorageButton = CustomButton()
+    let likeStorageButton = CustomButton(cornerRadius: 8)
     let tableView = UITableView()
     let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     

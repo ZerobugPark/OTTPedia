@@ -11,11 +11,11 @@ import SnapKit
 
 final class MainView: BaseView {
     
-    let view = CustomView()
+    let view = CustomView(cornerRadius: 10)
     let imageView = CustomImageView(selected: true)
     let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
     let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
-    let likeStorageButton = CustomButton()
+    let likeStorageButton = CustomButton(cornerRadius: 8)
     let removeAllButton = UIButton()
     let recentInfoLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
     let movieListView = UIView()
