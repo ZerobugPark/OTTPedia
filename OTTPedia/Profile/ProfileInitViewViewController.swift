@@ -119,7 +119,6 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
        
         let specialCharacter = ["@","#","$","%"]
-        let numbers = ["0","1","2","3","4","5","6","7","8","9"]
         
         let maxLength = 10
         let minLength = 2
@@ -127,9 +126,10 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
         if specialCharacter.contains(string) {
             infoMsg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
             isOk = false
-        } else if numbers.contains(string) {
+        } else if let _ = Int(string) {
             infoMsg = "닉네임에 숫자는 포함할 수 없어요"
             isOk = false
+            
         } else {
             isOk = true
         }
@@ -150,6 +150,7 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
         }
             
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
         return true
