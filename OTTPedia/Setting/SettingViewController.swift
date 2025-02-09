@@ -56,7 +56,7 @@ final class SettingViewController: UIViewController {
         settingView.likeStorageButton.setTitle(msg, for: .normal)
         
         
-        settingView.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
+        settingView.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
         settingView.nameLabel.text = userInfo.id
         settingView.dateLabel.text = userInfo.date
     }
@@ -84,7 +84,7 @@ final class SettingViewController: UIViewController {
             ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
             ProfileUserDefaults.id = self.userInfo.id
     
-            self.settingView.imageView.image = UIImage(named: ImageList.shared.profileImageList[self.userInfo.userImageIndex])
+            self.settingView.imageView.image =   ImageList.shared.profileImageList[self.userInfo.userImageIndex]
             self.settingView.nameLabel.text = self.userInfo.id
         }
         

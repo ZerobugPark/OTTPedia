@@ -36,7 +36,7 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
     }
     func imageSetup(index: Int, selected: Bool) {
         
-        imageView.image = UIImage(named: ImageList.shared.profileImageList[index])
+        imageView.image = ImageList.shared.profileImageList[index]
         if !selected {
             imageView.layer.borderWidth = 1
             imageView.layer.borderColor = ColorList.darkGray.color.cgColor

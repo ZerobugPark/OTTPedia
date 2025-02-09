@@ -85,7 +85,7 @@ final class ProfileInitView: BaseView {
     override func configureView() {
         
         
-        imageView.image = UIImage(named: ImageList.shared.profileImageList[randomImageIndex])
+        imageView.image = ImageList.shared.profileImageList[randomImageIndex]
         imageView.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
         
         circleView.backgroundColor = ColorList.main.color

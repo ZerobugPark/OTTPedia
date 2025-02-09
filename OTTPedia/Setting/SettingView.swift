@@ -86,8 +86,6 @@ final class SettingView: BaseView {
     
     override func configureView() {
         
-        imageView.image = UIImage(named: ImageList.shared.profileImageList[0])
-        
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")

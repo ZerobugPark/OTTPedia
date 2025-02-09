@@ -50,7 +50,7 @@ final class ProfileInitViewViewController: UIViewController {
         vc.imageIndex = currentIndex
         
         vc.changedImage = { value in
-            self.profileInit.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
+            self.profileInit.imageView.image = ImageList.shared.profileImageList[value]
             self.currentIndex = value
 
         }
@@ -69,7 +69,7 @@ final class ProfileInitViewViewController: UIViewController {
         
         ProfileUserDefaults.id = profileInit.nameTextField.text!
         
-        window.rootViewController = UINavigationController(rootViewController: TabBarController())
+        window.rootViewController = TabBarController()
         window.makeKeyAndVisible()
         
     }

@@ -25,7 +25,7 @@ final class ProfileImageSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
+        imageSet.imageView.image = ImageList.shared.profileImageList[imageIndex]
         
         imageSet.collectionView.delegate = self
         imageSet.collectionView.dataSource = self
@@ -74,7 +74,7 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
             collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)]) // 이전 이미지 흑백으로 변경
             
             //collectionView.reloadData() -> 사실 이게 깔끔하긴 한데
-            imageSet.imageView.image = UIImage(named: ImageList.shared.profileImageList[imageIndex])
+            imageSet.imageView.image = ImageList.shared.profileImageList[imageIndex]
             changedImage?(imageIndex)
             
         }

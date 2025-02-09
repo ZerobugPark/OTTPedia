@@ -58,7 +58,7 @@ final class ModifiyProfileViewController: UIViewController {
     private func setupUserInfo() {
         // 프로필 이미지 편집이 네비게이션으로 연결되어있기 때문에, viewWill에서 셋팅 불가능
         
-        profileModify.imageView.image = UIImage(named: ImageList.shared.profileImageList[userInfo.userImageIndex])
+        profileModify.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
         profileModify.nameTextField.text =  userInfo.id
         
         profileModify.infoLable.text = ""
@@ -94,7 +94,7 @@ final class ModifiyProfileViewController: UIViewController {
         vc.imageIndex = currentIndex
         vc.isEdit = true
         vc.changedImage = { value in
-            self.profileModify.imageView.image = UIImage(named: ImageList.shared.profileImageList[value])
+            self.profileModify.imageView.image =  ImageList.shared.profileImageList[value]
             self.currentIndex = value
         }
         navigationController?.pushViewController(vc, animated: true)

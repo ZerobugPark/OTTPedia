@@ -96,7 +96,7 @@ final class MainViewController: UIViewController {
         textList = ProfileUserDefaults.recentSearh
         
      
-        mainView.imageView.image = UIImage(named:ImageList.shared.profileImageList[userInfo.userImageIndex])
+        mainView.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
         mainView.nameLabel.text = userInfo.id
         mainView.dateLabel.text = userInfo.date
         mainView.collectionView.reloadData()
@@ -301,7 +301,7 @@ extension MainViewController {
             ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
             ProfileUserDefaults.id = self.userInfo.id
             
-            self.mainView.imageView.image = UIImage(named: ImageList.shared.profileImageList[self.userInfo.userImageIndex])
+            self.mainView.imageView.image = ImageList.shared.profileImageList[self.userInfo.userImageIndex]
             self.mainView.nameLabel.text = self.userInfo.id
             self.mainView.dateLabel.text = self.userInfo.date
             
