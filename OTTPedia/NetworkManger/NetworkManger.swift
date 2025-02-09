@@ -38,7 +38,7 @@ enum TMDBRequest {
     }
     
     var header: HTTPHeaders {
-        return ["Authorization": "Bearer \(TMDBAPI.client_ID)"]
+        return ["Authorization": "Bearer \(TMDBAPI.clientID)"]
         
     }
     

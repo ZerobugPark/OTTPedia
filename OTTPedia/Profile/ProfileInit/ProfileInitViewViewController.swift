@@ -55,7 +55,7 @@ final class ProfileInitViewViewController: UIViewController {
 
         }
         navigationController?.pushViewController(vc, animated: true)
-        
+      
         
     }
     
