@@ -25,6 +25,7 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
 
     }
     
+    
     override func configureLayout() {
         
         profileImage.snp.makeConstraints { make in
@@ -52,10 +53,24 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
     
     override func configureView() {
         
-        DispatchQueue.main.async {
-            self.profileImage.layer.cornerRadius = self.profileImage.frame.width / 2
-        }
+        
+        // DispatchQueue와 layoutSubview의 장단점 구분해볼 것
+//        DispatchQueue.main.async {
+//            self.profileImage.layer.cornerRadius = self.profileImage.frame.width / 2
+//        }
     }
+    
+    // 뷰의 프레임이 변경될 때 마다 호출
+    override func layoutSubviews() {
+        print(#function)
+        super.layoutSubviews()
+        guard contentView.bounds.width > 0 else { return }
+        
+        profileImage.layer.cornerRadius = profileImage.frame.width / 2
+        print(profileImage.frame.width)
+    }
+    
+    
 
     func setupCast(info: CastInfo) {
         
@@ -69,6 +84,7 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
         koreanName.text = info.name
         characterName.text = info.character
         
+        contentView.layoutIfNeeded() // 강제로 layoutSubview 호출
     }
 
     
