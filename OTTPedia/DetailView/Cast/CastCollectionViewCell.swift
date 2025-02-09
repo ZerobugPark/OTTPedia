@@ -14,8 +14,8 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
     static let id = "CastCollectionViewCell"
     
     private let profileImage = CustomImageView()
-    private let koreanName = CustomLabel(boldStyle: true, fontSize: 13, color: ColorList.white.color)
-    private let characterName = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    private let koreanName = CustomLabel(boldStyle: true, fontSize: 13, color: ColorList.white)
+    private let characterName = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
     
     
     override func configureHierarchy() {

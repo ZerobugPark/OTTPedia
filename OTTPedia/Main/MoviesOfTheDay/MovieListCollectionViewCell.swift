@@ -15,8 +15,8 @@ final class MovieListCollectionViewCell: BaseCollectionViewCell {
     static let id = "MovieListCollectionViewCell"
     
     private let movieImage = CustomImageView(cornerRadius: true)
-    private let movieTitleLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
-    private let overviewLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white.color)
+    private let movieTitleLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
+    private let overviewLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white)
     
     private var likeButtonStatus = false
     

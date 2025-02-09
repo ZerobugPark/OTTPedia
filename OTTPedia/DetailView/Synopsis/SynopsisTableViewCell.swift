@@ -13,8 +13,8 @@ final class SynopsisTableViewCell: BaseTableViewCell {
 
     static let id = "SynopsisTableViewCell"
     
-    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
-    private let overviewLabel = CustomLabel(boldStyle: false, fontSize: 14, color: ColorList.white.color)
+    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
+    private let overviewLabel = CustomLabel(boldStyle: false, fontSize: 14, color: ColorList.white)
     private let hideButton = UIButton()
     
     private var buttonTtile = "More"
@@ -62,7 +62,7 @@ final class SynopsisTableViewCell: BaseTableViewCell {
     override func configureView() {
         
         hideButton.setTitle(buttonTtile, for: .normal)
-        hideButton.setTitleColor(ColorList.main.color, for: .normal)
+        hideButton.setTitleColor(ColorList.main, for: .normal)
         hideButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
         
         overviewLabel.numberOfLines = 3 // 높이가 NumberofLines에 맞춰 자동으로 반영

@@ -15,9 +15,9 @@ final class DetailView: BaseView {
     let scrollView = UIScrollView()
     let pageControl = UIPageControl()
     
-    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
-    let avgLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
-    let genreLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
+    let avgLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
+    let genreLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
     let imageViews: [CustomImageView] = [CustomImageView(), CustomImageView(), CustomImageView()]
     
     let tableView = UITableView()
@@ -76,12 +76,12 @@ final class DetailView: BaseView {
         
         for i in 0..<imageViews.count {
             imageViews[i].image = UIImage(systemName: images[i])
-            imageViews[i].tintColor = ColorList.lightGray.color
+            imageViews[i].tintColor = ColorList.lightGray
             imageViews[i].isHidden = true // 자연스러운 전환을 위해서 히든 처리
         }
         
         tableView.bounces = false
-        tableView.backgroundColor = ColorList.black.color
+        tableView.backgroundColor = ColorList.black
         
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
@@ -92,8 +92,8 @@ final class DetailView: BaseView {
         
         
         
-        pageControl.pageIndicatorTintColor = ColorList.lightGray.color
-        pageControl.currentPageIndicatorTintColor = ColorList.white.color
+        pageControl.pageIndicatorTintColor = ColorList.lightGray
+        pageControl.currentPageIndicatorTintColor = ColorList.white
         
         
         

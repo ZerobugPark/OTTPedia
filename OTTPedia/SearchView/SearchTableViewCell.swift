@@ -14,8 +14,8 @@ final class SearchTableViewCell: BaseTableViewCell {
     static let id = "SearchTableViewCell"
     
     private let movieImage = CustomImageView(cornerRadius: true)
-    private let movieTitle = CustomLabel(boldStyle: true, fontSize: 15, color: ColorList.white.color)
-    private let releaseDate = CustomLabel(boldStyle: false, fontSize: 13, color: ColorList.lightGray.color)
+    private let movieTitle = CustomLabel(boldStyle: true, fontSize: 15, color: ColorList.white)
+    private let releaseDate = CustomLabel(boldStyle: false, fontSize: 13, color: ColorList.lightGray)
 
     private let stackView = UIStackView()
     private var genreView: [CustomView] = []
@@ -144,7 +144,7 @@ final class SearchTableViewCell: BaseTableViewCell {
             genreView.append(view)
             stackView.addArrangedSubview(genreView[i])
             
-            let label = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white.color)
+            let label = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.white)
             label.textAlignment = .center
             
             genreLabel.append(label)

@@ -39,12 +39,12 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
         imageView.image = ImageList.shared.profileImageList[index]
         if !selected {
             imageView.layer.borderWidth = 1
-            imageView.layer.borderColor = ColorList.darkGray.color.cgColor
+            imageView.layer.borderColor = ColorList.darkGray.cgColor
             imageView.alpha = 0.5
             
         } else {
             imageView.layer.borderWidth = 3
-            imageView.layer.borderColor = ColorList.main.color.cgColor
+            imageView.layer.borderColor = ColorList.main.cgColor
             imageView.alpha = 1
         }
         

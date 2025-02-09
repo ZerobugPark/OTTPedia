@@ -37,9 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 
         let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: ColorList.white.color]
+        appearance.titleTextAttributes = [.foregroundColor: ColorList.white]
         
-        UINavigationBar.appearance().tintColor = ColorList.main.color
+        UINavigationBar.appearance().tintColor = ColorList.main
         UINavigationBar.appearance().standardAppearance = appearance
 
     }

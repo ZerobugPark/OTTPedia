@@ -17,10 +17,10 @@ final class CustomTextField: UITextField {
         self.init()
         
         textAlignment = .left
-        textColor = ColorList.white.color
+        textColor = ColorList.white
         
         //Placeholder 색상 변경
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : ColorList.darkGray.color])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : ColorList.darkGray])
         
         backgroundColor = .clear
         borderStyle = .none

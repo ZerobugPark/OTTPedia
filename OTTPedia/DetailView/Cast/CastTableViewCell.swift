@@ -13,7 +13,7 @@ final class CastTableViewCell: BaseTableViewCell {
     
     static let id = "CastTableViewCell"
     
-    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
+    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
   
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
     
@@ -39,7 +39,7 @@ final class CastTableViewCell: BaseTableViewCell {
     }
     
     override func configureView() {
-        collectionView.backgroundColor = ColorList.black.color
+        collectionView.backgroundColor = ColorList.black
         collectionView.showsHorizontalScrollIndicator = false
         
         //테이틀뷰는 해주는게 바운스를 false가 자연스럽고, 컬렉션뷰는 true가 자연스러워 보임

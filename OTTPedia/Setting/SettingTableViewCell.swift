@@ -13,7 +13,7 @@ final class SettingTableViewCell: BaseTableViewCell {
 
     static let id = "SettingTableViewCell"
     
-    private let content = CustomLabel(boldStyle: false, fontSize: 16, color: ColorList.white.color)
+    private let content = CustomLabel(boldStyle: false, fontSize: 16, color: ColorList.white)
 
 
     override func configureHierarchy() {

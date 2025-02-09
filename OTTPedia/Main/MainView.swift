@@ -13,16 +13,16 @@ final class MainView: BaseView {
     
     let view = CustomView(cornerRadius: 10)
     let imageView = CustomImageView(selected: true)
-    let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
-    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white)
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
     let likeStorageButton = CustomButton(cornerRadius: 8)
     let removeAllButton = UIButton()
-    let recentInfoLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let recentInfoLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
     let movieListView = UIView()
-    let secondSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
+    let secondSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
 
         
-    private let firstSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
+    private let firstSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
     private let stackView = UIStackView()
     private let recentSearchView = UIView()
  
@@ -155,14 +155,14 @@ final class MainView: BaseView {
     
     override func configureView() {
         
-        recentSearchView.backgroundColor = ColorList.black.color
-        movieListView.backgroundColor = ColorList.black.color
+        recentSearchView.backgroundColor = ColorList.black
+        movieListView.backgroundColor = ColorList.black
         
-        recentSearchCollectionView.backgroundColor = ColorList.black.color
+        recentSearchCollectionView.backgroundColor = ColorList.black
         recentSearchCollectionView.showsHorizontalScrollIndicator = false
         recentSearchCollectionView.tag = 0
         
-        collectionView.backgroundColor = ColorList.black.color
+        collectionView.backgroundColor = ColorList.black
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.tag = 1
 
@@ -170,7 +170,7 @@ final class MainView: BaseView {
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
-        chevronImage.tintColor = ColorList.lightGray.color
+        chevronImage.tintColor = ColorList.lightGray
     
         
         stackView.axis = .vertical
@@ -185,7 +185,7 @@ final class MainView: BaseView {
         
         let buttonTitle = "전체 삭제"
         removeAllButton.setTitle(buttonTitle, for: .normal)
-        removeAllButton.setTitleColor(ColorList.main.color, for: .normal)
+        removeAllButton.setTitleColor(ColorList.main, for: .normal)
         removeAllButton.titleLabel?.font = .systemFont(ofSize: 12)
         
         //print("메인뷰")

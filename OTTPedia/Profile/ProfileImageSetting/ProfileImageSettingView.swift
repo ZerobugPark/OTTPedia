@@ -57,10 +57,10 @@ final class ProfileImageSettingView: BaseView {
     
     override func configureView() {
         
-        circleView.backgroundColor = ColorList.main.color
+        circleView.backgroundColor = ColorList.main
         
         subImageView.image = UIImage(systemName: "camera.fill")
-        subImageView.tintColor = ColorList.white.color
+        subImageView.tintColor = ColorList.white
         subImageView.contentMode = .scaleAspectFit
         
         
@@ -70,7 +70,7 @@ final class ProfileImageSettingView: BaseView {
             self.subImageView.layer.cornerRadius = self.subImageView.frame.width / 2
         }
         
-        collectionView.backgroundColor = ColorList.black.color
+        collectionView.backgroundColor = ColorList.black
         
     }
     

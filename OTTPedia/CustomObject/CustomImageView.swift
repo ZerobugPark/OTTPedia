@@ -32,10 +32,10 @@ final class CustomImageView: UIImageView {
         
         if selected {
             layer.borderWidth = 3
-            layer.borderColor = ColorList.main.color.cgColor
+            layer.borderColor = ColorList.main.cgColor
         } else {
             layer.borderWidth = 1
-            layer.borderColor = ColorList.darkGray.color.cgColor
+            layer.borderColor = ColorList.darkGray.cgColor
             alpha = 0.5
         }
         

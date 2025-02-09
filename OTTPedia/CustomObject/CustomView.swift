@@ -19,7 +19,7 @@ class CustomView: UIView {
         self.init()
         
         layer.cornerRadius = cornerRadius
-        backgroundColor = ColorList.darkGray.color
+        backgroundColor = ColorList.darkGray
         clipsToBounds = true
     }
     

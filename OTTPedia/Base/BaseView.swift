@@ -15,7 +15,7 @@ class BaseView: UIView {
         configureLayout()
         configureView()
         // 모든 뷰가 동일한 색상의 뷰를 가진다면, 베이스뷰에서 작업하는 것도 괜찮아 보임.
-        self.backgroundColor = ColorList.black.color
+        self.backgroundColor = ColorList.black
     }
     
     func configureHierarchy() { }

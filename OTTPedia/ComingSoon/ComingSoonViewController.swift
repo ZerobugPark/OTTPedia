@@ -12,7 +12,7 @@ final class ComingSoonViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = ColorList.black.color
+        view.backgroundColor = ColorList.black
 
     }
     

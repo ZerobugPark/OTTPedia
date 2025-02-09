@@ -18,8 +18,8 @@ final class CustomButton: UIButton {
     convenience init(cornerRadius: CGFloat) {
         self.init()
         
-        backgroundColor = ColorList.main.color
-        titleLabel?.textColor = ColorList.white.color
+        backgroundColor = ColorList.main
+        titleLabel?.textColor = ColorList.white
         titleLabel?.font = .boldSystemFont(ofSize: 14)
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
@@ -49,10 +49,10 @@ extension CustomButton.Configuration {
        
         var configuration = UIButton.Configuration.filled()
         configuration.title = title
-        configuration.baseForegroundColor = ColorList.main.color  // 텍스트 컬러
+        configuration.baseForegroundColor = ColorList.main  // 텍스트 컬러
         configuration.baseBackgroundColor = .clear // 배경 컬러
         
-        configuration.background.strokeColor = ColorList.main.color // 테두리 색상
+        configuration.background.strokeColor = ColorList.main // 테두리 색상
         configuration.background.strokeWidth =  3 // 테두리 굵기
         configuration.cornerStyle = .capsule
         configuration.buttonSize = .small

@@ -14,7 +14,7 @@ class BaseTableViewCell: UITableViewCell {
         configureHierarchy()
         configureLayout()
         configureView()
-        self.backgroundColor = ColorList.black.color
+        self.backgroundColor = ColorList.black
     }
 
 

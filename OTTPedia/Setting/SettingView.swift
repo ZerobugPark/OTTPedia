@@ -11,10 +11,10 @@ final class SettingView: BaseView {
 
     let view = CustomView(cornerRadius: 10)
     let imageView = CustomImageView(selected: true)
-    let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white.color)
+    let nameLabel = CustomLabel(boldStyle: true, fontSize: 16, color:  ColorList.white)
     let likeStorageButton = CustomButton(cornerRadius: 8)
     let tableView = UITableView()
-    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray.color)
+    let dateLabel = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.lightGray)
     
     
     private let chevronImage = CustomImageView()
@@ -89,15 +89,15 @@ final class SettingView: BaseView {
         view.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
 
         chevronImage.image = UIImage(systemName: "chevron.compact.right")
-        chevronImage.tintColor = ColorList.lightGray.color
+        chevronImage.tintColor = ColorList.lightGray
         
 
         tableView.bounces = false
         
-        tableView.backgroundColor = ColorList.black.color
+        tableView.backgroundColor = ColorList.black
         
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        tableView.separatorColor = ColorList.lightGray.color
+        tableView.separatorColor = ColorList.lightGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
       
         // 탭바에서 디스패치큐를 사용시 주의 점

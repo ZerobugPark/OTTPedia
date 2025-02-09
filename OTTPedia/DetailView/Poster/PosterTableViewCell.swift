@@ -13,7 +13,7 @@ final class PosterTableViewCell: BaseTableViewCell {
 
     static let id = "PosterTableViewCell"
     
-    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white.color)
+    private let sectionLabel = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
   
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
 
@@ -39,7 +39,7 @@ final class PosterTableViewCell: BaseTableViewCell {
     }
     
     override func configureView() {
-        collectionView.backgroundColor = ColorList.black.color
+        collectionView.backgroundColor = ColorList.black
         collectionView.showsHorizontalScrollIndicator = false
     }
     

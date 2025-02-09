@@ -13,7 +13,7 @@ final class SearchView: BaseView {
 
     let searchBar = UISearchBar()
     let tableView = UITableView()
-    let infoLabel = CustomLabel(boldStyle: true, fontSize: 14, color: ColorList.white.color)
+    let infoLabel = CustomLabel(boldStyle: true, fontSize: 14, color: ColorList.white)
 
   
     override func configureHierarchy() {
@@ -46,18 +46,18 @@ final class SearchView: BaseView {
         
         
         let placeholder = "어떤 영화가 궁금하신가요?"
-        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor : ColorList.lightGray.color])
-        searchBar.searchTextField.backgroundColor =  ColorList.darkGray.color
-        searchBar.searchTextField.leftView?.tintColor = ColorList.white.color // 돋보기 색상 변경
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor : ColorList.lightGray])
+        searchBar.searchTextField.backgroundColor =  ColorList.darkGray
+        searchBar.searchTextField.leftView?.tintColor = ColorList.white // 돋보기 색상 변경
         searchBar.searchTextField.textColor = .white
         searchBar.searchBarStyle = .minimal
         
         
         
         tableView.bounces = false
-        tableView.backgroundColor = ColorList.black.color
+        tableView.backgroundColor = ColorList.black
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-        tableView.separatorColor = ColorList.lightGray.color
+        tableView.separatorColor = ColorList.lightGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         let msg = "원하는 검색결과를 찾지 못했습니다."

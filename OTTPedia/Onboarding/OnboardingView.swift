@@ -14,8 +14,8 @@ final class OnboardingView: BaseCollectionViewCell {
     let startButton = CustomButton(title: "시작하기")
     
     private let imageView = CustomImageView()
-    private let titleLable = CustomLabel(boldStyle: false, fontSize: 25, italic: true, color: ColorList.white.color)
-    private let subTitleLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false, color: ColorList.white.color)
+    private let titleLable = CustomLabel(boldStyle: false, fontSize: 25, italic: true, color: ColorList.white)
+    private let subTitleLable = CustomLabel(boldStyle: false, fontSize: 14, italic: false, color: ColorList.white)
     
     
     override func configureHierarchy() {

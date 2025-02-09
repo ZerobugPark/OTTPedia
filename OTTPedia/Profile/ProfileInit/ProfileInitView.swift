@@ -17,7 +17,7 @@ final class ProfileInitView: BaseView {
     
     let imageView = CustomImageView(selected: true)
     let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
-    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.main.color)
+    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.main)
     let okButton = CustomButton(title: "완료")
     let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
     
@@ -88,13 +88,13 @@ final class ProfileInitView: BaseView {
         imageView.image = ImageList.shared.profileImageList[randomImageIndex]
         imageView.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
         
-        circleView.backgroundColor = ColorList.main.color
+        circleView.backgroundColor = ColorList.main
         
         subImageView.image = UIImage(systemName: "camera.fill")
-        subImageView.tintColor = ColorList.white.color
+        subImageView.tintColor = ColorList.white
         subImageView.contentMode = .scaleAspectFit
     
-        lineView.backgroundColor = ColorList.white.color
+        lineView.backgroundColor = ColorList.white
        
         let text = "2글자 이상 10글자 미만으로 설정해주세요"
         infoLable.text = text

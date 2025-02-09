@@ -11,7 +11,7 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     
     static let id = "RecentSearchCollectionViewCell"
     
-    private let label = CustomLabel(boldStyle: false, fontSize: 13, color: ColorList.black.color)
+    private let label = CustomLabel(boldStyle: false, fontSize: 13, color: ColorList.black)
     private let view = UIView()
     
     let button = UIButton()
@@ -49,13 +49,13 @@ final class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     override func configureView() {
         
         
-        view.backgroundColor = ColorList.white.color
+        view.backgroundColor = ColorList.white
         view.layer.cornerRadius = 13
         view.clipsToBounds = true
         
     
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = ColorList.black.color
+        button.tintColor = ColorList.black
         button.backgroundColor = .clear
     }
     
