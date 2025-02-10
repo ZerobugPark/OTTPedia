@@ -14,6 +14,7 @@ enum ColorList {
     static let darkGray = UIColor(resource: .darkGray)
     static let black = UIColor.black
     static let white = UIColor.white
+    static let red = UIColor.red
     
 }
 

@@ -13,10 +13,6 @@ struct ImageList {
                                        .profile4, .profile5, .profile6, .profile7,
                                        .profile8, .profile9, .profile10, .profile11]
     
-//    let profileImageList = ["profile_0", "profile_1", "profile_2", "profile_3",
-//                            "profile_4", "profile_5", "profile_6", "profile_7",
-//                            "profile_8", "profile_9", "profile_10", "profile_11"]
-    
     
     static let shared = ImageList()
     

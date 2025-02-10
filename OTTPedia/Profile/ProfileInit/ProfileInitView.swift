@@ -17,9 +17,9 @@ final class ProfileInitView: BaseView {
     
     let imageView = CustomImageView(selected: true)
     let nameTextField = CustomTextField(placeholder: "사용하실 닉네임을 입력해주세요")
-    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.main)
+    let infoLable = CustomLabel(boldStyle: false, fontSize: 12, color: ColorList.red)
     let okButton = CustomButton(title: "완료")
-    let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
+   // let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -85,7 +85,7 @@ final class ProfileInitView: BaseView {
     override func configureView() {
         
         
-        imageView.image = ImageList.shared.profileImageList[randomImageIndex]
+        //imageView.image = ImageList.shared.profileImageList[randomImageIndex]
         imageView.isUserInteractionEnabled = true // 뷰에도 터치 가능하게
         
         circleView.backgroundColor = ColorList.main
