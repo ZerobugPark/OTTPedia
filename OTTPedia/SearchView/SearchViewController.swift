@@ -138,7 +138,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (UIScreen.main.bounds.width / 3.0)
+        return (view.frame.width / 3.0)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

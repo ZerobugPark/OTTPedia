@@ -10,6 +10,7 @@ import UIKit
 final class ProfileInitViewViewController: UIViewController {
     
     private var profileInit = ProfileInitView()
+    
     private var infoMsg = ""
     private var isOk = true
     private var currentIndex = 0

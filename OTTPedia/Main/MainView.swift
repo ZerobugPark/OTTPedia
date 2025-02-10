@@ -200,7 +200,7 @@ final class MainView: BaseView {
        
         let inset: CGFloat = 16
         let spacing: CGFloat = 8
-
+        
         layout.minimumLineSpacing = spacing
         
         layout.itemSize = CGSize(width: 0, height: 0)
