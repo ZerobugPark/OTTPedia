@@ -274,13 +274,8 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-     
-        var deviceWidth = 0.0
-        if let width = view.window?.windowScene?.screen.bounds.width {
-            deviceWidth = width
-        } else {
-            deviceWidth = 100
-        }
+        
+        let deviceWidth = view.frame.width
         
         if indexPath.section == 1 {
             // 하나의 테이블셀에서 아이템을 기준으로 변경하려고 각각 화면을 구성하려고 했으나, 컬렉션뷰와 오토디멘션 문제로 구조 변경

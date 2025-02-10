@@ -58,6 +58,9 @@ final class CastTableViewCell: BaseTableViewCell {
         
         var deviceWidth: Double = 0.0
         
+        //print(frame.size.width) // 여기서 쓰면, contentView의 크기
+        
+        
         if let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             deviceWidth = window.screen.bounds.size.width
         } else {
