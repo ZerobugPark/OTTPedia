@@ -34,10 +34,11 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
         }
     
     }
-    func imageSetup(index: Int, selected: Bool) {
+    
+    func imageSetup(data: (currendIdx: Int, status: Bool) ) {
         
-        imageView.image = ImageList.shared.profileImageList[index]
-        if !selected {
+        imageView.image = ImageList.shared.profileImageList[data.currendIdx]
+        if !data.status {
             imageView.layer.borderWidth = 1
             imageView.layer.borderColor = ColorList.darkGray.cgColor
             imageView.alpha = 0.5
@@ -48,9 +49,21 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
             imageView.alpha = 1
         }
         
-        
-        
-        
     }
+//    func imageSetup(index: Int, selected: Bool) {
+//        
+//        imageView.image = ImageList.shared.profileImageList[index]
+//        if !selected {
+//            imageView.layer.borderWidth = 1
+//            imageView.layer.borderColor = ColorList.darkGray.cgColor
+//            imageView.alpha = 0.5
+//            
+//        } else {
+//            imageView.layer.borderWidth = 3
+//            imageView.layer.borderColor = ColorList.main.cgColor
+//            imageView.alpha = 1
+//        }
+//        
+//    }
     
 }

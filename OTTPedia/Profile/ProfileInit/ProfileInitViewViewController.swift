@@ -29,17 +29,23 @@ final class ProfileInitViewViewController: UIViewController {
         profileInit.nameTextField.delegate = self
         //currentIndex = profileInit.randomImageIndex
         
-        profileModel.input.viewDidLoad.value = ()
-        addTarget()
         bindData()
+        
+        profileModel.input.viewDidLoad.value = ()
+        
+        addTarget()
+        
     }
     
     private func bindData() {
-        profileModel.output.viewDidLoad.bind { [weak self] index in
+        profileModel.output.viewDidLoad.bind { [weak self] _ in
             self?.navigationItem.title = self?.profileModel.navigationTitle
             self?.navigationItem.backButtonTitle =  self?.profileModel.backButtonTitle
+
+        }
+        
+        profileModel.output.updateImage.lazyBind { [weak self] index in
             self?.profileInit.imageView.image = ImageList.shared.profileImageList[index]
-            
         }
         
         profileModel.output.textCountStatus.lazyBind { [weak self] status in
@@ -71,6 +77,10 @@ final class ProfileInitViewViewController: UIViewController {
         
         profileModel.input.textCountStatus.value = profileInit.nameTextField.text
    
+    }
+    
+    deinit {
+        print("ProfileInitViewViewController Deinit")
     }
     
     
@@ -113,11 +123,12 @@ extension ProfileInitViewViewController {
         let vc = ProfileImageSettingViewController()
         
         // 프로필 사진을 새로 선택한 상태에서, 확인(회원가입)을 안누르고 프로필 사진을 다시 설정할 경우, 랜덤 이미지가 아닌, 변경된 이미지가 선택될 수 있도록.
-        vc.imageIndex = currentIndex
         
-        vc.changedImage = { value in
-            self.profileInit.imageView.image = ImageList.shared.profileImageList[value]
-            self.currentIndex = value
+        vc.settingModel.output.currentImageIndex.value = profileModel.output.updateImage.value
+        
+        vc.settingModel.changedImage = { value in
+
+            self.profileModel.input.selectedImage.value = value
             
         }
         navigationController?.pushViewController(vc, animated: true)

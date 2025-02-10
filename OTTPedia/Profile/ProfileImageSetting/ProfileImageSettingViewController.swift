@@ -9,35 +9,55 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
     
-    private var imageSet = ProfileImageSettingView()
-    private var previousImageIndex = 0
-    
-    var imageIndex = 0
-    var changedImage: ((Int) -> Void)?
+    private var settingView = ProfileImageSettingView()
+    var settingModel = ProfileImageSettingViewModel()
+
     var isEdit = false
     
     override func loadView() {
-        view = imageSet
-        configurationNavigationController()
-
+        view = settingView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageSet.imageView.image = ImageList.shared.profileImageList[imageIndex]
+        configurationNavigationController()
         
-        imageSet.collectionView.delegate = self
-        imageSet.collectionView.dataSource = self
-        imageSet.collectionView.register(ProfileImageSettingCollectionViewCell.self, forCellWithReuseIdentifier: ProfileImageSettingCollectionViewCell.id)
+        settingView.collectionView.delegate = self
+        settingView.collectionView.dataSource = self
+        settingView.collectionView.register(ProfileImageSettingCollectionViewCell.self, forCellWithReuseIdentifier: ProfileImageSettingCollectionViewCell.id)
+        settingModel.input.viewDidLoad.value = ()
+        bindData()
         
     }
+    
+    private func bindData() {
+        settingModel.output.currentImageIndex.bind { [weak self] index in
+            
+            self?.settingView.imageView.image = ImageList.shared.profileImageList[index]
+            //self?.navigationItem.title = self?.settingModel.navigationTitle
+        }
+        
+        settingModel.output.imageStatus.lazyBind { [weak self] _ in
+            print("outputimageStatus")
+            self?.settingView.collectionView.reloadData()
+        }
+        settingModel.output.updateImage.lazyBind { [weak self] value  in
+            self?.settingView.collectionView.reloadItems(at: [IndexPath(row: value.1, section: 0)])
+            self?.settingView.collectionView.reloadItems(at: [IndexPath(row: value.0, section: 0)])
+        }
+    }
+    
     
     private func configurationNavigationController() {
         
         let title = isEdit ? "프로필 이미지 편집" : "프로필 이미지 설정"
         navigationItem.title = title
         
+    }
+    
+    deinit {
+        print("ProfileImageSettingViewController Deinit")
     }
     
     
@@ -52,12 +72,13 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = imageSet.collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageSettingCollectionViewCell.id, for: indexPath) as? ProfileImageSettingCollectionViewCell else {
+        guard let cell = settingView.collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageSettingCollectionViewCell.id, for: indexPath) as? ProfileImageSettingCollectionViewCell else {
             return UICollectionViewCell()
         }
         
-        let isSelected = imageIndex == indexPath.item ? true : false
-        cell.imageSetup(index: indexPath.item, selected: isSelected)
+        let data =  settingModel.profileStatus[indexPath.item]
+        
+        cell.imageSetup(data: data)
 
         
         return cell
@@ -65,19 +86,20 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if imageIndex != indexPath.item {
-            previousImageIndex = imageIndex
-            imageIndex = indexPath.item
-            
-            collectionView.reloadItems(at: [indexPath])
-            collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)]) // 이전 이미지 흑백으로 변경
-            
-            //collectionView.reloadData() -> 사실 이게 깔끔하긴 한데
-            imageSet.imageView.image = ImageList.shared.profileImageList[imageIndex]
-            changedImage?(imageIndex)
-            
-        }
+      
+        settingModel.input.didSelected.value = indexPath.item
+//        if imageIndex != indexPath.item {
+//            previousImageIndex = imageIndex
+//            imageIndex = indexPath.item
+//            
+//            collectionView.reloadItems(at: [indexPath])
+//            collectionView.reloadItems(at: [IndexPath(row: previousImageIndex, section: indexPath.section)]) // 이전 이미지 흑백으로 변경
+//            
+//            //collectionView.reloadData() -> 사실 이게 깔끔하긴 한데
+//            settingView.imageView.image = ImageList.shared.profileImageList[imageIndex]
+//            changedImage?(imageIndex)
+//            
+//        }
     }
     
     

@@ -19,20 +19,22 @@ class ProfileInitViewModel: BaseViewModel {
         let textCountStatus: Observable<String?> = Observable((""))
         let char: Observable<String> = Observable((""))
         let currentText: Observable<String?> = Observable((nil))
+        let selectedImage: Observable<Int> = Observable((0))
     }
     
     struct Output {
-        let viewDidLoad: Observable<Int> = Observable((0))
+        let viewDidLoad: Observable<Void> = Observable(())
         let textCountStatus: Observable<Bool> = Observable((false))
-        let charStatus:Observable<(String, Bool)>  = Observable(("",false))
-        let textFieldStatus:Observable<(String, Bool)>  = Observable(("",false))
+        let charStatus: Observable<(String, Bool)>  = Observable(("",false))
+        let textFieldStatus: Observable<(String, Bool)>  = Observable(("",false))
+        let updateImage: Observable<Int> = Observable((0))
     }
     
     
     let navigationTitle = "프로필 설정"
     let backButtonTitle = ""
     private let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
-    
+
     var isOk = false
     var infoMsg = ""
     
@@ -47,7 +49,9 @@ class ProfileInitViewModel: BaseViewModel {
     func transform() {
     
         input.viewDidLoad.lazyBind { [weak self] _ in
-            self?.output.viewDidLoad.value = self!.randomImageIndex
+            //self?.output.viewDidLoad.value = ()
+            self?.output.updateImage.value = self!.randomImageIndex
+            
         }
         
         input.okButtonTapped.lazyBind { [weak self] name in
@@ -68,11 +72,15 @@ class ProfileInitViewModel: BaseViewModel {
             self?.validationString(str: str)
         }
         
+        input.selectedImage.lazyBind { [weak self] index in
+            self?.output.updateImage.value = index
+        }
+        
     }
     
     private func okButtonTapped(id: String) {
         ProfileUserDefaults.isEnroll = true
-        ProfileUserDefaults.imageIndex = 0 //currentIndex
+        ProfileUserDefaults.imageIndex = output.updateImage.value
         ProfileUserDefaults.resgisterDate = Date().formatted(.dateTime.day(.twoDigits).month(.twoDigits).year(.defaultDigits).locale(Locale(identifier: "ko_KR")))
         
         ProfileUserDefaults.id = id
