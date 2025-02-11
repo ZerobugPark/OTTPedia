@@ -41,14 +41,24 @@ class ProfileUserDefaults {
         }
     }
     
-    static var likeMoive: [String: Bool] {
+    static var likeMoive: [Int] {
         get {
-            UserDefaults.standard.dictionary(forKey: "likeMovie") as? [String: Bool] ?? ["nil" : false]
+            UserDefaults.standard.array(forKey: "likeMovie") as? [Int] ?? []
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "likeMovie")
         }
     }
+    
+    
+//    static var likeMoive: [String: Bool] {
+//        get {
+//            UserDefaults.standard.dictionary(forKey: "likeMovie") as? [String: Bool] ?? ["nil" : false]
+//        }
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: "likeMovie")
+//        }
+//    }
     
     static var recentSearh: [String] {
         get {
