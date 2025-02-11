@@ -73,7 +73,7 @@ final class MovieListCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    func setupTrending(trend: Results) {
+    func setupTrending(trend: Results, likeStatus: Bool) {
         
         if let path = trend.posterPath {
             let url = URL(string: Configuration.shared.secureURL + Configuration.PosterSizes.w500.rawValue + path)
@@ -81,7 +81,11 @@ final class MovieListCollectionViewCell: BaseCollectionViewCell {
         } else {
             movieImage.image = UIImage(systemName: "star.fill")
         }
+   
         
+        let image = likeStatus ? "heart.fill" : "heart"
+        likeButtonStatus = likeStatus
+        likeButton.setImage(UIImage(systemName: image), for: .normal)
         
         movieTitleLabel.text = trend.title
         overviewLabel.text = trend.overview

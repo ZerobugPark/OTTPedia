@@ -14,32 +14,11 @@ protocol PassMovieLikeDelegate {
     func detailViewLikeButtonTapped(id: Int, status: Bool)
 }
 
-
-
 final class MainViewController: UIViewController {
     
     private var mainView = MainView()
     private var mainModel = MainViewModel()
-
     
-    
-//    private var userInfo = UserInfo() {
-//        didSet {
-//            let msg = "\(userInfo.likeCount) 개의 무비박스 보관중"
-//            mainView.likeStorageButton.setTitle(msg, for: .normal)
-//        }
-//    }
-    private var likeMovie: [String: Bool] = [:]
-    
-//    private var textList: [String] = [] {
-//        didSet {
-//            if textList.isEmpty {
-//                mainView.recentInfoLabel.isHidden = false
-//            } else {
-//                mainView.recentInfoLabel.isHidden = true
-//            }
-//        }
-//    }
     
     override func loadView() {
         view = mainView
@@ -57,7 +36,7 @@ final class MainViewController: UIViewController {
         mainView.collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.id)
         mainView.recentSearchCollectionView.register(RecentSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecentSearchCollectionViewCell.id)
         
-    
+        
         
         addTarget()
         bindData()
@@ -94,6 +73,11 @@ final class MainViewController: UIViewController {
         mainModel.output.resarchTextStatus.lazyBind { [weak self] status in
             self?.mainView.recentInfoLabel.isHidden = status
         }
+        
+        mainModel.output.likeMovieCountMessage.lazyBind { [weak self] msg in
+            
+            self?.mainView.likeStorageButton.setTitle(msg, for: .normal)
+        }
     }
     
     
@@ -109,30 +93,18 @@ final class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-//        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
-//        userInfo.id =  ProfileUserDefaults.id
-//        userInfo.date =  ProfileUserDefaults.resgisterDate
-//        userInfo.likeCount = likeCount()
-//        textList = ProfileUserDefaults.recentSearh
-//        
-//     
-//        mainView.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
-//        mainView.nameLabel.text = userInfo.id
-//        mainView.dateLabel.text = userInfo.date
-//        mainView.collectionView.reloadData()
+        //        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
+        //        userInfo.id =  ProfileUserDefaults.id
+        //        userInfo.date =  ProfileUserDefaults.resgisterDate
+        //        userInfo.likeCount = likeCount()
+        //        textList = ProfileUserDefaults.recentSearh
+        //
+        //
+        //        mainView.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
+        //        mainView.nameLabel.text = userInfo.id
+        //        mainView.dateLabel.text = userInfo.date
+        //        mainView.collectionView.reloadData()
         
-    }
-    
-    private func likeCount() -> Int {
-        
-        likeMovie = ProfileUserDefaults.likeMoive
-        var count = 0
-        for (_, value) in likeMovie {
-            if value {
-                count += 1
-            }
-        }
-        return count
     }
     
 }
@@ -170,12 +142,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.id, for: indexPath) as? MovieListCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.setupTrending(trend: mainModel.output.tredingResult.value[indexPath.item])
+            
+            mainModel.input.checklikeStatus.value = indexPath.item
+            
+            cell.setupTrending(trend: mainModel.output.tredingResult.value[indexPath.item], likeStatus: mainModel.likeImageStatus)
             cell.delegate = self
             cell.likeButton.tag = indexPath.item
-            
-            let image = checkLikeStatus(index: indexPath.item) ? "heart.fill" : "heart"
-            cell.likeButton.setImage(UIImage(systemName: image), for: .normal)
+
             
             return cell
             
@@ -195,7 +168,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else if collectionView.tag == 1 {
             let vc = DetailViewController()
-            vc.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: checkLikeStatus(index: indexPath.item))
+            //vc.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: checkLikeStatus(index: indexPath.item))
+            vc.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: false)
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
             
@@ -203,20 +177,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
     }
     
-    private func checkLikeStatus(index: Int) -> Bool {
-        let likeStatus = likeMovie[String(mainModel.output.tredingResult.value[index].id)] ?? false
-        
-        return likeStatus
-    }
-    
-    
-    @objc private func deleteButtonTapped(_ sender: UIButton) {
-        mainModel.input.updateTextList.value = (nil, sender.tag)
-        //textList.remove(at: sender.tag)
-        //ProfileUserDefaults.recentSearh = self.textList
-        // 갱신이 아닌 삭제가 되는거기 때문에, reloadData 사용
-        //mainView.recentSearchCollectionView.reloadData()
-    }
+
 }
 
 // MARK: - CollectionViewDelegateFlowLayout Delegate
@@ -246,14 +207,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         } else if collectionView.tag == 1 {
             
             let deviceWidth: Double = view.frame.width
-                        
+            
             let spacing: CGFloat = 8
             let inset: CGFloat = 16
             let imageCount: CGFloat = 2
             
             let objectWidth = (deviceWidth - ((spacing * (imageCount - 1)) + (inset * 2))) / 1.5
             let objectHeight = mainView.movieListView.frame.size.height - mainView.secondSection.frame.size.height
-
+            
             return CGSize(width: objectWidth, height: objectHeight)
         } else {
             
@@ -266,16 +227,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - PassMovieLikeDelegate Delegate
 extension MainViewController: PassMovieLikeDelegate {
-
+    
     func likeButtonTapped(index: Int, status: Bool) {
-        likeMovie.updateValue(status, forKey: String(mainModel.output.tredingResult.value[index].id))
-        ProfileUserDefaults.likeMoive = likeMovie
-       // userInfo.likeCount = likeCount()
+        mainModel.input.likeButtonTapped.value = (index, status)
     }
     
     func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        likeMovie.updateValue(status, forKey: String(id))
-        ProfileUserDefaults.likeMoive = likeMovie
+        //likeMovie.updateValue(status, forKey: String(id))
+        //ProfileUserDefaults.likeMoive = likeMovie
         //userInfo.likeCount = likeCount()
         mainView.collectionView.reloadData()
         
@@ -293,6 +252,7 @@ extension MainViewController {
         mainView.likeStorageButton.addTarget(self, action: #selector(likeStorageButtonTapped), for: .touchUpInside)
         mainView.removeAllButton.addTarget(self, action: #selector(removeAllButtonTapped), for: .touchUpInside)
     }
+    
     
     @objc private func profileButtonTapped(_ sender: UIButton) {
         
@@ -315,20 +275,20 @@ extension MainViewController {
         }
         
         
-//        vc.userInfo = userInfo
-//        
-//        vc.updateUserInfo = { info in
-//            self.userInfo.userImageIndex =  info.userImageIndex
-//            self.userInfo.id =  info.id
-//            
-//            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
-//            ProfileUserDefaults.id = self.userInfo.id
-//            
-//            self.mainView.imageView.image = ImageList.shared.profileImageList[self.userInfo.userImageIndex]
-//            self.mainView.nameLabel.text = self.userInfo.id
-//            self.mainView.dateLabel.text = self.userInfo.date
-//            
-//        }
+        //        vc.userInfo = userInfo
+        //
+        //        vc.updateUserInfo = { info in
+        //            self.userInfo.userImageIndex =  info.userImageIndex
+        //            self.userInfo.id =  info.id
+        //
+        //            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
+        //            ProfileUserDefaults.id = self.userInfo.id
+        //
+        //            self.mainView.imageView.image = ImageList.shared.profileImageList[self.userInfo.userImageIndex]
+        //            self.mainView.nameLabel.text = self.userInfo.id
+        //            self.mainView.dateLabel.text = self.userInfo.date
+        //
+        //        }
         
         present(nav,animated: true)
         
@@ -339,13 +299,19 @@ extension MainViewController {
         print(#function)
     }
     
+    
+    
+    @objc private func deleteButtonTapped(_ sender: UIButton) {
+        mainModel.input.updateTextList.value = (nil, sender.tag)
+    }
+    
     @objc private func removeAllButtonTapped(_ sender: UIButton) {
         
         let removeAll: (String?, Int?) = (nil, nil)
         mainModel.input.updateTextList.value = removeAll
         
         //textList.removeAll()
-       // self.mainView.recentSearchCollectionView.reloadData()
+        // self.mainView.recentSearchCollectionView.reloadData()
     }
     
     @objc private func searchButtonTapped(_ sender: UIButton) {
@@ -354,17 +320,19 @@ extension MainViewController {
         vc.recentTextInfo = { text in
             
             self.mainModel.input.updateTextList.value = (text, nil)
-//
-//            if let sameTextIndex = self.textList.lastIndex(of: text) {
-//                self.textList.remove(at: sameTextIndex)
-//            }
-//            self.textList.insert(text, at: 0)
-//            self.mainView.recentSearchCollectionView.reloadData()
-//            ProfileUserDefaults.recentSearh = self.textList
+            //
+            //            if let sameTextIndex = self.textList.lastIndex(of: text) {
+            //                self.textList.remove(at: sameTextIndex)
+            //            }
+            //            self.textList.insert(text, at: 0)
+            //            self.mainView.recentSearchCollectionView.reloadData()
+            //            ProfileUserDefaults.recentSearh = self.textList
         }
         
         navigationController?.pushViewController(vc, animated: true)
         
     }
+    
+    
     
 }
