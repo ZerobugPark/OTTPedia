@@ -21,15 +21,12 @@ final class MainView: BaseView {
     let movieListView = UIView()
     let secondSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
 
-        
     private let firstSection = CustomLabel(boldStyle: true, fontSize: 16, color: ColorList.white)
     private let stackView = UIStackView()
     private let recentSearchView = UIView()
  
     private let chevronImage = CustomImageView()
-    
-    private let titleSection = ["최근검색어", "오늘의 영화"]
-    
+        
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
     lazy var recentSearchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
     
@@ -104,7 +101,7 @@ final class MainView: BaseView {
         }
         // MARK: - 최근 검색어 레이아웃
         recentSearchView.snp.makeConstraints { make in
-            make.top.equalTo(stackView.safeAreaLayoutGuide)
+            make.top.equalTo(stackView)
             make.horizontalEdges.equalTo(stackView)
             make.height.equalTo(70)
         }
@@ -175,8 +172,8 @@ final class MainView: BaseView {
         
         stackView.axis = .vertical
         stackView.spacing = 4
-        
 
+        let titleSection = ["최근검색어", "오늘의 영화"]
         firstSection.text = titleSection[0]
         secondSection.text = titleSection[1]
         
@@ -203,7 +200,7 @@ final class MainView: BaseView {
         
         layout.minimumLineSpacing = spacing
         
-        layout.itemSize = CGSize(width: 0, height: 0)
+        layout.itemSize = CGSize(width: 10, height: 10)
         layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         layout.scrollDirection = .horizontal
         

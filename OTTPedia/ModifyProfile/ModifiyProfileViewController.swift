@@ -90,13 +90,13 @@ final class ModifiyProfileViewController: UIViewController {
     @objc private func profileButtonTapped(_ sender: UIButton) {
         
         let vc = ProfileImageSettingViewController()
-       
-        vc.imageIndex = currentIndex
-        vc.isEdit = true
-        vc.changedImage = { value in
-            self.profileModify.imageView.image =  ImageList.shared.profileImageList[value]
-            self.currentIndex = value
-        }
+       // 수정해야 함
+        //vc.imageIndex = currentIndex
+//        vc.isEdit = true
+//        vc.changedImage = { value in
+//            self.profileModify.imageView.image =  ImageList.shared.profileImageList[value]
+//            self.currentIndex = value
+//        }
         navigationController?.pushViewController(vc, animated: true)
         
     }
