@@ -52,7 +52,6 @@ class ProfileImageSettingViewModel: BaseViewModel {
     }
     
     private func imageViewInit(value: Int) {
-        print(value, "123213")
         for i in 0..<ImageList.shared.profileImageList.count {
             
             if output.currentImageIndex.value == i {

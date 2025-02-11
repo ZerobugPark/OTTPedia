@@ -35,6 +35,20 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
     
     }
     
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        
+//        if imageView.frame.width == 0 {
+//            contentView.layoutIfNeeded() // 강제로 Auto Layout 적용
+//        }
+//        
+//        print("layoutSubviews - imageView frame: \(imageView.frame)") // 여기서 크기가 정해짐
+//        imageView.layer.cornerRadius = imageView.frame.width / 2
+//    }
+//    
+    
+
+    
     func imageSetup(data: (currendIdx: Int, status: Bool) ) {
         
         imageView.image = ImageList.shared.profileImageList[data.currendIdx]
@@ -50,20 +64,5 @@ final class ProfileImageSettingCollectionViewCell: BaseCollectionViewCell {
         }
         
     }
-//    func imageSetup(index: Int, selected: Bool) {
-//        
-//        imageView.image = ImageList.shared.profileImageList[index]
-//        if !selected {
-//            imageView.layer.borderWidth = 1
-//            imageView.layer.borderColor = ColorList.darkGray.cgColor
-//            imageView.alpha = 0.5
-//            
-//        } else {
-//            imageView.layer.borderWidth = 3
-//            imageView.layer.borderColor = ColorList.main.cgColor
-//            imageView.alpha = 1
-//        }
-//        
-//    }
     
 }

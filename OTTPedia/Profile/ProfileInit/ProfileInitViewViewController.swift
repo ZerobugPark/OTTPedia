@@ -24,10 +24,8 @@ final class ProfileInitViewViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        // configurationNavigationController()
         
         profileInit.nameTextField.delegate = self
-        //currentIndex = profileInit.randomImageIndex
         
         bindData()
         

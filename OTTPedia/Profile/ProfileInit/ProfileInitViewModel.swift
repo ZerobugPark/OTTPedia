@@ -90,10 +90,8 @@ class ProfileInitViewModel: BaseViewModel {
         if let text = str {
             if text.count < 2 {
                 output.textCountStatus.value = false
-                //profileInit.nameTextField.becomeFirstResponder()
             } else {
                 output.textCountStatus.value = true
-                //view.endEditing(true)
             }
         }
     }

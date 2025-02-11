@@ -74,10 +74,13 @@ final class ProfileImageSettingView: BaseView {
         
     }
     
+    
+    
     private func createCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         
         var deviceWidth: Double = 0.0
+        print(frame.width) // 0
         
         if let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             deviceWidth = window.screen.bounds.size.width
