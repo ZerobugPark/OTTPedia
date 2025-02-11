@@ -99,7 +99,7 @@ final class SearchTableViewCell: BaseTableViewCell {
     }
     
     
-    func searchInfo(info: Results) {
+    func searchInfo(info: Results, likeStatus: Bool) {
         
         if let path = info.posterPath {
             let url = URL(string: Configuration.shared.secureURL + Configuration.PosterSizes.w500.rawValue + path)
@@ -108,6 +108,9 @@ final class SearchTableViewCell: BaseTableViewCell {
             movieImage.image = UIImage(systemName: "star.fill")
         }
 
+        let image = likeStatus ? "heart.fill" : "heart"
+        likeButtonStatus = likeStatus
+        likeButton.setImage(UIImage(systemName: image), for: .normal)
         
         movieTitle.text = info.title
         releaseDate.text = info.releaseDate

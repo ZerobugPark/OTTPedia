@@ -16,7 +16,7 @@ class MainViewModel: BaseViewModel {
     
     
     struct Input {
-        let viewDidLoad: Observable<Void> = Observable(())
+        let viewWillAppear: Observable<Void> = Observable(())
         let likeStatus: Observable<Void> = Observable(())
         let updateTextList: Observable<(String?, Int?)> = Observable((nil, nil))
         let checklikeStatus: Observable<Int> = Observable(0)
@@ -24,7 +24,7 @@ class MainViewModel: BaseViewModel {
     }
     
     struct Output {
-        let viewDidLoad: Observable<Void> = Observable(())
+        let viewWillAppear: Observable<Void> = Observable(())
         let errorMessage: Observable<String> = Observable("")
         let tredingResult: Observable<[Results]> = Observable([])
         let userInfo: Observable<UserInfo> = Observable(UserInfo())
@@ -53,8 +53,8 @@ class MainViewModel: BaseViewModel {
     func transform() {
         
         
-        input.viewDidLoad.lazyBind { [weak self] _ in
-            self?.output.viewDidLoad.value = ()
+        input.viewWillAppear.lazyBind { [weak self] _ in
+            self?.output.viewWillAppear.value = ()
             self?.loadData()
             self?.callRequest()
             self?.resarchTextStatus()
@@ -137,9 +137,6 @@ class MainViewModel: BaseViewModel {
     
     private func checkLikeStatus(index: Int) -> Bool {
         let likeStatus = likeMovie.contains(output.tredingResult.value[index].id)
-        
-        //let image = likeStatus ? "heart.fill" : "heart"
-        
         return likeStatus
     }
     

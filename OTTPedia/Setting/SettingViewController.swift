@@ -94,7 +94,7 @@ final class SettingViewController: UIViewController {
     
     private func likeCount() -> Int {
         
-        likeMovie = ProfileUserDefaults.likeMoive
+        //likeMovie = ProfileUserDefaults.likeMoive
         var count = 0
         for (_, value) in likeMovie {
             if value {

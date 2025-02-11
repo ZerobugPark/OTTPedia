@@ -41,12 +41,12 @@ final class MainViewController: UIViewController {
         addTarget()
         bindData()
         
-        mainModel.input.viewDidLoad.value = ()
+        
         
     }
     
     private func bindData() {
-        mainModel.output.viewDidLoad.lazyBind { [weak self]  in
+        mainModel.output.viewWillAppear.lazyBind { [weak self]  in
             self?.configurationNavigationController()
             
         }
@@ -93,6 +93,8 @@ final class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        mainModel.input.viewWillAppear.value = ()
+        print(#function)
         //        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
         //        userInfo.id =  ProfileUserDefaults.id
         //        userInfo.date =  ProfileUserDefaults.resgisterDate
@@ -163,7 +165,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         if collectionView.tag == 0 {
             let vc = SearchViewController()
-            vc.searchText = mainModel.output.textList.value[indexPath.item]
+            vc.searchModel.searchText = mainModel.output.textList.value[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
             
         } else if collectionView.tag == 1 {
@@ -317,18 +319,9 @@ extension MainViewController {
     @objc private func searchButtonTapped(_ sender: UIButton) {
         let vc = SearchViewController()
         
-        vc.recentTextInfo = { text in
-            
+        vc.searchModel.recentTextInfo = { text in
             self.mainModel.input.updateTextList.value = (text, nil)
-            //
-            //            if let sameTextIndex = self.textList.lastIndex(of: text) {
-            //                self.textList.remove(at: sameTextIndex)
-            //            }
-            //            self.textList.insert(text, at: 0)
-            //            self.mainView.recentSearchCollectionView.reloadData()
-            //            ProfileUserDefaults.recentSearh = self.textList
         }
-        
         navigationController?.pushViewController(vc, animated: true)
         
     }

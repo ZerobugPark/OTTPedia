@@ -11,13 +11,16 @@ final class SearchViewController: UIViewController {
     
 
     private var searchResult: [Results] = []
-    private var currentPage = 1
+    //private var currentPage = 1
+    
     private var searchView = SearchView()
+    var searchModel = SearchViewModel()
+    
     private var totalPage = 0
-    private var likeMovie: [String: Bool] = [:]
+   // private var likeMovie: [String: Bool] = [:]
     
     var searchText = ""
-    var recentTextInfo: ((String) -> Void)?
+    //var recentTextInfo: ((String) -> Void)?
     
     override func loadView() {
         view = searchView
@@ -25,35 +28,50 @@ final class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         searchView.tableView.delegate = self
         searchView.tableView.dataSource = self
         searchView.tableView.prefetchDataSource = self
         searchView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
-        
         searchView.searchBar.delegate = self
         
-        configurationNavigationController()
+        //configurationNavigationController()
         
         
-        if !searchText.isEmpty {
-            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
-                
-                switch response {
-                case .success(let value):
-                    self.searchResult = value.results
-                    self.totalPage = value.totalPage
-                    self.searchView.tableView.reloadData()
-                    self.noData()
-                    self.searchView.searchBar.text = self.searchText
-                case .failure(let failure):
-                    //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                    self.showAPIAlet(msg: "Error")
-                }
 
+       // likeMovie = ProfileUserDefaults.likeMoive
+        
+        
+        bindData()
+        searchModel.input.viewDidLoad.value = ()
+    }
+    
+    
+    private func bindData() {
+        
+        searchModel.output.viewDidLoad.lazyBind { [weak self] text in
+            
+            self?.navigationItem.title = self?.searchModel.navigationTitle
+            self?.navigationItem.backButtonTitle = self?.searchModel.backButtonTitle
+            
+            if let search = text {
+                self?.searchView.searchBar.text = search
             }
+            
+            
         }
-        likeMovie = ProfileUserDefaults.likeMoive
+        
+        searchModel.output.searchResult.lazyBind { [weak self] _ in
+            self?.searchView.tableView.reloadData()
+            self?.view.endEditing(true)
+        }
+        
+        searchModel.output.noResult.lazyBind { [weak self] status in
+            self?.searchView.infoLabel.isHidden = status
+        }
+        
+        searchModel.output.errorMessage.lazyBind { [weak self] msg in
+            self?.showAPIAlet(msg: msg)
+        }
     }
     
     private func configurationNavigationController() {
@@ -64,15 +82,15 @@ final class SearchViewController: UIViewController {
         
     }
     
-    private func checkLikeStatus(index: Int) -> Bool {
-        let likeStatus = likeMovie[String(searchResult[index].id)] ?? false
-        
-        return likeStatus
-    }
+//    private func checkLikeStatus(index: Int) -> Bool {
+//        let likeStatus = likeMovie[String(searchResult[index].id)] ?? false
+//        
+//        return likeStatus
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        likeMovie = ProfileUserDefaults.likeMoive
+       // likeMovie = ProfileUserDefaults.likeMoive
 
     }
     
@@ -83,56 +101,27 @@ final class SearchViewController: UIViewController {
 // MARK: - SearchBar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        if let text = searchBar.text {
-            searchText = text
-            currentPage = 1
-            NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
-                
-                switch response {
-                case .success(let value):
-                    self.searchResult = value.results
-                    self.totalPage = value.totalPage
-                    self.searchView.tableView.reloadData()
-                    self.noData()
-                case .failure(let failure):
-                    //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                    self.showAPIAlet(msg: "Error")
-                }
-            }
-            recentTextInfo?(searchText)
-        }
-        
-        view.endEditing(true)
-    }
-    
-    private func noData() {
-        if searchResult.isEmpty {
-            searchView.infoLabel.isHidden = false
-        } else {
-            searchView.infoLabel.isHidden = true
-        }
+        searchModel.input.serachButtonTapped.value = searchBar.text
     }
 }
 
 // MARK: - TableView Delegate
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResult.count
+        return searchModel.output.searchResult.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
         
-        cell.searchInfo(info: searchResult[indexPath.row])
+        searchModel.input.checklikeStatus.value = indexPath.item
+        cell.searchInfo(info: searchModel.output.searchResult.value[indexPath.row], likeStatus: searchModel.likeImageStatus)
         cell.selectionStyle = .none
         
         cell.likeButton.tag = indexPath.row
         cell.delegate = self
         
-        let image = checkLikeStatus(index: indexPath.row) ? "heart.fill" : "heart"
-        cell.likeButton.setImage(UIImage(systemName: image), for: .normal)
         
         return cell
         
@@ -143,7 +132,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
-        vc.movieInfo = (info: searchResult[indexPath.row], likeStatus: checkLikeStatus(index: indexPath.row))
+        //vc.movieInfo = (info: searchResult[indexPath.row], likeStatus: checkLikeStatus(index: indexPath.row))
+        vc.movieInfo = (info: searchModel.output.searchResult.value[indexPath.row], likeStatus: false)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
         
@@ -156,29 +146,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - TableView Prefetching
 extension SearchViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        
-        if currentPage > totalPage {
-            print("맥스입니다")
-            return
-        } else {
-            
-            for path in indexPaths {
-                if searchResult.count - 2 == path.row {
-                    currentPage += 1
-                    NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
-            
-                        switch response {
-                        case .success(let value):
-                            self.searchResult.append(contentsOf: value.results)
-                            self.searchView.tableView.reloadData()
-                        case .failure(let failure):
-                            //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                            self.showAPIAlet(msg: "Error")
-                        }
-                    }
-                }
-            }
-        }
+        searchModel.input.pagenationStart.value = indexPaths
     }
     
 }
@@ -188,14 +156,12 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
 extension SearchViewController: PassMovieLikeDelegate {
     
     func likeButtonTapped(index: Int, status: Bool) {
-        likeMovie.updateValue(status, forKey: String(searchResult[index].id))
-        ProfileUserDefaults.likeMoive = likeMovie
-        
+        searchModel.input.likeButtonTapped.value = (index, status)
     }
     
     func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        likeMovie.updateValue(status, forKey: String(id))
-        ProfileUserDefaults.likeMoive = likeMovie
+        //likeMovie.updateValue(status, forKey: String(id))
+      //  ProfileUserDefaults.likeMoive = likeMovie
         searchView.tableView.reloadData()
         
     }
