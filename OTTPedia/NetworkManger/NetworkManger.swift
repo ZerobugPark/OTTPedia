@@ -45,7 +45,7 @@ enum TMDBRequest {
     var method: HTTPMethod {
         return .get
     }
-    
+    //Router pattern
     var parameter: Parameters? {
         switch self {
         case .trending(let language):
