@@ -12,16 +12,12 @@ final class ProfileImageSettingViewController: UIViewController {
     private var settingView = ProfileImageSettingView()
     var settingModel = ProfileImageSettingViewModel()
 
-    var isEdit = false
-    
     override func loadView() {
         view = settingView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configurationNavigationController()
         
         settingView.collectionView.delegate = self
         settingView.collectionView.dataSource = self
@@ -35,7 +31,7 @@ final class ProfileImageSettingViewController: UIViewController {
         settingModel.output.currentImageIndex.bind { [weak self] index in
             
             self?.settingView.imageView.image = ImageList.shared.profileImageList[index]
-            //self?.navigationItem.title = self?.settingModel.navigationTitle
+            self?.navigationItem.title = self?.settingModel.output.navigationTitle
         }
         
         settingModel.output.imageStatus.lazyBind { [weak self] _ in
@@ -49,13 +45,7 @@ final class ProfileImageSettingViewController: UIViewController {
     }
     
     
-    private func configurationNavigationController() {
-        
-        let title = isEdit ? "프로필 이미지 편집" : "프로필 이미지 설정"
-        navigationItem.title = title
-        
-    }
-    
+
     deinit {
         print("ProfileImageSettingViewController Deinit")
     }
@@ -76,7 +66,7 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
             return UICollectionViewCell()
         }
         
-        let data =  settingModel.profileStatus[indexPath.item]
+        let data =  settingModel.output.profileStatus[indexPath.item]
         
         cell.imageSetup(data: data)
 

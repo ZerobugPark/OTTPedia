@@ -181,8 +181,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 // MARK: - CollectionViewDelegateFlowLayout Delegate
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     
-    // 셀 기준으로 컬렉션 뷰의 크기를 변경할 때, 컬렉션뷰의 높이를 결정해줄 수 있는 deviceWidth의 크기를 알 수 없기 때문에 뷰컨트롤러에서 델리게이트로 사이즈 변경 해줌
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         
@@ -204,7 +202,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             
         } else if collectionView.tag == 1 {
             
-            let deviceWidth: Double = view.frame.width
+            let deviceWidth = view.frame.width
             
             let spacing: CGFloat = 8
             let inset: CGFloat = 16

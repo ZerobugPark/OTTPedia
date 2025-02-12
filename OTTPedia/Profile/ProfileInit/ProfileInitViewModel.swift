@@ -36,12 +36,10 @@ final class ProfileInitViewModel: BaseViewModel {
         
         var isOk: Bool = false
         
-
+        let navigationTitle = "프로필 설정"
+        let emptyString = ""
     }
-    
-    
-    let navigationTitle = "프로필 설정"
-    let emptyString = ""
+
 
     private var infoMsg = ""
     

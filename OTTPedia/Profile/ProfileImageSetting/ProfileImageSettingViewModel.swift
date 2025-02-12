@@ -24,12 +24,14 @@ final class ProfileImageSettingViewModel: BaseViewModel {
         let currentImageIndex: Observable<Int> = Observable(0)
         let imageStatus: Observable<Void> = Observable(())
         let updateImage: Observable<(Int,Int)> = Observable((0,0))
+        var profileStatus: [(Int, Bool)] = []
+        let navigationTitle = "프로필 이미지 설정"
     }
     
     
     var changedImage: ((Int) -> Void)?
     
-    var profileStatus: [(Int, Bool)] = []
+    
     
     private var previousImageIndex = 0
     
@@ -55,9 +57,9 @@ final class ProfileImageSettingViewModel: BaseViewModel {
         for i in 0..<ImageList.shared.profileImageList.count {
             
             if output.currentImageIndex.value == i {
-                profileStatus.append((i,true))
+                output.profileStatus.append((i,true))
             } else {
-                profileStatus.append((i,false))
+                output.profileStatus.append((i,false))
             }
         }
         output.imageStatus.value = ()
@@ -70,8 +72,8 @@ final class ProfileImageSettingViewModel: BaseViewModel {
             output.currentImageIndex.value = index
             print(previousImageIndex, output.currentImageIndex.value)
 
-            profileStatus[previousImageIndex] = (previousImageIndex, false)
-            profileStatus[output.currentImageIndex.value] = (output.currentImageIndex.value, true)
+            output.profileStatus[previousImageIndex] = (previousImageIndex, false)
+            output.profileStatus[output.currentImageIndex.value] = (output.currentImageIndex.value, true)
             
             output.updateImage.value = (previousImageIndex, output.currentImageIndex.value)
         

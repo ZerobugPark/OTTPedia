@@ -37,8 +37,8 @@ final class ProfileInitViewViewController: UIViewController {
     
     private func bindData() {
         profileModel.output.viewDidLoad.bind { [weak self] _ in
-            self?.navigationItem.title = self?.profileModel.navigationTitle
-            self?.navigationItem.backButtonTitle =  self?.profileModel.emptyString
+            self?.navigationItem.title = self?.profileModel.output.navigationTitle
+            self?.navigationItem.backButtonTitle =  self?.profileModel.output.emptyString
             let index = self!.profileModel.output.randomImageIndex
             self?.profileInit.imageView.image = ImageList.shared.profileImageList[index]
 

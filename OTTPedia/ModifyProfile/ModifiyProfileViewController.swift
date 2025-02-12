@@ -44,7 +44,7 @@ final class ModifiyProfileViewController: UIViewController {
             
             self?.navigationItem.rightBarButtonItem = rightButton
             self?.navigationItem.rightBarButtonItem?.isEnabled = true
-            self?.navigationItem.backButtonTitle = self?.modifyModel.emptyString
+            self?.navigationItem.backButtonTitle = self?.modifyModel.output.emptyString
             
             self?.modifyView.okButton.isHidden = true
             
@@ -52,7 +52,7 @@ final class ModifiyProfileViewController: UIViewController {
             self?.modifyView.imageView.image = ImageList.shared.profileImageList[index]
             self?.modifyView.nameTextField.text =  self?.modifyModel.userInfo.id
             
-            self?.modifyView.infoLable.text = self?.modifyModel.emptyString
+            self?.modifyView.infoLable.text = self?.modifyModel.output.emptyString
             
         }
         
@@ -89,12 +89,10 @@ final class ModifiyProfileViewController: UIViewController {
 // MARK: - TextFieldDelegate
 extension ModifiyProfileViewController: UITextFieldDelegate {
     
-    // textField.text에 값이 있음
     func textFieldDidChangeSelection(_ textField: UITextField) {
         modifyModel.input.currentText.value = textField.text
     }
  
-    // 입력은 되었지만 textField.text에는 아직 값이 없음
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         modifyModel.input.char.value = string
