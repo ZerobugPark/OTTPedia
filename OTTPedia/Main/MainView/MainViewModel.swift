@@ -159,6 +159,12 @@ extension MainViewModel {
         if status {
             likeMovie.append(output.tredingResult.value[index].id)
         } else {
+            //Keep
+//            var setArray: Set = Set(likeMovie)
+//            setArray.remove(output.tredingResult.value[index].id)
+//            likeMovie = Array(setArray)
+            
+            //뭐가 더 나을 까?
             if let sameID = likeMovie.lastIndex(of: output.tredingResult.value[index].id) {
                 likeMovie.remove(at: sameID)
             }

@@ -16,9 +16,10 @@ final class SearchViewController: UIViewController {
     private var searchView = SearchView()
     var searchModel = SearchViewModel()
     
-    //private var totalPage = 0
+    private var totalPage = 0
    // private var likeMovie: [String: Bool] = [:]
     
+    var searchText = ""
     //var recentTextInfo: ((String) -> Void)?
     
     override func loadView() {
@@ -46,7 +47,7 @@ final class SearchViewController: UIViewController {
     
     
     private func bindData() {
-
+        
         searchModel.output.viewDidLoad.lazyBind { [weak self] text in
             
             self?.navigationItem.title = self?.searchModel.output.navigationTitle
@@ -131,9 +132,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
-        //vc.movieInfo = (info: searchResult[indexPath.row], likeStatus: checkLikeStatus(index: indexPath.row))
-        vc.movieInfo = (info: searchModel.output.searchResult.value[indexPath.row], likeStatus: false)
-        vc.delegate = self
+        
+        searchModel.input.checklikeStatus.value = indexPath.item
+        
+        vc.detailModel.movieInfo = (info: searchModel.output.searchResult.value[indexPath.row], likeStatus: searchModel.output.likeImageStatus)
+        vc.detailModel.delegate = self
         navigationController?.pushViewController(vc, animated: true)
         
     }

@@ -94,6 +94,8 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         mainModel.input.viewWillAppear.value = ()
+        
+        //역값전달?.
         print(#function)
         //        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
         //        userInfo.id =  ProfileUserDefaults.id
@@ -170,9 +172,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else if collectionView.tag == 1 {
             let vc = DetailViewController()
-            //vc.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: checkLikeStatus(index: indexPath.item))
-            vc.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: false)
-            vc.delegate = self
+            
+            mainModel.input.checklikeStatus.value = indexPath.item
+            
+            vc.detailModel.movieInfo = (info: mainModel.output.tredingResult.value[indexPath.item], likeStatus: mainModel.output.likeImageStatus)
+
+
+            vc.detailModel.delegate = self
             navigationController?.pushViewController(vc, animated: true)
             
         } else { }

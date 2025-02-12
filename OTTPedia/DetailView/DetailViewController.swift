@@ -19,17 +19,8 @@ final class DetailViewController: UIViewController {
     
     
     private var detailView = DetailView()
-    private var backdrops: [ImageInfo] = []
-    private var posters: [ImageInfo] = []
-    private var castInfo: [CastInfo] = []
-    private var likeButtonStatus = false
-    private var maxBackdropImageCount = 0
-    private let sections = ["Synopsis", "Cast", "Poster"]
+    var detailModel = DetailViewModel()
     
-    var movieInfo: (info: Results, likeStatus: Bool)?
-    
-    var delegate: PassMovieLikeDelegate?
- 
     
     let color:[UIColor] = [.red,.blue,.green,.yellow,.purple]
     override func loadView() {
@@ -48,122 +39,53 @@ final class DetailViewController: UIViewController {
         detailView.tableView.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.id)
         
         detailView.tableView.estimatedRowHeight = 100 // 오토디멘션 사용시 추정값을 잡아줘야 함
-       
         
-        let group = DispatchGroup()
-        if let (info, likeStatus) = movieInfo {
-            group.enter()
-            NetworkManger.shared.callRequest(api: .getImage(id: info.id), type: GetImage.self) { response in
-                switch response {
-                case .success(let value):
-                    self.backdrops = value.backdrops
-                    self.maxBackdropImageCount = self.backdrops.count
-                    self.posters = value.posters
-                    group.leave()
-                case .failure(let failure):
-                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                    self.showAPIAlet(msg: "Error")
-                    group.leave()
-                }
-            }
-            group.enter()
-            NetworkManger.shared.callRequest(api: .getCredit(id: info.id), type: GetCredit.self) { response in
-                switch response {
-                case .success(let value):
-                    self.castInfo = value.cast
-                    group.leave()
-                case .failure(let failure):
-                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
-                     self.showAPIAlet(msg: "Error")
-                     group.leave()
-                }
-            }
-            likeButtonStatus = likeStatus
-        }
         
-        group.notify(queue: .main) {
-            //print("DispatchGroup Notifiy")
-            self.detailView.tableView.reloadData()
-       
-        }
+        bindData()
+        detailModel.input.viewDidLoad.value = ()
     }
     
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        addContentScrollView()
-        setPageControl()
+    private func bindData() {
         
-        if let (info, _) = movieInfo {
-            if let releaseDate = info.releaseDate {
-                detailView.dateLabel.text = releaseDate + "  | "
-            } else {
-                detailView.dateLabel.text = "  | "
-            }
-            if let average = info.average {
-                detailView.avgLabel.text = average.formatted() + "  | "
-            } else {
-                detailView.avgLabel.text = "  | "
-            }
+        detailModel.output.viewDidLoad.lazyBind { [weak self] movieInfo in
             
+            self?.navigationItem.title = movieInfo.title
+            
+            let rightButton = UIBarButtonItem(image: UIImage(systemName: movieInfo.likeImage), style: .plain, target: self, action: #selector(self?.likebuttonTapped))
+            
+            self?.navigationItem.rightBarButtonItem = rightButton
+            self?.detailView.dateLabel.text = movieInfo.date
+            self?.detailView.avgLabel.text = movieInfo.avg
+            self?.detailView.genreLabel.text = movieInfo.genre
+            
+            
+            for i in 0..<self!.detailView.imageViews.count {
+                self?.detailView.imageViews[i].isHidden = false
+            }
+        }
+        
+        detailModel.output.finishedRequest.lazyBind { [weak self] _ in
+            self?.detailView.tableView.reloadData()
+        }
+        
+        detailModel.output.likeButtonTapped.lazyBind { [weak self] img in
            
-            if let genre = info.genreIds {
-                detailView.genreLabel.text = findGenre(genres: genre)
-            }
-            
-            
-            for i in 0..<detailView.imageViews.count {
-                detailView.imageViews[i].isHidden = false
-            }
-  
-            configurationNavigationController(title: info.title)
+            self?.navigationItem.rightBarButtonItem?.image = UIImage(systemName: img)
         }
+        
+        detailModel.output.backdropSetting.lazyBind { [weak self] _ in
+            self?.addContentScrollView()
+            self?.setPageControl()
+        }
+        
+        detailModel.output.errorMessage.lazyBind { [weak self] msg in
+            self?.showAPIAlet(msg: msg)
+        }
+        
     }
     
 
-    private func findGenre(genres: [Int]) -> String {
-        
-        let maxCount = genres.count > 2 ? 2 : genres.count
-        var genre = ""
-        
-        if maxCount == 0 {
-            return genre
-        }
-        
-        for i in 0..<maxCount {
-            if i == maxCount - 1 {
-                genre += (Configuration.Genres(rawValue: genres[i])?.genre ?? "unknown")
-            } else {
-                genre += (Configuration.Genres(rawValue: genres[i])?.genre ?? "unknown") + ", "
-            }
-        }
-        return genre
-    }
-    
-    
-    private func configurationNavigationController(title: String) {
-        
-        navigationItem.title = title
-        
-        let image = likeButtonStatus ? "heart.fill" : "heart"
-        
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: image), style: .plain, target: self, action: #selector(likebuttonTapped))
-        
-        navigationItem.rightBarButtonItem = rightButton
-    }
-    
-    @objc private func likebuttonTapped (_ sender: UIButton) {
-        likeButtonStatus.toggle()
-        let image = likeButtonStatus ? "heart.fill" : "heart"
-        let rightButton = UIImage(systemName: image)
-        
-        if let (info, _) = movieInfo  {
-            delegate?.detailViewLikeButtonTapped(id: info.id, status: likeButtonStatus)
-        }
-            
-        navigationItem.rightBarButtonItem?.image = rightButton
-        
-    }
+ 
     
     
 }
@@ -172,7 +94,6 @@ extension DetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //scrollView.contentOffset.x : 스크롤뷰가 움직이는 실시간 좌표 값
         let value = scrollView.contentOffset.x/scrollView.frame.size.width
-        // print(scrollView.contentOffset.x)
         
         //value 자체를 rounded를 할 경우, isNan 및 isInfinite 오류 발생
         //해결 -> 타입 자체를 Int로 먼저 바꾸지 말고, 실수형으로 바꾼 뒤 Int로 변환해서 해결(정밀하지 않아도 되니 Float로 구현)
@@ -186,30 +107,23 @@ extension DetailViewController: UIScrollViewDelegate {
     
     private func addContentScrollView() {
         
-        if maxBackdropImageCount == 0 {
-            return
-        } else if maxBackdropImageCount >= 5  {
-            maxBackdropImageCount = 5
-        }
-        
-        for i in 0..<maxBackdropImageCount {
+        for i in 0..<detailModel.output.maxBackdropImageCount {
             let imageView = UIImageView()
             // 이미지를 스크롤뷰와 동일한 사이즈를 맞추기 위해, x좌표를 알아야함, h는 고정 사이즈이기 때문에, 상관 X
             let xPos = detailView.scrollView.frame.width * CGFloat(i)
             imageView.frame = CGRect(x: xPos, y: 0, width: detailView.scrollView.bounds.width, height: detailView.scrollView.bounds.height)
             
-            
-           
-            let url = URL(string: Configuration.shared.secureURL + Configuration.BackdropSizes.w780.rawValue + backdrops[i].filePath)
-            imageView.kf.setImage(with: url)
+ 
+            imageView.kf.setImage(with: detailModel.output.backdropsURL[i])
             detailView.scrollView.addSubview(imageView)
+            
             // 스크롤뷰 위치 변경
             detailView.scrollView.contentSize.width = imageView.frame.width * CGFloat(i + 1)
         }
     }
     
     private func setPageControl() {
-        detailView.pageControl.numberOfPages = maxBackdropImageCount
+        detailView.pageControl.numberOfPages = detailModel.output.maxBackdropImageCount
     }
 }
 
@@ -226,19 +140,19 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: SynopsisTableViewCell.id, for: indexPath) as? SynopsisTableViewCell else { return UITableViewCell() }
             
-            if let (info, _) = movieInfo {
-                cell.setupLabel(title: sections[indexPath.row], overView: info.overview)
-            } else {
-                cell.setupLabel(title: "", overView: "")
-            }
+
+            let title = detailModel.output.sections[indexPath.section]
+            let overView = detailModel.output.overView
+            cell.setupLabel(title: title, overView: overView)
             cell.delegate = self
             cell.selectionStyle = .none
             
             return cell
         } else if indexPath.section == 1 {
             guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as? CastTableViewCell else { return UITableViewCell() }
-
-            cell.setupLabel(title: sections[indexPath.section])
+            
+            let title = detailModel.output.sections[indexPath.section]
+            cell.setupLabel(title: title)
             cell.collectionView.delegate = self
             cell.collectionView.dataSource = self
             cell.collectionView.tag = indexPath.section - 1
@@ -251,7 +165,9 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.section == 2 {
             
             guard let cell = detailView.tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.id, for: indexPath) as? PosterTableViewCell else { return UITableViewCell() }
-            cell.setupLabel(title: sections[indexPath.section])
+           
+            let title = detailModel.output.sections[indexPath.section]
+            cell.setupLabel(title: title)
             cell.collectionView.delegate = self
             cell.collectionView.dataSource = self
             cell.collectionView.tag = indexPath.section - 1
@@ -264,13 +180,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             return UITableViewCell()
         }
-
-            
+        
+        
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+        return detailModel.output.sections.count
     }
-    
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -296,9 +211,9 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView.tag == 0 {
-            return castInfo.count
+            return detailModel.output.castInfo.count
         } else if collectionView.tag == 1 {
-            return posters.count
+            return detailModel.output.posters.count
         } else {
             return 0
         }
@@ -306,12 +221,12 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       
+        
         if collectionView.tag == 0 {
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.setupCast(info: castInfo[indexPath.item])
+            cell.setupCast(info: detailModel.output.castInfo[indexPath.item])
             
             return cell
             
@@ -319,23 +234,34 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as? PosterCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.setupPoster(info: posters[indexPath.item])
+            cell.setupPoster(info: detailModel.output.posters[indexPath.item])
             
             return cell
             
         } else {
             return UICollectionViewCell()
         }
-       
+        
     }
     
 }
 
+// MARK: - Objc Function
+extension DetailViewController {
+    
+    @objc private func likebuttonTapped (_ sender: UIButton) {
+        detailModel.input.likeButtonTapped.value = ()
+        
+    }
+}
+
+// MARK: - Delegate
 extension DetailViewController: PassHiddenButtonDelegate {
     func hidebuttonTapped() {
         detailView.tableView.reloadData()
     }
 }
+
 
 
 

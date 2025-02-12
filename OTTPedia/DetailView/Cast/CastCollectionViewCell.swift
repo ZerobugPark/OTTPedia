@@ -62,12 +62,11 @@ final class CastCollectionViewCell: BaseCollectionViewCell {
     
     // 뷰의 프레임이 변경될 때 마다 호출
     override func layoutSubviews() {
-        print(#function)
         super.layoutSubviews()
         guard contentView.bounds.width > 0 else { return }
         
         profileImage.layer.cornerRadius = profileImage.frame.width / 2
-        print(profileImage.frame.width)
+    
     }
     
     
