@@ -16,10 +16,9 @@ final class SearchViewController: UIViewController {
     private var searchView = SearchView()
     var searchModel = SearchViewModel()
     
-    private var totalPage = 0
+    //private var totalPage = 0
    // private var likeMovie: [String: Bool] = [:]
     
-    var searchText = ""
     //var recentTextInfo: ((String) -> Void)?
     
     override func loadView() {
@@ -47,11 +46,11 @@ final class SearchViewController: UIViewController {
     
     
     private func bindData() {
-        
+
         searchModel.output.viewDidLoad.lazyBind { [weak self] text in
             
-            self?.navigationItem.title = self?.searchModel.navigationTitle
-            self?.navigationItem.backButtonTitle = self?.searchModel.backButtonTitle
+            self?.navigationItem.title = self?.searchModel.output.navigationTitle
+            self?.navigationItem.backButtonTitle = self?.searchModel.output.backButtonTitle
             
             if let search = text {
                 self?.searchView.searchBar.text = search
@@ -116,7 +115,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
         
         searchModel.input.checklikeStatus.value = indexPath.item
-        cell.searchInfo(info: searchModel.output.searchResult.value[indexPath.row], likeStatus: searchModel.likeImageStatus)
+        cell.searchInfo(info: searchModel.output.searchResult.value[indexPath.row], likeStatus: searchModel.output.likeImageStatus)
         cell.selectionStyle = .none
         
         cell.likeButton.tag = indexPath.row

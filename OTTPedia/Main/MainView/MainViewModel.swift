@@ -31,16 +31,17 @@ class MainViewModel: BaseViewModel {
         let textList: Observable<[String]> = Observable([])
         let resarchTextStatus: Observable<Bool> = Observable(false)
         let likeMovieCountMessage: Observable<String> = Observable("")
+        let navigationTitle: String = "OTTPedia"
+        let backButtonTitle: String = ""
+        
+        var likeImageStatus: Bool = false
+        
     }
     
-    let navigationTitle = "OTTPedia"
-    let backButtonTitle = ""
+
     
     private var likeMovie: [Int] = []
     private var userInfo = UserInfo()
-    
-    
-    var likeImageStatus = false
     
     
     init() {
@@ -66,7 +67,7 @@ class MainViewModel: BaseViewModel {
         }
         
         input.checklikeStatus.lazyBind { [weak self] index in
-            self?.likeImageStatus = self!.checkLikeStatus(index: index)
+            self?.output.likeImageStatus = self!.checkLikeStatus(index: index)
         }
         
         input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in

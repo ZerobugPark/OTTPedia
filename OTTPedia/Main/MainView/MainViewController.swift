@@ -83,8 +83,8 @@ final class MainViewController: UIViewController {
     
     private func configurationNavigationController() {
         
-        navigationItem.title = mainModel.navigationTitle
-        navigationItem.backButtonTitle = mainModel.backButtonTitle
+        navigationItem.title = mainModel.output.navigationTitle
+        navigationItem.backButtonTitle = mainModel.output.backButtonTitle
         
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
         
@@ -147,7 +147,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             mainModel.input.checklikeStatus.value = indexPath.item
             
-            cell.setupTrending(trend: mainModel.output.tredingResult.value[indexPath.item], likeStatus: mainModel.likeImageStatus)
+            cell.setupTrending(trend: mainModel.output.tredingResult.value[indexPath.item], likeStatus: mainModel.output.likeImageStatus)
             cell.delegate = self
             cell.likeButton.tag = indexPath.item
 

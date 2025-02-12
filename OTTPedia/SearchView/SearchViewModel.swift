@@ -27,15 +27,16 @@ class SearchViewModel: BaseViewModel {
         let searchResult: Observable<[Results]> = Observable([])
         let noResult: Observable<Bool> = Observable(false)
         let errorMessage: Observable<String> = Observable("")
+        let navigationTitle: String = "OTTPedia"
+        let backButtonTitle: String = ""
+        
+        var likeImageStatus: Bool = false
     }
     
     
-    let navigationTitle = "OTTPedia"
-    let backButtonTitle = ""
-    
     var searchText = ""
     var recentTextInfo: ((String) -> Void)?
-    var likeImageStatus = false
+ 
     
     private var currentPage = 1
     private var totalPage = 0
@@ -71,7 +72,7 @@ class SearchViewModel: BaseViewModel {
         }
         
         input.checklikeStatus.lazyBind { [weak self] index in
-            self?.likeImageStatus = self!.checkLikeStatus(index: index)
+            self?.output.likeImageStatus = self!.checkLikeStatus(index: index)
         }
         
         input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in
@@ -142,7 +143,7 @@ extension SearchViewModel {
         
         if status {
             likeMovie.append(output.searchResult.value[index].id)
-        } else {
+        } else { //이거 Set으로 변경해도 될거 같다.
             if let sameID = likeMovie.lastIndex(of: output.searchResult.value[index].id) {
                 likeMovie.remove(at: sameID)
             }
