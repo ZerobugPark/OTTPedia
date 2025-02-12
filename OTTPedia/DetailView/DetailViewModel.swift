@@ -86,7 +86,7 @@ final class DetailViewModel: BaseViewModel {
                     self.output.posters = value.posters
                     group.leave()
                 case .failure(_):
-                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: status)
                     self.output.errorMessage.value = ("Error")
                     group.leave()
                 }
@@ -98,7 +98,7 @@ final class DetailViewModel: BaseViewModel {
                     self.output.castInfo = value.cast
                     group.leave()
                 case .failure(_):
-                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                    // let msg = ApiError.shared.apiErrorDoCatch(apiStatus: status)
                     self.output.errorMessage.value = ("Error")
                     group.leave()
                 }

@@ -38,7 +38,9 @@ final class ProfileInitViewViewController: UIViewController {
     private func bindData() {
         profileModel.output.viewDidLoad.bind { [weak self] _ in
             self?.navigationItem.title = self?.profileModel.navigationTitle
-            self?.navigationItem.backButtonTitle =  self?.profileModel.backButtonTitle
+            self?.navigationItem.backButtonTitle =  self?.profileModel.emptyString
+            let index = self!.profileModel.output.randomImageIndex
+            self?.profileInit.imageView.image = ImageList.shared.profileImageList[index]
 
         }
         
@@ -54,18 +56,18 @@ final class ProfileInitViewViewController: UIViewController {
             }
         }
         
-        profileModel.output.charStatus.lazyBind { [weak self] (msg, stauts) in
+        profileModel.output.charStatus.lazyBind { [weak self] (msg, status) in
             self?.profileInit.infoLable.text = msg
-            self?.profileInit.infoLable.textColor = stauts ? ColorList.main :  ColorList.red
+            self?.profileInit.infoLable.textColor = status ? ColorList.main :  ColorList.red
             
         }
         
-        profileModel.output.textFieldStatus.lazyBind { [weak self] (msg, stauts) in
+        profileModel.output.textFieldStatus.lazyBind { [weak self] (msg, status) in
             self?.profileInit.infoLable.text = msg
-            self?.profileInit.infoLable.textColor = stauts ? ColorList.main :  ColorList.red
+            self?.profileInit.infoLable.textColor = status ? ColorList.main :  ColorList.red
             
             
-            self?.profileInit.okButton.isEnabled = stauts
+            self?.profileInit.okButton.isEnabled = status
         }
         
     }
@@ -96,7 +98,7 @@ extension ProfileInitViewViewController: UITextFieldDelegate {
     // 입력은 되었지만 textField.text에는 아직 값이 없음
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         profileModel.input.char.value = string
-        return profileModel.isOk
+        return profileModel.output.isOk
         
     }
     

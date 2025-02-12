@@ -27,17 +27,19 @@ final class SettingViewModel: BaseViewModel {
         let viewWillAppear: Observable<Void> = Observable(())
         let didSelectRowAt: Observable<Int?> = Observable(nil)
         let resetUserDefaults: Observable<Void> = Observable(())
+        let saveData: Observable<UserInfo> = Observable(UserInfo())
     }
     
     struct Output {
         let viewWillAppear: Observable<String> = Observable((""))
         let showAlert: Observable<(String,String)> = Observable(("",""))
+        let userInfo: Observable<UserInfo> = Observable(UserInfo())
         
         let navigationtitle = "설정"
         let contents = ["자주 묻는 질문", "1:1 문의", "알림 설정", "탈퇴하기"]
         
         
-        var userInfo = UserInfo()
+    
     }
     
     
@@ -64,13 +66,20 @@ final class SettingViewModel: BaseViewModel {
         input.resetUserDefaults.lazyBind { [weak self] _ in
             self?.resetUserDefatuls()
         }
+        
+        input.saveData.lazyBind { [weak self] info in
+            self?.saveData(info: info)
+        }
     }
     
     
     private func loadData() {
-        output.userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
-        output.userInfo.id =  ProfileUserDefaults.id
-        output.userInfo.date =  ProfileUserDefaults.resgisterDate
+        var info = UserInfo()
+        info.userImageIndex = ProfileUserDefaults.imageIndex
+        info.id = ProfileUserDefaults.id
+        info.date = ProfileUserDefaults.resgisterDate
+        
+        output.userInfo.value = info
         
         let likeCountString = likeCount()
         
@@ -111,11 +120,21 @@ final class SettingViewModel: BaseViewModel {
         
     }
     
+    private func saveData(info: UserInfo) {
+        ProfileUserDefaults.imageIndex = info.userImageIndex
+        ProfileUserDefaults.id = info.id
+        output.userInfo.value = info
+    }
+    
     private func resetUserDefatuls() {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key.description)
             print(key)
         }
+    }
+    
+    deinit {
+        print("SettingViewModel Deinit")
     }
     
     

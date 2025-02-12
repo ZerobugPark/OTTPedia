@@ -80,9 +80,9 @@ final class SearchViewModel: BaseViewModel {
             self?.output.likeImageStatus = self?.checkLikeStatus(index: index) ?? false
         }
         
-        input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in
+        input.likeButtonTapped.lazyBind { [weak self] (index, status) in
          
-            self?.likeButtonTapped(index: index, status: stauts)
+            self?.likeButtonTapped(index: index, status: status)
         }
         
         input.pagenationStart.lazyBind { [weak self] indexPath in
@@ -104,7 +104,7 @@ final class SearchViewModel: BaseViewModel {
                 self.noResult()
             case .failure(_):
                 self.output.errorMessage.value = ("Error")
-                //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: status)
             }
         }
     }

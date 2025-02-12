@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProfileInitViewModel: BaseViewModel {
+final class ProfileInitViewModel: BaseViewModel {
     
     
     private(set) var input: Input
@@ -20,6 +20,9 @@ class ProfileInitViewModel: BaseViewModel {
         let char: Observable<String> = Observable((""))
         let currentText: Observable<String?> = Observable((nil))
         let selectedImage: Observable<Int> = Observable((0))
+        
+        //Modify Only
+        let saveButtonTapped: Observable<String> = Observable((""))
     }
     
     struct Output {
@@ -28,16 +31,24 @@ class ProfileInitViewModel: BaseViewModel {
         let charStatus: Observable<(String, Bool)>  = Observable(("",false))
         let textFieldStatus: Observable<(String, Bool)>  = Observable(("",false))
         let updateImage: Observable<Int> = Observable((0))
+        
+        let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
+        
+        var isOk: Bool = false
+        
+
     }
     
     
     let navigationTitle = "프로필 설정"
-    let backButtonTitle = ""
-    private let randomImageIndex = Int.random(in: 0..<ImageList.shared.profileImageList.count)
+    let emptyString = ""
 
-    var isOk = false
-    var infoMsg = ""
+    private var infoMsg = ""
     
+    //Modify Only
+    var userInfo = UserInfo()
+    
+    var updateUserInfo: ((UserInfo) -> (Void))?
     
     init() {
         print("ProfileInitViewModel Init")
@@ -45,13 +56,13 @@ class ProfileInitViewModel: BaseViewModel {
         output = Output()
         transform()
     }
-    
+  
     func transform() {
     
-        input.viewDidLoad.lazyBind { [weak self] _ in
-            //self?.output.viewDidLoad.value = ()
-            self?.output.updateImage.value = self!.randomImageIndex
-            
+        input.viewDidLoad.lazyBind { [weak self] in
+            self?.output.viewDidLoad.value = ()
+            self?.output.updateImage.value = self!.output.randomImageIndex
+
         }
         
         input.okButtonTapped.lazyBind { [weak self] name in
@@ -68,7 +79,6 @@ class ProfileInitViewModel: BaseViewModel {
         }
         //문자열 처리
         input.currentText.lazyBind { [weak self] str in
-            print("inputTextField")
             self?.validationString(str: str)
         }
         
@@ -76,15 +86,14 @@ class ProfileInitViewModel: BaseViewModel {
             self?.output.updateImage.value = index
         }
         
+        
+        input.saveButtonTapped.lazyBind { [weak self] str in
+            self?.saveButtonTapped(id: str)
+        }
+        
     }
     
-    private func okButtonTapped(id: String) {
-        ProfileUserDefaults.isEnroll = true
-        ProfileUserDefaults.imageIndex = output.updateImage.value
-        ProfileUserDefaults.resgisterDate = Date().formatted(.dateTime.day(.twoDigits).month(.twoDigits).year(.defaultDigits).locale(Locale(identifier: "ko_KR")))
-        
-        ProfileUserDefaults.id = id
-    }
+
     
     private func checkTextCount(str: String?) {
         if let text = str {
@@ -103,15 +112,15 @@ class ProfileInitViewModel: BaseViewModel {
         
         if specialCharacter.contains(char) {
             infoMsg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
-            isOk = false
+            output.isOk = false
         } else if let _ = Int(char) {
             infoMsg = "닉네임에 숫자는 포함할 수 없어요"
-            isOk = false
+            output.isOk = false
         } else {
-            isOk = true
+            output.isOk = true
         }
         
-        output.charStatus.value = (infoMsg, isOk)
+        output.charStatus.value = (infoMsg, output.isOk)
         
     }
     
@@ -120,19 +129,22 @@ class ProfileInitViewModel: BaseViewModel {
         let maxLength = 10
         let minLength = 2
         
-        
-        if isOk {
-            if let text = str {
-                if text.count >= minLength && text.count <= maxLength {
-                    infoMsg = "사용할 수 있는 닉네님이에요"
-                    isOk = true
-                } else  {
-                    infoMsg = "2글자 이상 10글자 미만으로 설정해주세요"
-                    isOk = false
-                }
+        if output.isOk {
+            
+            guard let text = str else {
+                print("nil입니다.")
+                return
             }
+            if text.count >= minLength && text.count <= maxLength {
+                infoMsg = "사용할 수 있는 닉네님이에요"
+                output.isOk = true
+            } else  {
+                infoMsg = "2글자 이상 10글자 미만으로 설정해주세요"
+                output.isOk = false
+            }
+     
         
-            output.textFieldStatus.value = (infoMsg, isOk)
+            output.textFieldStatus.value = (infoMsg, output.isOk)
         }
     }
     
@@ -142,4 +154,26 @@ class ProfileInitViewModel: BaseViewModel {
     }
     
     
+}
+
+// MARK: - ProfileInitViewController
+
+extension ProfileInitViewModel {
+    private func okButtonTapped(id: String) {
+        ProfileUserDefaults.isEnroll = true
+        ProfileUserDefaults.imageIndex = output.updateImage.value
+        ProfileUserDefaults.resgisterDate = Date().formatted(.dateTime.day(.twoDigits).month(.twoDigits).year(.defaultDigits).locale(Locale(identifier: "ko_KR")))
+        
+        ProfileUserDefaults.id = id
+    }
+}
+
+// MARK: - ModifyViewController
+extension ProfileInitViewModel {
+    private func saveButtonTapped(id: String) {
+        
+        userInfo.id = id
+        userInfo.userImageIndex = output.updateImage.value
+        updateUserInfo?(userInfo)
+    }
 }

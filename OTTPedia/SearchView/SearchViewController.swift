@@ -64,6 +64,10 @@ final class SearchViewController: UIViewController {
         super.viewWillAppear(true)
     }
     
+    deinit {
+        print("SearchViewController Deinit")
+    }
+    
     
 }
 

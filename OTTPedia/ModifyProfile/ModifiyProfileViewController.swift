@@ -9,77 +9,109 @@ import UIKit
 
 final class ModifiyProfileViewController: UIViewController {
 
-    private var profileModify = ProfileInitView()
-    private var currentIndex = 0
+    private var modifyView = ProfileInitView()
+    var modifyModel = ProfileInitViewModel()
     
-    private var infoMsg = ""
-    private var isOk = true
-    
-    var userInfo = UserInfo()
-    var updateUserInfo: ((UserInfo) -> (Void))?
     
     override func loadView() {
-        view = profileModify
+        view = modifyView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        profileModify.nameTextField.delegate = self
+        modifyView.nameTextField.delegate = self
         
-        configurationNavigationController()
-        setupUserInfo()
-        currentIndex = userInfo.userImageIndex
+        modifyView.nameTextField.becomeFirstResponder()
         
-        profileModify.nameTextField.becomeFirstResponder()
+        modifyView.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
         
-        profileModify.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped)))
+        bindData()
+        
     }
     
-    
-    private func configurationNavigationController() {
+    private func bindData() {
+        modifyModel.output.viewDidLoad.bind {[weak self] _ in
+            let title = "프로필 편집"
+            self?.navigationItem.title = title
+          
+            let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self?.cancelButtonTapped))
+            
+            self?.navigationItem.leftBarButtonItem = leftButton
+            
+            let buttonTitle = "저장"
+            let rightButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(self?.saveButtonTapped))
+            
+            self?.navigationItem.rightBarButtonItem = rightButton
+            self?.navigationItem.rightBarButtonItem?.isEnabled = true
+            self?.navigationItem.backButtonTitle = self?.modifyModel.emptyString
+            
+            self?.modifyView.okButton.isHidden = true
+            
+            let index = self!.modifyModel.userInfo.userImageIndex
+            self?.modifyView.imageView.image = ImageList.shared.profileImageList[index]
+            self?.modifyView.nameTextField.text =  self?.modifyModel.userInfo.id
+            
+            self?.modifyView.infoLable.text = self?.modifyModel.emptyString
+            
+        }
         
-        let title = "프로필 편집"
-        navigationItem.title = title
-      
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(cancelButtonTapped))
+        modifyModel.output.updateImage.lazyBind { [weak self] index in
+            self?.modifyView.imageView.image = ImageList.shared.profileImageList[index]
+        }
         
-        navigationItem.leftBarButtonItem = leftButton
+        modifyModel.output.charStatus.lazyBind { [weak self] (msg, status) in
+            self?.modifyView.infoLable.text = msg
+            self?.modifyView.infoLable.textColor = status ? ColorList.main :  ColorList.red
+        }
         
-        let buttonTitle = "저장"
-        let rightButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(saveButtonTapped))
-    
-        navigationItem.rightBarButtonItem = rightButton
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        navigationItem.backButtonTitle = ""
-
-    }
-    
-    private func setupUserInfo() {
-        // 프로필 이미지 편집이 네비게이션으로 연결되어있기 때문에, viewWill에서 셋팅 불가능
+        modifyModel.output.textFieldStatus.lazyBind { [weak self] (msg, status) in
+            self?.modifyView.infoLable.text = msg
+            self?.modifyView.infoLable.textColor = status ? ColorList.main :  ColorList.red
+            
+            
+            self?.navigationItem.rightBarButtonItem?.isEnabled = status
+        }
         
-        profileModify.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
-        profileModify.nameTextField.text =  userInfo.id
-        
-        profileModify.infoLable.text = ""
-        profileModify.okButton.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         DispatchQueue.main.async {
-            self.profileModify.imageView.layer.cornerRadius = self.profileModify.imageView.frame.width / 2
+            self.modifyView.imageView.layer.cornerRadius = self.modifyView.imageView.frame.width / 2
         }
    
     }
     
+}
+
+// MARK: - TextFieldDelegate
+extension ModifiyProfileViewController: UITextFieldDelegate {
     
-    @objc private func saveButtonTapped(_ sender: UIButton) {
+    // textField.text에 값이 있음
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        modifyModel.input.currentText.value = textField.text
+    }
+ 
+    // 입력은 되었지만 textField.text에는 아직 값이 없음
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        userInfo.userImageIndex = currentIndex
-        userInfo.id = profileModify.nameTextField.text!
-        updateUserInfo?(userInfo)
+        modifyModel.input.char.value = string
+        return modifyModel.output.isOk
+
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
+
+}
+
+// MARK: - addTraget OBJ Function
+extension ModifiyProfileViewController {
+    @objc private func saveButtonTapped(_ sender: UIButton) {
+        modifyModel.input.saveButtonTapped.value = modifyView.nameTextField.text!
         dismiss(animated: true)
     }
     
@@ -90,81 +122,16 @@ final class ModifiyProfileViewController: UIViewController {
     @objc private func profileButtonTapped(_ sender: UIButton) {
         
         let vc = ProfileImageSettingViewController()
-       // 수정해야 함
-        //vc.imageIndex = currentIndex
-//        vc.isEdit = true
-//        vc.changedImage = { value in
-//            self.profileModify.imageView.image =  ImageList.shared.profileImageList[value]
-//            self.currentIndex = value
-//        }
+        
+        vc.settingModel.output.currentImageIndex.value = modifyModel.userInfo.userImageIndex
+        
+        vc.settingModel.changedImage = { value in
+
+            self.modifyModel.input.selectedImage.value = value
+            
+        }
+
         navigationController?.pushViewController(vc, animated: true)
         
     }
-}
-
-// MARK: - TextFieldDelegate
-extension ModifiyProfileViewController: UITextFieldDelegate {
-    
-    // textField.text에 값이 있음
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        
-        let maxLength = 10
-        let minLength = 2
-        
-        if isOk {
-            if let text = textField.text {
-                if text.count >= minLength && text.count <= maxLength {
-                    infoMsg = "사용할 수 있는 닉네님이에요"
-                    isOk = true
-                } else {
-                    infoMsg = "2글자 이상 10글자 미만으로 설정해주세요"
-                    isOk = false
-                }
-                profileModify.infoLable.text = infoMsg
-                navigationItem.rightBarButtonItem?.isEnabled = isOk
-            }
-            
-        }
-    }
- 
-    // 입력은 되었지만 textField.text에는 아직 값이 없음
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-       
-        let specialCharacter = ["@","#","$","%"]
-        
-        let maxLength = 10
-        let minLength = 2
-        
-        if specialCharacter.contains(string) {
-            infoMsg = "닉네임에 @, #, $, % 는 포함할 수 없어요"
-            isOk = false
-        } else if let _ = Int(string) {
-            infoMsg = "닉네임에 숫자는 포함할 수 없어요"
-            isOk = false
-        } else {
-            isOk = true
-        }
-        
-        if !isOk { 
-            profileModify.infoLable.text = infoMsg
-            
-            if let text = textField.text {
-                if text.count >= minLength && text.count <= maxLength {
-                    navigationItem.rightBarButtonItem?.isEnabled = true
-                } else {
-                    navigationItem.rightBarButtonItem?.isEnabled = isOk
-                }
-            }
-            
-            return isOk
-        } else {
-            return isOk
-        }
-            
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
-        return true
-    }
-
 }

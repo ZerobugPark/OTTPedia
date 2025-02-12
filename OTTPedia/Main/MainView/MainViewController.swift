@@ -95,21 +95,10 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         mainModel.input.viewWillAppear.value = ()
-        
-        //역값전달?.
-        print(#function)
-        //        userInfo.userImageIndex =  ProfileUserDefaults.imageIndex
-        //        userInfo.id =  ProfileUserDefaults.id
-        //        userInfo.date =  ProfileUserDefaults.resgisterDate
-        //        userInfo.likeCount = likeCount()
-        //        textList = ProfileUserDefaults.recentSearh
-        //
-        //
-        //        mainView.imageView.image = ImageList.shared.profileImageList[userInfo.userImageIndex]
-        //        mainView.nameLabel.text = userInfo.id
-        //        mainView.dateLabel.text = userInfo.date
-        //        mainView.collectionView.reloadData()
-        
+    }
+    
+    deinit {
+        print("MainViewController Deinit")
     }
     
 }
@@ -244,11 +233,6 @@ extension MainViewController: PassMovieLikeDelegate {
     func detailViewLikeButtonTapped(id: Int, status: Bool) {
         mainModel.input.likeUpdate.value = (id, status)
         
-//        //likeMovie.updateValue(status, forKey: String(id))
-//        //ProfileUserDefaults.likeMoive = likeMovie
-//        //userInfo.likeCount = likeCount()
-//        mainView.collectionView.reloadData()
-        
     }
     
 }
@@ -286,20 +270,11 @@ extension MainViewController {
         }
         
         
-        //        vc.userInfo = userInfo
-        //
-        //        vc.updateUserInfo = { info in
-        //            self.userInfo.userImageIndex =  info.userImageIndex
-        //            self.userInfo.id =  info.id
-        //
-        //            ProfileUserDefaults.imageIndex = self.userInfo.userImageIndex
-        //            ProfileUserDefaults.id = self.userInfo.id
-        //
-        //            self.mainView.imageView.image = ImageList.shared.profileImageList[self.userInfo.userImageIndex]
-        //            self.mainView.nameLabel.text = self.userInfo.id
-        //            self.mainView.dateLabel.text = self.userInfo.date
-        //
-        //        }
+        vc.modifyModel.userInfo = mainModel.output.userInfo.value
+      
+        vc.modifyModel.updateUserInfo = { [weak self] info in
+            self?.mainModel.input.saveData.value = info
+        }
         
         present(nav,animated: true)
         
@@ -320,9 +295,6 @@ extension MainViewController {
         
         let removeAll: (String?, Int?) = (nil, nil)
         mainModel.input.updateTextList.value = removeAll
-        
-        //textList.removeAll()
-        // self.mainView.recentSearchCollectionView.reloadData()
     }
     
     @objc private func searchButtonTapped(_ sender: UIButton) {

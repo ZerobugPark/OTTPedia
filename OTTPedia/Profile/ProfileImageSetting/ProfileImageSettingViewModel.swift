@@ -8,7 +8,7 @@
 import Foundation
 
 
-class ProfileImageSettingViewModel: BaseViewModel {
+final class ProfileImageSettingViewModel: BaseViewModel {
     
     
     private(set) var input: Input

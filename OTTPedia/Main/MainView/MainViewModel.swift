@@ -22,6 +22,7 @@ final class MainViewModel: BaseViewModel {
         let checklikeStatus: Observable<Int> = Observable(0)
         let likeButtonTapped: Observable<(Int, Bool)> = Observable((0, false))
         let likeUpdate: Observable<(Int, Bool)> = Observable((0, false))
+        let saveData: Observable<UserInfo> = Observable(UserInfo())
     }
     
     struct Output {
@@ -71,12 +72,16 @@ final class MainViewModel: BaseViewModel {
             self?.output.likeImageStatus = self!.checkLikeStatus(index: index)
         }
         
-        input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in
-            self?.likeButtonTapped(index: index, status: stauts)
+        input.likeButtonTapped.lazyBind { [weak self] (index, status) in
+            self?.likeButtonTapped(index: index, status: status)
         }
         
         input.likeUpdate.lazyBind { [weak self] (id, status) in
             self?.likeUpdate(id: id, status: status)
+        }
+        
+        input.saveData.lazyBind { [weak self] info in
+            self?.saveData(info: info)
         }
         
     }
@@ -98,7 +103,7 @@ final class MainViewModel: BaseViewModel {
             case .success(let value):
                 self.output.tredingResult.value = value.results
             case .failure(_):
-                //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
+                //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: status)
                 self.output.errorMessage.value = ("Error")
             }
         }
@@ -146,6 +151,12 @@ final class MainViewModel: BaseViewModel {
         return likeStatus
     }
     
+    private func saveData(info: UserInfo) {
+        ProfileUserDefaults.imageIndex = info.userImageIndex
+        ProfileUserDefaults.id = info.id
+        output.userInfo.value = info
+    }
+    
     deinit {
         print("MainViewModel DeInit")
     }
@@ -183,7 +194,6 @@ extension MainViewModel {
         if status {
             likeMovie.append(id)
         } else {
-            //뭐가 더 나을 까?
             if let sameID = likeMovie.lastIndex(of: id) {
                 likeMovie.remove(at: sameID)
             }
