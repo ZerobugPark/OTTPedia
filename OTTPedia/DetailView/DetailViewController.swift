@@ -7,6 +7,7 @@
 
 import UIKit
 
+import SnapKit
 import Kingfisher
 
 protocol PassHiddenButtonDelegate {
@@ -110,16 +111,14 @@ extension DetailViewController: UIScrollViewDelegate {
         
         for i in 0..<detailModel.output.maxBackdropImageCount {
             let imageView = UIImageView()
-            // 이미지를 스크롤뷰와 동일한 사이즈를 맞추기 위해, x좌표를 알아야함, h는 고정 사이즈이기 때문에, 상관 X
-            let xPos = detailView.scrollView.frame.width * CGFloat(i)
-            imageView.frame = CGRect(x: xPos, y: 0, width: detailView.scrollView.bounds.width, height: detailView.scrollView.bounds.height)
+            detailView.imageStackView.addArrangedSubview(imageView)
             
- 
+            imageView.snp.makeConstraints { make in
+                make.size.equalTo(detailView.scrollView)
+              }
+            
             imageView.kf.setImage(with: detailModel.output.backdropsURL[i])
-            detailView.scrollView.addSubview(imageView)
-            
-            // 스크롤뷰 위치 변경
-            detailView.scrollView.contentSize.width = imageView.frame.width * CGFloat(i + 1)
+   
         }
     }
     

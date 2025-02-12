@@ -24,10 +24,12 @@ final class DetailView: BaseView {
     
     private let stackView = UIStackView()
     
+    let imageStackView = UIStackView()
     
     override func configureHierarchy() {
         
         addSubview(scrollView)
+        scrollView.addSubview(imageStackView)
         addSubview(pageControl)
         addSubview(stackView)
         stackView.addArrangedSubview(imageViews[0])
@@ -45,6 +47,10 @@ final class DetailView: BaseView {
             make.top.equalTo(self.safeAreaLayoutGuide).offset(16)
             make.horizontalEdges.equalTo(self)
             make.height.equalTo(self.snp.width).multipliedBy(1.0 / 1.75)
+        }
+        
+        imageStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         pageControl.snp.makeConstraints { make in
@@ -90,6 +96,10 @@ final class DetailView: BaseView {
         stackView.spacing = 4
         stackView.distribution = .equalSpacing
         stackView.axis = .horizontal
+        
+        imageStackView.axis = .horizontal
+        imageStackView.spacing = 0
+        imageStackView.distribution = .fillEqually
         
         
         
