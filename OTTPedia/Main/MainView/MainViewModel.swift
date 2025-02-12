@@ -8,7 +8,7 @@
 import Foundation
 
 
-class MainViewModel: BaseViewModel {
+final class MainViewModel: BaseViewModel {
     
     
     private(set) var input: Input

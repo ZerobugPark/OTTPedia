@@ -8,7 +8,7 @@
 import Foundation
 
 
-class SearchViewModel: BaseViewModel {
+final class SearchViewModel: BaseViewModel {
     
     private(set) var input: Input
     private(set) var output: Output

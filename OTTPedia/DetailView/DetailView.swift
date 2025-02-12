@@ -24,6 +24,7 @@ final class DetailView: BaseView {
     
     private let stackView = UIStackView()
     
+    
     override func configureHierarchy() {
         
         addSubview(scrollView)

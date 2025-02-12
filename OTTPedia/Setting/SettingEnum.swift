@@ -8,10 +8,3 @@
 import Foundation
 
 
-enum Setting: Int {
-    case FAQ = 0
-    case inquiry
-    case alarm
-    case withdraw
-    
-}
