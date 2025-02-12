@@ -95,15 +95,15 @@ class SearchViewModel: BaseViewModel {
     }
     
     private func callRequest() {
-        NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { [weak self] response in
+        NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
             
             switch response {
             case .success(let value):
-                self?.output.searchResult.value.append(contentsOf: value.results)
-                self?.totalPage = value.totalPage
-                self?.noResult()
+                self.output.searchResult.value.append(contentsOf: value.results)
+                self.totalPage = value.totalPage
+                self.noResult()
             case .failure(_):
-                self?.output.errorMessage.value = ("Error")
+                self.output.errorMessage.value = ("Error")
                 //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
             }
         }

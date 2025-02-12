@@ -25,6 +25,7 @@ final class SettingTableViewCell: BaseTableViewCell {
         content.snp.makeConstraints { make in
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView)
+            make.height.greaterThanOrEqualTo(16)
         }
     }
   
