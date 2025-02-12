@@ -20,6 +20,7 @@ class SearchViewModel: BaseViewModel {
         let checklikeStatus: Observable<Int> = Observable(0)
         let likeButtonTapped: Observable<(Int, Bool)> = Observable((0, false))
         let pagenationStart: Observable<[IndexPath]> = Observable(([]))
+        let likeUpdate: Observable<(Int, Bool)> = Observable((0, false))
     }
     
     struct Output {
@@ -27,6 +28,8 @@ class SearchViewModel: BaseViewModel {
         let searchResult: Observable<[Results]> = Observable([])
         let noResult: Observable<Bool> = Observable(false)
         let errorMessage: Observable<String> = Observable("")
+        let updatedLike: Observable<Void> = Observable(())
+        
         let navigationTitle: String = "OTTPedia"
         let backButtonTitle: String = ""
         
@@ -54,9 +57,11 @@ class SearchViewModel: BaseViewModel {
         input.viewDidLoad.lazyBind { [weak self] _ in
             if (self?.searchText.isEmpty) != nil {
                 self?.callRequest()
-                self?.output.viewDidLoad.value = (self!.searchText)
+                self?.output.viewDidLoad.value = self?.searchText
+            } else {
+                self?.output.viewDidLoad.value = nil
             }
-            self?.output.viewDidLoad.value = (nil)
+            
             self?.likeMovie = ProfileUserDefaults.likeMoive
         }
         
@@ -64,7 +69,7 @@ class SearchViewModel: BaseViewModel {
             if let text = search {
                 self?.searchText = text
                 self?.currentPage = 1
-                self?.recentTextInfo?(self!.searchText)
+                self?.recentTextInfo?(self?.searchText ?? "")
                 self?.output.searchResult.value.removeAll()
                 self?.callRequest()
             }
@@ -72,7 +77,7 @@ class SearchViewModel: BaseViewModel {
         }
         
         input.checklikeStatus.lazyBind { [weak self] index in
-            self?.output.likeImageStatus = self!.checkLikeStatus(index: index)
+            self?.output.likeImageStatus = self?.checkLikeStatus(index: index) ?? false
         }
         
         input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in
@@ -83,19 +88,22 @@ class SearchViewModel: BaseViewModel {
         input.pagenationStart.lazyBind { [weak self] indexPath in
             self?.pagenation(indexPaths: indexPath)
         }
+        
+        input.likeUpdate.lazyBind { [weak self] (id, status) in
+            self?.likeUpdate(id: id, status: status)
+        }
     }
     
     private func callRequest() {
-        NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { response in
+        NetworkManger.shared.callRequest(api: .searchMoive(query: searchText, page: currentPage), type: Trending.self) { [weak self] response in
             
             switch response {
             case .success(let value):
-                self.output.searchResult.value.append(contentsOf: value.results)
-                self.totalPage = value.totalPage
-                self.noResult()
+                self?.output.searchResult.value.append(contentsOf: value.results)
+                self?.totalPage = value.totalPage
+                self?.noResult()
             case .failure(_):
-                print("")
-                self.output.errorMessage.value = ("Error")
+                self?.output.errorMessage.value = ("Error")
                 //let msg = ApiError.shared.apiErrorDoCatch(apiStatus: stauts)
             }
         }
@@ -143,7 +151,7 @@ extension SearchViewModel {
         
         if status {
             likeMovie.append(output.searchResult.value[index].id)
-        } else { //이거 Set으로 변경해도 될거 같다.
+        } else {
             if let sameID = likeMovie.lastIndex(of: output.searchResult.value[index].id) {
                 likeMovie.remove(at: sameID)
             }
@@ -151,11 +159,16 @@ extension SearchViewModel {
         ProfileUserDefaults.likeMoive = likeMovie
     }
     
-    func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        //likeMovie.updateValue(status, forKey: String(id))
-        //ProfileUserDefaults.likeMoive = likeMovie
-        //userInfo.likeCount = likeCount()
-       // mainView.collectionView.reloadData()
+    func likeUpdate(id: Int, status: Bool) {
+        if status {
+            likeMovie.append(id)
+        } else {
+            if let sameID = likeMovie.lastIndex(of: id) {
+                likeMovie.remove(at: sameID)
+            }
+        }
+        ProfileUserDefaults.likeMoive = likeMovie
+        output.updatedLike.value = ()
         
     }
     

@@ -21,6 +21,7 @@ class MainViewModel: BaseViewModel {
         let updateTextList: Observable<(String?, Int?)> = Observable((nil, nil))
         let checklikeStatus: Observable<Int> = Observable(0)
         let likeButtonTapped: Observable<(Int, Bool)> = Observable((0, false))
+        let likeUpdate: Observable<(Int, Bool)> = Observable((0, false))
     }
     
     struct Output {
@@ -72,6 +73,10 @@ class MainViewModel: BaseViewModel {
         
         input.likeButtonTapped.lazyBind { [weak self] (index, stauts) in
             self?.likeButtonTapped(index: index, status: stauts)
+        }
+        
+        input.likeUpdate.lazyBind { [weak self] (id, status) in
+            self?.likeUpdate(id: id, status: status)
         }
         
     }
@@ -174,11 +179,17 @@ extension MainViewModel {
 
     }
     
-    func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        //likeMovie.updateValue(status, forKey: String(id))
-        //ProfileUserDefaults.likeMoive = likeMovie
-        //userInfo.likeCount = likeCount()
-       // mainView.collectionView.reloadData()
+    func likeUpdate(id: Int, status: Bool) {
+        if status {
+            likeMovie.append(id)
+        } else {
+            //뭐가 더 나을 까?
+            if let sameID = likeMovie.lastIndex(of: id) {
+                likeMovie.remove(at: sameID)
+            }
+        }
+        ProfileUserDefaults.likeMoive = likeMovie
+        userInfo.likeCount = likeCount()
         
     }
     

@@ -9,19 +9,10 @@ import UIKit
 
 final class SearchViewController: UIViewController {
     
-
-    private var searchResult: [Results] = []
-    //private var currentPage = 1
-    
     private var searchView = SearchView()
     var searchModel = SearchViewModel()
     
-    private var totalPage = 0
-   // private var likeMovie: [String: Bool] = [:]
-    
-    var searchText = ""
-    //var recentTextInfo: ((String) -> Void)?
-    
+
     override func loadView() {
         view = searchView
     }
@@ -33,13 +24,6 @@ final class SearchViewController: UIViewController {
         searchView.tableView.prefetchDataSource = self
         searchView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
         searchView.searchBar.delegate = self
-        
-        //configurationNavigationController()
-        
-        
-
-       // likeMovie = ProfileUserDefaults.likeMoive
-        
         
         bindData()
         searchModel.input.viewDidLoad.value = ()
@@ -56,8 +40,6 @@ final class SearchViewController: UIViewController {
             if let search = text {
                 self?.searchView.searchBar.text = search
             }
-            
-            
         }
         
         searchModel.output.searchResult.lazyBind { [weak self] _ in
@@ -72,26 +54,14 @@ final class SearchViewController: UIViewController {
         searchModel.output.errorMessage.lazyBind { [weak self] msg in
             self?.showAPIAlet(msg: msg)
         }
-    }
-    
-    private func configurationNavigationController() {
         
-        let title = "영화 검색"
-        navigationItem.title = title
-        navigationItem.backButtonTitle = ""
-        
+        searchModel.output.updatedLike.lazyBind { [weak self] _ in
+            self?.searchView.tableView.reloadData()
+        }
     }
-    
-//    private func checkLikeStatus(index: Int) -> Bool {
-//        let likeStatus = likeMovie[String(searchResult[index].id)] ?? false
-//        
-//        return likeStatus
-//    }
-    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-       // likeMovie = ProfileUserDefaults.likeMoive
-
     }
     
     
@@ -162,10 +132,7 @@ extension SearchViewController: PassMovieLikeDelegate {
     }
     
     func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        //likeMovie.updateValue(status, forKey: String(id))
-      //  ProfileUserDefaults.likeMoive = likeMovie
-        searchView.tableView.reloadData()
-        
+        searchModel.input.likeUpdate.value = (id, status)
     }
     
 }

@@ -77,6 +77,7 @@ final class MainViewController: UIViewController {
         mainModel.output.likeMovieCountMessage.lazyBind { [weak self] msg in
             
             self?.mainView.likeStorageButton.setTitle(msg, for: .normal)
+            self?.mainView.collectionView.reloadData()
         }
     }
     
@@ -241,10 +242,12 @@ extension MainViewController: PassMovieLikeDelegate {
     }
     
     func detailViewLikeButtonTapped(id: Int, status: Bool) {
-        //likeMovie.updateValue(status, forKey: String(id))
-        //ProfileUserDefaults.likeMoive = likeMovie
-        //userInfo.likeCount = likeCount()
-        mainView.collectionView.reloadData()
+        mainModel.input.likeUpdate.value = (id, status)
+        
+//        //likeMovie.updateValue(status, forKey: String(id))
+//        //ProfileUserDefaults.likeMoive = likeMovie
+//        //userInfo.likeCount = likeCount()
+//        mainView.collectionView.reloadData()
         
     }
     
@@ -325,8 +328,8 @@ extension MainViewController {
     @objc private func searchButtonTapped(_ sender: UIButton) {
         let vc = SearchViewController()
         
-        vc.searchModel.recentTextInfo = { text in
-            self.mainModel.input.updateTextList.value = (text, nil)
+        vc.searchModel.recentTextInfo = { [weak self] text in
+            self?.mainModel.input.updateTextList.value = (text, nil)
         }
         navigationController?.pushViewController(vc, animated: true)
         

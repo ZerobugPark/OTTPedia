@@ -20,9 +20,8 @@ final class DetailViewController: UIViewController {
     
     private var detailView = DetailView()
     var detailModel = DetailViewModel()
+
     
-    
-    let color:[UIColor] = [.red,.blue,.green,.yellow,.purple]
     override func loadView() {
         view = detailView
     }
@@ -84,7 +83,9 @@ final class DetailViewController: UIViewController {
         
     }
     
-
+    deinit {
+        print("DetailViewController Deinit")
+    }
  
     
     
